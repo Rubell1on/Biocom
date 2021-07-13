@@ -32,20 +32,55 @@ namespace DataGridView {
         [Header("Events")]
         public DataGridViewCellClickEvent cellClicked = new DataGridViewCellClickEvent();
 
+        private List<bool> sortings = new List<bool>();
+
         private void Awake()
         {
-            _GetHeaderElements();
+            headers = _GetHeaderElements();
+
+            if (sortings.Count > 0)
+            {
+                sortings.Clear();
+            }
+
+            headers.ForEach(h => sortings.Add(false));
+
+            for (int i = 0; i < headers.Count; i++)
+            {
+                DataGridViewHeaderElement header = headers[i];
+                Button headerButton = header.GetComponent<Button>();
+                int id = i;
+                headerButton.onClick.AddListener(() =>
+                {
+                    bool sorting = sortings[id];
+                    if (sorting)
+                    {
+                        rows.Sort((a, b) => a.cells[id].value.CompareTo(b.cells[id].value));
+                    } 
+                    else
+                    {
+                        rows.Sort((a, b) => a.cells[id].value.CompareTo(b.cells[id].value));
+                        rows.Reverse();
+                    }
+
+                    sortings[id] = sortings[id] ? false : true;
+
+                    rows.changed?.Invoke();
+                });
+            }
 
             rows.changed.AddListener(OnChange);
         }
 
-        private void _GetHeaderElements()
+        private List<DataGridViewHeaderElement> _GetHeaderElements()
         {
             DataGridViewHeaderElement[] headers = headerComponent.GetComponentsInChildren<DataGridViewHeaderElement>();
             if (headers.Length > 0)
             {
-                this.headers = headers.ToList();
+                return headers.ToList();
             }
+
+            return null;
         }
 
         public void OnChange()
