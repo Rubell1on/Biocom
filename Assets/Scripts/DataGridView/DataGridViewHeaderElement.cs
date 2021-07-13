@@ -13,6 +13,7 @@ namespace DataGridView
     public class DataGridViewHeaderElement : MonoBehaviour
     {
         public Text textComponent;
+
         [MenuItem("GameObject/UI/Custom/DataGridViewHeaderElement")]
         public static GameObject CreateHeaderElement()
         {
