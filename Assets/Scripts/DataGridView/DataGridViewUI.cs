@@ -60,6 +60,7 @@ namespace DataGridView
             rowsRt.offsetMax = new Vector2(0f, -50f);
 
             ScrollRect scrollRect = rows.AddComponent<ScrollRect>();
+            scrollRect.scrollSensitivity = 20;
             scrollRect.horizontal = false;
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
 

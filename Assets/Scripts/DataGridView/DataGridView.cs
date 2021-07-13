@@ -89,7 +89,7 @@ namespace DataGridView {
             {
                 if (uiRows.Count > 0)
                 {
-                    uiRows.ForEach(r => Destroy(r));
+                    uiRows.ForEach(r => Destroy(r.gameObject));
                     uiRows.Clear();
                 }
 
@@ -147,7 +147,7 @@ namespace DataGridView {
 
             } else
             {
-                throw new System.Exception("Количество ячеек в строке не соответствует заголовку!");
+                throw new System.Exception("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             }
         }
     }
