@@ -10,6 +10,7 @@ public class DGVTest : MonoBehaviour
     void Start()
     {
         gridView = GetComponent<DataGridView.DataGridView>();
+        gridView.cellClicked.AddListener(d => Debug.Log($"row: {d.row} cell: {d.cell}"));
         List<DataGridViewRow> rows = new List<DataGridViewRow>();
         for (int i = 0; i < 40; i++)
         {

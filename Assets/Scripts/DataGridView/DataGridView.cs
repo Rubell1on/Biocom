@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
@@ -8,14 +10,29 @@ using UnityEngine.Events;
 namespace DataGridView {
     public class DataGridView : MonoBehaviour
     {
+        [Header("Root components")]
         public GameObject headerComponent;
         public GameObject rowsComponent;
+        [Space(10)]
 
+        [Header("Data lists")]
         [SerializeField]
-        public List<DataGridViewHeaderElement> header;
+        public List<DataGridViewHeaderElement> headers;
         [SerializeField]
         public CustomList<DataGridViewRow> rows = new CustomList<DataGridViewRow>();
-    
+        List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
+        [Space(10)]
+
+        [Header("Row colors")]
+        public bool colorRows = true;
+        public Color even = Color.white;
+        public Color odd = new Color32(174, 174, 174, 255);
+        [Space(10)]
+
+        [Header("Events")]
+        public DataGridViewCellClickEvent cellClicked = new DataGridViewCellClickEvent();
+
+
         private static string HEADER = "header";
         private static string ROWS = "rows";
 
@@ -79,7 +96,6 @@ namespace DataGridView {
             Image viewportImage = viewport.AddComponent<Image>();
 
             RectTransform viewportRT = viewport.GetComponent<RectTransform>();
-            //viewportRT.pivot = new Vector2(0, 1);
             viewportRT.anchorMin = Vector2.zero;
             viewportRT.anchorMax = Vector2.one;
             viewportRT.offsetMin = Vector2.zero;
@@ -92,6 +108,7 @@ namespace DataGridView {
 
             RectTransform contentRT = content.AddComponent<RectTransform>();
             scrollRect.content = contentRT;
+            contentRT.pivot = new Vector2(0.5f, 1);
             contentRT.anchorMin = new Vector2(0f, 1f);
             contentRT.anchorMax = Vector2.one;
             contentRT.offsetMin = Vector2.zero;
@@ -114,36 +131,102 @@ namespace DataGridView {
 
         private void Awake()
         {
+            _GetHeaderElements();
+
             rows.changed.AddListener(OnChange);
+        }
+
+        private void _GetHeaderElements()
+        {
+            DataGridViewHeaderElement[] headers = headerComponent.GetComponentsInChildren<DataGridViewHeaderElement>();
+            if (headers.Length > 0)
+            {
+                this.headers = headers.ToList();
+            }
         }
 
         public void OnChange()
         {
-            List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
-            rows.ForEach(r =>
+            if (rows?[0].cells.Count == headers?.Count)
             {
-                GameObject row = DataGridViewRowUI.CreateRow();
-                DataGridViewRowUI rowUI = row.GetComponent<DataGridViewRowUI>();
-
-                r.cells.ForEach(c =>
+                if (uiRows.Count > 0)
                 {
-                    GameObject cell = DataGridViewCellUI.CreateCell();
-                    cell.transform.SetParent(rowUI.transform);
-                    DataGridViewCellUI cellUI = cell.GetComponent<DataGridViewCellUI>();
-                    cellUI.textComponent.text = c.value;
-                    rowUI.cells.Add(cellUI);
+                    uiRows.ForEach(r => Destroy(r));
+                    uiRows.Clear();
+                }
+
+                for(int i = 0; i < rows.Count; i++)
+                {
+                    DataGridViewRow row = rows[i];
+                    GameObject rowObject = DataGridViewRowUI.CreateRow();
+                    DataGridViewRowUI rowUI = rowObject.GetComponent<DataGridViewRowUI>();
+
+                    Image rowImage = rowObject.GetComponent<Image>();
+                    if (colorRows)
+                    {
+                        rowImage = rowObject.GetComponent<Image>();
+                        rowImage.color = i == 0 || i % 2 == 0 ? even : odd;
+                    } else
+                    {
+                        rowImage.color = even;
+                    }
+
+                    for (int j = 0; j < row.cells.Count; j++)
+                    {
+
+                        GameObject cell = DataGridViewCellUI.CreateCell();
+
+                        RectTransform cellRT = cell.GetComponent<RectTransform>();
+                        RectTransform headerRT = headers[j].GetComponent<RectTransform>();
+                        cellRT.sizeDelta = new Vector2(headerRT.sizeDelta.x, cellRT.sizeDelta.y);
+
+                        cell.transform.SetParent(rowUI.transform);
+                        DataGridViewCellUI cellUI = cell.GetComponent<DataGridViewCellUI>();
+                        cellUI.textComponent.text = row.cells[j].value;
+
+                        Button cellButton = cell.GetComponent<Button>();
+                        DataGridViewEventArgs args = new DataGridViewEventArgs(i, j);
+                        cellButton.onClick.AddListener(OnClick);
+
+                        rowUI.cells.Add(cellUI);
+
+                        void OnClick()
+                        {
+                            cellClicked.Invoke(args);
+                        }
+                    }
+
+                    uiRows.Add(rowUI);
+                }
+
+                uiRows.ForEach(r =>
+                {
+                    r.transform.SetParent(rowsComponent.transform);
+                    RectTransform rowRT = r.GetComponent<RectTransform>();
+                    rowRT.anchoredPosition3D = Vector3.zero;
+                    rowRT.localScale = Vector3.one;
                 });
 
-                uiRows.Add(rowUI);
-            });
-
-            uiRows.ForEach(r =>
+            } else
             {
-                r.transform.SetParent(rowsComponent.transform);
-                RectTransform rowRT = r.GetComponent<RectTransform>();
-                rowRT.anchoredPosition3D = Vector3.zero;
-                rowRT.localScale = Vector3.one;
-            });
+                throw new System.Exception("Количество ячеек в строке не соответствует заголовку!");
+            }
         }
     }
+
+    [Serializable]
+    public class DataGridViewEventArgs
+    {
+        public int row;
+        public int cell;
+
+        public DataGridViewEventArgs(int row, int cell)
+        {
+            this.row = row;
+            this.cell = cell;
+        }
+    }
+
+    [Serializable]
+    public class DataGridViewCellClickEvent : UnityEvent<DataGridViewEventArgs> { };
 }

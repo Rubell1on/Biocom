@@ -28,6 +28,10 @@ namespace DataGridView
             text.alignment = TextAnchor.MiddleCenter;
             text.text = "HeaderElement";
 
+            RectTransform textRT = textObject.GetComponent<RectTransform>();
+            textRT.anchorMin = Vector2.zero;
+            textRT.anchorMax = Vector2.one;
+
             dgvhe.textComponent = text;
 
             return element;
