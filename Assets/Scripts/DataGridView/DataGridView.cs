@@ -89,13 +89,52 @@ namespace DataGridView {
 
             ScrollRect scrollRect = rows.AddComponent<ScrollRect>();
             scrollRect.horizontal = false;
+            scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+
+            GameObject scrollObject = new GameObject("Scrollbar Vertical");
+            Image scrollImage = scrollObject.AddComponent<Image>();
+            scrollImage.color = new Color32(229, 229, 229, 255);
+
+            RectTransform scrollRT = scrollObject.GetComponent<RectTransform>();
+            scrollRT.SetParent(rowsRt);
+
+            scrollRT.anchorMin = new Vector2(1, 0);
+            scrollRT.anchorMax = Vector2.one;
+            scrollRT.pivot = Vector2.one;
+            scrollRT.offsetMax = Vector2.zero;
+            scrollRT.offsetMin = new Vector2(-20, -17);
+
+            Scrollbar scrollbar = scrollObject.AddComponent<Scrollbar>();
+            scrollRect.verticalScrollbar = scrollbar;
+            scrollbar.direction = Scrollbar.Direction.BottomToTop;
+
+            GameObject slidingArea = new GameObject("Sliding Area");
+            RectTransform slidingAreaRT = slidingArea.AddComponent<RectTransform>();
+            slidingAreaRT.SetParent(scrollRT);
+            slidingAreaRT.anchorMin = Vector2.zero;
+            slidingAreaRT.anchorMax = Vector2.one;
+            slidingAreaRT.offsetMin = new Vector2(10, 10);
+            slidingAreaRT.offsetMax = new Vector2(-10, -10);
+
+            GameObject handleObject = new GameObject("Handle");
+            Image handleImage = handleObject.AddComponent<Image>();
+            handleImage.color = new Color32(180, 180, 180, 255);
+            RectTransform handleRT = handleObject.GetComponent<RectTransform>();
+            scrollbar.handleRect = handleRT;
+            handleRT.SetParent(slidingAreaRT);
+            handleRT.anchorMin = new Vector2(0, 1);
+            handleRT.anchorMax = Vector2.one;
+            handleRT.offsetMin = new Vector2(-10, 10);
+            handleRT.offsetMax = new Vector2(10, -10);
 
             GameObject viewport = new GameObject("Viewport");
-            viewport.transform.parent = rows.transform;
-
             Image viewportImage = viewport.AddComponent<Image>();
 
             RectTransform viewportRT = viewport.GetComponent<RectTransform>();
+            viewportRT.SetParent(rowsRt);
+
+            scrollRect.viewport = viewportRT;
+
             viewportRT.anchorMin = Vector2.zero;
             viewportRT.anchorMax = Vector2.one;
             viewportRT.offsetMin = Vector2.zero;
