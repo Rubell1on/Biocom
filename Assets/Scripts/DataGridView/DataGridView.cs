@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace DataGridView {
     public class DataGridView : MonoBehaviour
@@ -13,7 +14,7 @@ namespace DataGridView {
         [SerializeField]
         public List<DataGridViewHeaderElement> header;
         [SerializeField]
-        private List<DataGridViewRow> rows = new List<DataGridViewRow>();
+        public CustomList<DataGridViewRow> rows = new CustomList<DataGridViewRow>();
     
         private static string HEADER = "header";
         private static string ROWS = "rows";
@@ -106,13 +107,18 @@ namespace DataGridView {
             csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             DataGridView dgv = dataGridView.AddComponent<DataGridView>();
+            dgv.rows.changed.AddListener(dgv.OnChange);
             dgv.headerComponent = header;
-            dgv.rowsComponent = rows;
+            dgv.rowsComponent = content;
         }
 
-        public void AddRows(List<DataGridViewRow> rows)
+        private void Awake()
         {
-            this.rows = rows;
+            rows.changed.AddListener(OnChange);
+        }
+
+        public void OnChange()
+        {
             List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
             rows.ForEach(r =>
             {
@@ -138,18 +144,6 @@ namespace DataGridView {
                 rowRT.anchoredPosition3D = Vector3.zero;
                 rowRT.localScale = Vector3.one;
             });
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

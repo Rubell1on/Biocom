@@ -24,7 +24,7 @@ public class DGVTest : MonoBehaviour
             rows.Add(new DataGridViewRow(cells));  
         }
 
-        gridView.AddRows(rows);
+        gridView.rows.AddRange(rows);
 
     }
 
