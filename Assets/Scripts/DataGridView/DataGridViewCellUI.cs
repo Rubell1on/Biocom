@@ -24,7 +24,6 @@ namespace CatchyClick
 
             DataGridViewCellUI cell = cellObject.AddComponent<DataGridViewCellUI>();
             GameObject textObject = new GameObject("Text");
-            textObject.transform.parent = cellObject.transform;
 
             Text text = textObject.AddComponent<Text>();
             text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
@@ -33,6 +32,7 @@ namespace CatchyClick
             text.text = "HeaderElement";
 
             RectTransform textRT = textObject.GetComponent<RectTransform>();
+            textRT.SetParent(cellRT);
             textRT.anchorMin = Vector2.zero;
             textRT.anchorMax = Vector2.one;
             textRT.offsetMin = Vector2.zero;
