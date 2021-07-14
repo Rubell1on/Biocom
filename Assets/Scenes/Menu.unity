@@ -2287,7 +2287,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headerComponent: {fileID: 74532054}
   rowsComponent: {fileID: 1757433988}
-  header: []
+  headers: []
+  colorRows: 1
+  even: {r: 1, g: 1, b: 1, a: 1}
+  odd: {r: 0.68235296, g: 0.68235296, b: 0.68235296, a: 1}
+  cellClicked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &373649803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11675,7 +11681,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1652611644}
-  - component: {fileID: 1652611643}
   m_Layer: 0
   m_Name: '[DataBase]'
   m_TagString: Untagged
@@ -11683,18 +11688,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1652611643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1652611642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa57c9924835a964ca4ddb4151ac2d3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1652611644
 Transform:
   m_ObjectHideFlags: 0
@@ -16050,6 +16043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvases:
   - {fileID: 925565898277699360}
+  - {fileID: 925565898627244038}
   - {fileID: 925565898854172753}
   selecteDirection: 0
   alphaAmplifier: 1
@@ -17029,7 +17023,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925565897123287927}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -18327,7 +18321,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 1111
 --- !u!224 &925565897237685081
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19986,7 +19980,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: 1111
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -20923,7 +20917,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: "\u0410\u0431\u043B\u0430\u0435\u0432 \u0414\u043C\u0438\u0442\u0440\u0438\u0439
+    \u0410\u043B\u0435\u043A\u0441\u0435\u0435\u0432\u0438\u0447"
 --- !u!224 &925565897668701814
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21272,7 +21267,8 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: "\u0410\u0431\u043B\u0430\u0435\u0432 \u0414\u043C\u0438\u0442\u0440\u0438\u0439
+    \u0410\u043B\u0435\u043A\u0441\u0435\u0435\u0432\u0438\u0447"
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -25339,19 +25335,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 925565898603943217}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 925565896937439289}
-        m_TargetAssemblyTypeName: CanvasController, Assembly-CSharp
-        m_MethodName: SelectCanvas
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &925565898603943219
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25384,6 +25368,7 @@ GameObject:
   - component: {fileID: 925565898603943216}
   - component: {fileID: 925565898603943217}
   - component: {fileID: 925565898603943218}
+  - component: {fileID: 925565898603943221}
   m_Layer: 5
   m_Name: EnterButton
   m_TagString: Untagged
@@ -25391,6 +25376,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &925565898603943221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925565898603943220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f114503f4a9234942be745ffda5cbd39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 925565898603943218}
+  login: {fileID: 925565897696022939}
+  password: {fileID: 925565897547497025}
+  canvasController: {fileID: 925565896937439289}
 --- !u!223 &925565898627244038
 Canvas:
   m_ObjectHideFlags: 0
@@ -27284,7 +27285,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925565898951725235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
