@@ -14,7 +14,7 @@ namespace CatchyClick
     {
         public Text textComponent;
         public Button buttonComponent;
-        //[MenuItem("GameObject/UI/Custom/DataGridViewCell")]
+
         public static GameObject CreateCell()
         {
             GameObject cellObject = new GameObject("Cell");

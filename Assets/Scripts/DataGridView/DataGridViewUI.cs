@@ -8,16 +8,23 @@ namespace CatchyClick
 {
     public class DataGridViewUI
     {
+#if UNITY_EDITOR
         [MenuItem("GameObject/UI/Custom/DataGridView")]
         private static void CreateInContextMenu()
         {
-            GameObject canvas = new GameObject("Canvas");
-            canvas.AddComponent<Canvas>();
-            canvas.AddComponent<CanvasScaler>();
-            canvas.AddComponent<GraphicRaycaster>();
-
             GameObject dataGridView = new GameObject("DataGridView");
-            dataGridView.transform.parent = canvas.transform;
+
+            if (Selection.activeTransform == null)
+            {
+                GameObject canvas = new GameObject("Canvas");
+                canvas.AddComponent<Canvas>();
+                canvas.AddComponent<CanvasScaler>();
+                canvas.AddComponent<GraphicRaycaster>();
+                dataGridView.transform.parent = canvas.transform;
+            } else
+            {
+                dataGridView.transform.parent = Selection.activeTransform;
+            }
 
             Image image = dataGridView.AddComponent<Image>();
             image.enabled = false;
@@ -140,5 +147,6 @@ namespace CatchyClick
             dgv.headerComponent = header;
             dgv.rowsComponent = content;
         }
+#endif
     }
 }

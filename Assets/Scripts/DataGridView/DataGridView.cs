@@ -18,7 +18,7 @@ namespace CatchyClick {
 
         [Header("Data lists")]
         [SerializeField]
-        public List<DataGridViewHeaderElement> headers;
+        public List<DataGridViewHeaderElementUI> headers;
         [SerializeField]
         public CustomList<DataGridViewRow> rows = new CustomList<DataGridViewRow>();
         List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
@@ -48,7 +48,7 @@ namespace CatchyClick {
 
             for (int i = 0; i < headers.Count; i++)
             {
-                DataGridViewHeaderElement header = headers[i];
+                DataGridViewHeaderElementUI header = headers[i];
                 Button headerButton = header.GetComponent<Button>();
                 int id = i;
                 headerButton.onClick.AddListener(() =>
@@ -86,9 +86,9 @@ namespace CatchyClick {
             rows.changed.AddListener(OnChange);
         }
 
-        private List<DataGridViewHeaderElement> _GetHeaderElements()
+        private List<DataGridViewHeaderElementUI> _GetHeaderElements()
         {
-            DataGridViewHeaderElement[] headers = headerComponent.GetComponentsInChildren<DataGridViewHeaderElement>();
+            DataGridViewHeaderElementUI[] headers = headerComponent.GetComponentsInChildren<DataGridViewHeaderElementUI>();
             if (headers.Length > 0)
             {
                 return headers.ToList();
@@ -161,7 +161,7 @@ namespace CatchyClick {
 
             } else
             {
-                throw new System.Exception("���������� ����� � ������ �� ������������� ���������!");
+                throw new System.Exception("Cells count don't match with header!");
             }
         }
     }
