@@ -11,13 +11,23 @@ public class DGVTest : MonoBehaviour
     {
         gridView = GetComponent<DataGridView.DataGridView>();
         gridView.cellClicked.AddListener(d => Debug.Log($"row: {d.row} cell: {d.cell}"));
+
+        string[] userNames = new string[]
+        {
+            "Хохлов Алексей Аркадьевич",
+            "Метелина Елена Сергеевна",
+            "Сбитнева Анастасия Андреевна",
+            "Аблаев Дмитрий Алексеевич",
+            "Аалаев Дмитрий Алексеевич"
+        };
+
         List<DataGridViewRow> rows = new List<DataGridViewRow>();
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < userNames.Length; i++)
         {
             List<DataGridViewCell> cells = new List<DataGridViewCell>
             {
                 new DataGridViewCell(i.ToString()),
-                new DataGridViewCell("UserName"),
+                new DataGridViewCell(userNames[i]),
                 new DataGridViewCell("Role"),
                 new DataGridViewCell("BirthDate")
             };

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Text;
 
 namespace DataGridView {
     public class DataGridView : MonoBehaviour
@@ -53,17 +54,30 @@ namespace DataGridView {
                 headerButton.onClick.AddListener(() =>
                 {
                     bool sorting = sortings[id];
+
+                    rows.Sort((a, b) => {
+                        string firstString = a.cells[id].value;
+                        string secondString = b.cells[id].value;
+
+                        int first;
+                        int second;
+
+                        if (Int32.TryParse(firstString, out first) && Int32.TryParse(secondString, out second))
+                        {
+                            return first.CompareTo(second);
+                        }
+
+                        return firstString.CompareTo(secondString);
+                    });
+
+
                     if (sorting)
                     {
-                        rows.Sort((a, b) => a.cells[id].value.CompareTo(b.cells[id].value));
-                    } 
-                    else
-                    {
-                        rows.Sort((a, b) => a.cells[id].value.CompareTo(b.cells[id].value));
                         rows.Reverse();
                     }
 
-                    sortings[id] = sortings[id] ? false : true;
+                    sortings = sortings.Select(x => false).ToList();
+                    sortings[id] = sorting ? false : true;
 
                     rows.changed?.Invoke();
                 });
@@ -167,4 +181,12 @@ namespace DataGridView {
 
     [Serializable]
     public class DataGridViewCellClickEvent : UnityEvent<DataGridViewEventArgs> { };
+
+    public static class StringExtention
+    {
+        public static int GetByteSumm(this string input)
+        {
+            return Encoding.UTF8.GetBytes(input).ToList().Aggregate(0, (acc, value) => acc + value);
+        }
+    }
 }
