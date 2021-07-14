@@ -12,7 +12,7 @@ public static class DBUsers
     public static User Authorize(string user, string password)
     {
         MySqlConnection connection = SQLConnection.GetConnection();
-        string sql = $"SELECT id, username, role FROM {usersTable} WHERE username = \"{user}\" AND password = \"{password}\"";
+        string sql = $"SELECT id, username, role FROM {usersTable} WHERE username = \"{user}\" AND password = \"{password}\";";
 
         MySqlCommand command = new MySqlCommand(sql, connection);
         MySqlDataReader reader = command.ExecuteReader();
@@ -30,6 +30,43 @@ public static class DBUsers
             Debug.Log("Don't search users!!!!!");
 
         return userInstance;
+    }
+    public static List<User> GetUsers()
+    {
+        MySqlConnection connection = SQLConnection.GetConnection();
+        string sql = $"SELECT id, username, role FROM {usersTable};";
+
+        MySqlCommand command = new MySqlCommand(sql, connection);
+        MySqlDataReader reader = command.ExecuteReader();
+        List<User> users = new List<User>();
+
+        while (reader.Read())
+        {
+            users.Add(new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString()));
+        }
+        reader.Close();
+
+        return users;
+    }
+    public static bool AddUser(string userName, string password, string role)
+    {
+        try
+        {
+            MySqlConnection connection = SQLConnection.GetConnection();
+            string sql = $"INSERT INTO {usersTable} SET username = \"{userName}\", password = \"{password}\", role = \"{role}\";";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            return false;
+        }
     }
 }
 public class User
