@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Text;
 
-namespace DataGridView {
+namespace CatchyClick {
     public class DataGridView : MonoBehaviour
     {
         [Header("Root components")]

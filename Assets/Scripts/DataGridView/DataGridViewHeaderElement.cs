@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 
-namespace DataGridView
+namespace CatchyClick
 {
     [Serializable]
     public class DataGridViewHeaderElement : MonoBehaviour

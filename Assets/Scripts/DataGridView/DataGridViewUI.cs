@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
-namespace DataGridView
+namespace CatchyClick
 {
     public class DataGridViewUI
     {

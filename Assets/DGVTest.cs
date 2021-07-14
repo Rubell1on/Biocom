@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DataGridView;
+using CatchyClick;
 
 public class DGVTest : MonoBehaviour
 {
-    DataGridView.DataGridView gridView;
+    CatchyClick.DataGridView gridView;
     // Start is called before the first frame update
     void Start()
     {
-        gridView = GetComponent<DataGridView.DataGridView>();
+        gridView = GetComponent<CatchyClick.DataGridView>();
         gridView.cellClicked.AddListener(d => Debug.Log($"row: {d.row} cell: {d.cell}"));
 
         string[] userNames = new string[]
