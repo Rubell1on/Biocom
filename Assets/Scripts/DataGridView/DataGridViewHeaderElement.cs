@@ -20,6 +20,16 @@ namespace CatchyClick
             GameObject element = new GameObject("HeaderElement");
             element.AddComponent<Image>();
             RectTransform headerRT = element.GetComponent<RectTransform>();
+
+            Transform parent = Selection.activeTransform;
+            if (parent)
+            {
+                headerRT.SetParent(parent);
+            }
+
+            headerRT.localScale = Vector3.one;
+            headerRT.anchoredPosition3D = Vector3.zero;
+
             element.AddComponent<Button>();
             DataGridViewHeaderElement dgvhe = element.AddComponent<DataGridViewHeaderElement>();
 
@@ -32,6 +42,8 @@ namespace CatchyClick
 
             RectTransform textRT = textObject.GetComponent<RectTransform>();
             textRT.SetParent(headerRT);
+            textRT.localScale = Vector3.one;
+            textRT.anchoredPosition3D = Vector3.zero;
             textRT.anchorMin = Vector2.zero;
             textRT.anchorMax = Vector2.one;
             textRT.offsetMin = Vector2.zero;
