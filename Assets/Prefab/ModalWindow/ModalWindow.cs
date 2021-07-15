@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class ModalWindow : MonoBehaviour
 {
     public Text title;
+    public Image icon;
     public Button close;
     public GameObject body;
 
