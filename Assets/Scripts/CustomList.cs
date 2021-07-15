@@ -31,4 +31,10 @@ public class CustomList<T> : List<T>
         base.RemoveAt(index);
         changed.Invoke();
     }
+
+    public new void Clear()
+    {
+        base.Clear();
+        changed.Invoke();
+    }
 }
