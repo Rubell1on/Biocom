@@ -9,6 +9,10 @@ public class UsersData : MonoBehaviour
     DataGridView dataGridView;
     void Start()
     {
+        FillUserData();
+    }
+    public void FillUserData()
+    {
         dataGridView = GetComponent<DataGridView>();
         List<User> users = DBUsers.GetUsers();
 
@@ -23,6 +27,9 @@ public class UsersData : MonoBehaviour
 
             return new DataGridViewRow(cells);
         }).ToList();
+
+        if (dataGridView.rows.Count > 0)
+            dataGridView.rows.Clear();
 
         dataGridView.rows.AddRange(rows);
     }
