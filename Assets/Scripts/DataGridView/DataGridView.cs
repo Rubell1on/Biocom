@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Text;
@@ -12,13 +10,13 @@ namespace CatchyClick {
     public class DataGridView : MonoBehaviour
     {
         [Header("Root components")]
-        public GameObject headerComponent;
+        public GameObject columnsComponent;
         public GameObject rowsComponent;
         [Space(10)]
 
         [Header("Data lists")]
         [SerializeField]
-        public List<DataGridViewHeaderElementUI> headers;
+        public List<DataGridViewColumn> columns;
         [SerializeField]
         public CustomList<DataGridViewRow> rows = new CustomList<DataGridViewRow>();
         List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
@@ -37,20 +35,35 @@ namespace CatchyClick {
 
         private void Awake()
         {
-            headers = _GetHeaderElements();
+            columns = _GetHeaderElements();
 
             if (sortings.Count > 0)
             {
                 sortings.Clear();
             }
 
-            headers.ForEach(h => sortings.Add(false));
+            columns.ForEach(h => sortings.Add(false));
 
-            for (int i = 0; i < headers.Count; i++)
+            for (int i = 0; i < columns.Count; i++)
             {
-                DataGridViewHeaderElementUI header = headers[i];
-                Button headerButton = header.GetComponent<Button>();
                 int id = i;
+                DataGridViewColumn column = columns[id];
+
+                if (column.sizeScaler != null)
+                {
+                    column.sizeScaler.scaleChanged.AddListener(size =>
+                    {
+                        uiRows.ForEach(r =>
+                        {
+                            RectTransform cellRT = r.cells[id].GetComponent<RectTransform>();
+                            cellRT.sizeDelta = new Vector2(size.x, cellRT.sizeDelta.y);
+                            LayoutRebuilder.ForceRebuildLayoutImmediate(r.GetComponent<RectTransform>());
+                        });
+                    });
+                }
+
+                Button headerButton = column.GetComponent<Button>();
+                
                 headerButton.onClick.AddListener(() =>
                 {
                     bool sorting = sortings[id];
@@ -86,9 +99,9 @@ namespace CatchyClick {
             rows.changed.AddListener(OnChange);
         }
 
-        private List<DataGridViewHeaderElementUI> _GetHeaderElements()
+        private List<DataGridViewColumn> _GetHeaderElements()
         {
-            DataGridViewHeaderElementUI[] headers = headerComponent.GetComponentsInChildren<DataGridViewHeaderElementUI>();
+            DataGridViewColumn[] headers = columnsComponent.GetComponentsInChildren<DataGridViewColumn>();
             if (headers.Length > 0)
             {
                 return headers.ToList();
@@ -99,7 +112,7 @@ namespace CatchyClick {
 
         public void OnChange()
         {
-            if (rows?[0].cells.Count == headers?.Count)
+            if (rows?[0].cells.Count == columns?.Count)
             {
                 if (uiRows.Count > 0)
                 {
@@ -129,7 +142,7 @@ namespace CatchyClick {
                         GameObject cell = DataGridViewCellUI.CreateCell();
 
                         RectTransform cellRT = cell.GetComponent<RectTransform>();
-                        RectTransform headerRT = headers[j].GetComponent<RectTransform>();
+                        RectTransform headerRT = columns[j].GetComponent<RectTransform>();
                         cellRT.sizeDelta = new Vector2(headerRT.sizeDelta.x, cellRT.sizeDelta.y);
 
                         cell.transform.SetParent(rowUI.transform);

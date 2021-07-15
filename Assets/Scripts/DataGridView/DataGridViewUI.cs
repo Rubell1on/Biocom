@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -9,7 +7,7 @@ namespace CatchyClick
     public class DataGridViewUI
     {
 #if UNITY_EDITOR
-        [MenuItem("GameObject/UI/Custom/DataGridView")]
+        [MenuItem("GameObject/UI/Custom/DataGridView", priority = 0)]
         private static void CreateInContextMenu()
         {
             GameObject dataGridView = new GameObject("DataGridView");
@@ -37,18 +35,22 @@ namespace CatchyClick
             dgvRt.anchorMax = Vector2.one;
             dgvRt.offsetMin = Vector2.zero;
             dgvRt.offsetMax = Vector3.zero;
+            dgvRt.localScale = Vector3.one;
+            dgvRt.anchoredPosition3D = Vector3.zero;
 
-            GameObject header = new GameObject("Header");
-            header.transform.parent = dataGridView.transform;
+            GameObject header = new GameObject("Columns");
             Image headerImage = header.AddComponent<Image>();
             headerImage.color = new Color(0.7f, 0.7f, 0.7f);
 
-            RectTransform headerRt = header.GetComponent<RectTransform>();
-            headerRt.anchorMin = new Vector2(0, 1);
-            headerRt.anchorMax = Vector2.one;
-            headerRt.pivot = new Vector2(0.5f, 1);
-            headerRt.offsetMin = new Vector2(0f, -50f);
-            headerRt.offsetMax = Vector2.zero;
+            RectTransform headerRT = header.GetComponent<RectTransform>();
+            headerRT.SetParent(dgvRt);
+            headerRT.localScale = Vector3.one;
+            headerRT.anchorMin = new Vector2(0, 1);
+            headerRT.anchorMax = Vector2.one;
+            headerRT.pivot = new Vector2(0.5f, 1);
+            headerRT.anchoredPosition3D = Vector3.zero;
+            headerRT.offsetMin = new Vector2(0f, -50f);
+            headerRT.offsetMax = Vector2.zero;
 
             HorizontalLayoutGroup headerHLG = header.AddComponent<HorizontalLayoutGroup>();
             headerHLG.childAlignment = TextAnchor.MiddleLeft;
@@ -56,13 +58,15 @@ namespace CatchyClick
             headerHLG.childControlHeight = true;
 
             GameObject rows = new GameObject("Rows");
-            rows.transform.parent = dataGridView.transform;
             rows.AddComponent<Image>();
 
             RectTransform rowsRt = rows.GetComponent<RectTransform>();
+            rowsRt.SetParent(dgvRt);
+            rowsRt.localScale = Vector3.one;
             rowsRt.anchorMin = Vector2.zero;
             rowsRt.anchorMax = Vector2.one;
             rowsRt.pivot = new Vector2(0.5f, 1);
+            rowsRt.anchoredPosition3D = Vector3.zero;
             rowsRt.offsetMin = new Vector2(-15, 0);
             rowsRt.offsetMax = new Vector2(0f, -50f);
 
@@ -78,9 +82,11 @@ namespace CatchyClick
             RectTransform scrollRT = scrollObject.GetComponent<RectTransform>();
             scrollRT.SetParent(rowsRt);
 
+            scrollRT.localScale = Vector3.one;
             scrollRT.anchorMin = new Vector2(1, 0);
             scrollRT.anchorMax = Vector2.one;
             scrollRT.pivot = Vector2.one;
+            scrollRT.anchoredPosition3D = Vector3.zero;
             scrollRT.offsetMax = Vector2.zero;
             scrollRT.offsetMin = new Vector2(-20, -17);
 
@@ -91,8 +97,10 @@ namespace CatchyClick
             GameObject slidingArea = new GameObject("Sliding Area");
             RectTransform slidingAreaRT = slidingArea.AddComponent<RectTransform>();
             slidingAreaRT.SetParent(scrollRT);
+            slidingAreaRT.localScale = Vector3.one;
             slidingAreaRT.anchorMin = Vector2.zero;
             slidingAreaRT.anchorMax = Vector2.one;
+            slidingAreaRT.anchoredPosition3D = Vector3.zero;
             slidingAreaRT.offsetMin = new Vector2(10, 0);
             slidingAreaRT.offsetMax = new Vector2(-10, 0);
 
@@ -102,8 +110,10 @@ namespace CatchyClick
             RectTransform handleRT = handleObject.GetComponent<RectTransform>();
             scrollbar.handleRect = handleRT;
             handleRT.SetParent(slidingAreaRT);
+            handleRT.localScale = Vector3.one;
             handleRT.anchorMin = new Vector2(0, 1);
             handleRT.anchorMax = Vector2.one;
+            handleRT.anchoredPosition3D = Vector3.zero;
             handleRT.offsetMin = new Vector2(-10, 0);
             handleRT.offsetMax = new Vector2(10, 0);
 
@@ -115,8 +125,10 @@ namespace CatchyClick
 
             scrollRect.viewport = viewportRT;
 
+            viewportRT.localScale = Vector3.one;
             viewportRT.anchorMin = Vector2.zero;
             viewportRT.anchorMax = Vector2.one;
+            viewportRT.anchoredPosition3D = Vector3.zero;
             viewportRT.offsetMin = Vector2.zero;
             viewportRT.offsetMax = Vector2.zero;
 
@@ -128,8 +140,10 @@ namespace CatchyClick
             RectTransform contentRT = content.AddComponent<RectTransform>();
             scrollRect.content = contentRT;
             contentRT.pivot = new Vector2(0.5f, 1);
+            contentRT.localScale = Vector3.one;
             contentRT.anchorMin = new Vector2(0f, 1f);
             contentRT.anchorMax = Vector2.one;
+            contentRT.anchoredPosition3D = Vector3.zero;
             contentRT.offsetMin = Vector2.zero;
             contentRT.offsetMax = Vector2.zero;
 
@@ -144,7 +158,7 @@ namespace CatchyClick
 
             DataGridView dgv = dataGridView.AddComponent<DataGridView>();
             dgv.rows.changed.AddListener(dgv.OnChange);
-            dgv.headerComponent = header;
+            dgv.columnsComponent = header;
             dgv.rowsComponent = content;
         }
 #endif

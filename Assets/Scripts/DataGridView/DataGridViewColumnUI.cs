@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
@@ -10,14 +6,13 @@ using UnityEngine.UI;
 namespace CatchyClick
 {
     [Serializable]
-    public class DataGridViewHeaderElementUI : MonoBehaviour
+    public class DataGridViewColumnUI
     {
-        public Text textComponent;
 #if UNITY_EDITOR
-        [MenuItem("GameObject/UI/Custom/DataGridViewHeaderElement")]
+        [MenuItem("GameObject/UI/Custom/DataGridViewColumn", priority = 1)]
         public static GameObject CreateHeaderElement()
         {
-            GameObject element = new GameObject("HeaderElement");
+            GameObject element = new GameObject("Column");
             element.AddComponent<Image>();
             RectTransform headerRT = element.GetComponent<RectTransform>();
 
@@ -31,7 +26,7 @@ namespace CatchyClick
             headerRT.anchoredPosition3D = Vector3.zero;
 
             element.AddComponent<Button>();
-            DataGridViewHeaderElementUI dgvhe = element.AddComponent<DataGridViewHeaderElementUI>();
+            DataGridViewColumn dgvhe = element.AddComponent<DataGridViewColumn>();
 
             GameObject textObject = new GameObject("Text");
             Text text = textObject.AddComponent<Text>();
@@ -65,8 +60,9 @@ namespace CatchyClick
             horSizeCollider.offset = new Vector2(-0.0001375675f, -0.02674484f);
             horSizeCollider.size = new Vector2(5.063251f, 49.75875f);
 
-            HeaderElementSizeScaler scaler = horSizeObject.AddComponent<HeaderElementSizeScaler>();
+            HorizontalSizeScaler scaler = horSizeObject.AddComponent<HorizontalSizeScaler>();
             scaler.wrapperRT = headerRT;
+            dgvhe.sizeScaler = scaler;
 
             dgvhe.textComponent = text;
 
