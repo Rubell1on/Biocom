@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace CatchyClick
-{ 
+{
+    [Serializable]
     public class DataGridViewRow
     {
         public List<DataGridViewCell> cells;

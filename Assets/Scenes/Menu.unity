@@ -20586,7 +20586,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 925565897501523258}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 925565898627244044}
+        m_TargetAssemblyTypeName: UserDataFormCreator, Assembly-CSharp
+        m_MethodName: CreateUserDataEditForm
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &925565897501523260
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21091,7 +21103,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 925565897560316669}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 925565896937439289}
+        m_TargetAssemblyTypeName: CanvasController, Assembly-CSharp
+        m_MethodName: SelectCanvas
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &925565897560316671
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26393,7 +26417,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   editPanel: {fileID: 6371297831367016538, guid: 1ede3c5f9d37bfe418bed5608c8a5006,
     type: 3}
-  dataGridView: {fileID: 0}
+  dataGridView: {fileID: 1423521025}
+  userData: {fileID: 1423521024}
 --- !u!114 &925565898627579008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28116,7 +28141,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 925565898944242285}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 925565898627244044}
+        m_TargetAssemblyTypeName: UserDataFormCreator, Assembly-CSharp
+        m_MethodName: DeleteUserData
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &925565898944242287
 RectTransform:
   m_ObjectHideFlags: 0

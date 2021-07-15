@@ -7,13 +7,22 @@ using CatchyClick;
 public class UsersData : MonoBehaviour
 {
     DataGridView dataGridView;
+    public DataGridViewRow selectedRow;
+
     void Start()
     {
+        dataGridView = GetComponent<DataGridView>();
+        dataGridView.cellClicked.AddListener(OnCellClicked);
         FillUserData();
     }
+
+    private void OnCellClicked(DataGridViewEventArgs e)
+    {
+        selectedRow = dataGridView.rows[e.row];
+    }
+
     public void FillUserData()
     {
-        dataGridView = GetComponent<DataGridView>();
         List<User> users = DBUsers.GetUsers();
 
         List<DataGridViewRow> rows = users.Select(u =>

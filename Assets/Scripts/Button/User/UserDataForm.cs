@@ -9,8 +9,8 @@ public class UserDataForm : MonoBehaviour
     public Button applyButton;
     public Text text;
 
-    public Text username;
-    public Text password;
+    public InputField username;
+    public InputField password;
     public Dropdown role;
  
 

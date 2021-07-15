@@ -94,6 +94,55 @@ public static class DBUsers
             return false;
         }
     }
+    public static bool RemoveUser(int id)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"DELETE FROM {usersTable} WHERE id = \"{id}\";";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
+    public static bool EditUser(int id, string userName, string password, string role)
+    {
+        MySqlConnection connection = null;
+        
+        try
+        { 
+            connection = SQLConnection.GetConnection();
+            string sql = $"UPDATE {usersTable} " +
+                $"SET username = \"{userName}\", {(password.Length > 0 ? $"password = \"{password}\", " : "")} role = \"{role}\" " +
+                $"WHERE id = \"{id}\";";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
 }
 public class User
 {
