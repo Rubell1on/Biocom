@@ -92,7 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 46588074605488000}
   icon: {fileID: 6183030438233258628}
-  close: {fileID: 46588074060126084}
+  close: {fileID: 128901161349515656}
   body: {fileID: 46588073414346380}
   modalWindowClosing:
     m_PersistentCalls:
