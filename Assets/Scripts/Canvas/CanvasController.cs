@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class CanvasController : MonoBehaviour
 {
-    public List<Canvas> canvases;
+    public List<Canvas> canvas;
     public enum Direction {Left, Up, Right, Down};
     public Direction selecteDirection;
-    public float alphaAmplifier = 2;
+    public bool instante = false;
+    [Range(0.1f, 5)]public float speed = 2;
     List<Vector3> list = new List<Vector3>()
     {
         new Vector3(Screen.width * -1, 0),
@@ -23,16 +24,16 @@ public class CanvasController : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < canvases.Count; i++)
+        for (int i = 0; i < canvas.Count; i++)
         {
             if (i == 0)
             {
-                current = canvases[0];
+                current = canvas[0];
                 current.gameObject.SetActive(true);
             }
             else
             {
-                canvases[i].gameObject.SetActive(false);
+                canvas[i].gameObject.SetActive(false);
             }
         }     
     }
@@ -41,7 +42,7 @@ public class CanvasController : MonoBehaviour
         if (move == null)
         {
             previous = current;
-            current = canvases[id];
+            current = canvas[id];
             current.gameObject.SetActive(true);
             move = StartCoroutine(Move(() => 
             { 
@@ -63,15 +64,24 @@ public class CanvasController : MonoBehaviour
         CanvasGroup currentGroup = current.GetComponent<CanvasGroup>();
 
         currentTransform.anchoredPosition = list[(int)selecteDirection];
-        while (lerp < 1)
-        {
-            previousGroup.alpha = 1 - lerp * alphaAmplifier;
-            currentGroup.alpha = lerp * alphaAmplifier;
-            previousTransform.anchoredPosition = Vector3.Lerp(previousTransform.anchoredPosition, targetPosition, lerp);
-            currentTransform.anchoredPosition = Vector3.Lerp(currentTransform.anchoredPosition, Vector3.zero, lerp);
-            lerp += Time.deltaTime;
 
-            yield return new WaitForEndOfFrame();
+        if (instante == true)
+            while (lerp < 1 / speed)
+            {
+                previousGroup.alpha = 1 - lerp * speed;
+                currentGroup.alpha = lerp * speed;
+                previousTransform.anchoredPosition = Vector3.Lerp(previousTransform.anchoredPosition, targetPosition, lerp * speed);
+                currentTransform.anchoredPosition = Vector3.Lerp(currentTransform.anchoredPosition, Vector3.zero, lerp * speed);
+                lerp += Time.deltaTime;
+
+                yield return new WaitForEndOfFrame();
+            }
+        else
+        {
+            previousGroup.alpha = 0;
+            currentGroup.alpha = 1;
+            previousTransform.anchoredPosition = targetPosition;
+            currentTransform.anchoredPosition = Vector3.zero;
         }
         callback();
     }
