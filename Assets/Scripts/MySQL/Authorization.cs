@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AuthorizeButton : MonoBehaviour
+public class Authorization : MonoBehaviour
 {
     public Button button;
     public InputField login;
     public InputField password;
     public CanvasController canvasController;
+    public User userData;
 
     private void Start()
     {
@@ -17,10 +18,10 @@ public class AuthorizeButton : MonoBehaviour
 
     private void Authorize()
     {
-        User user = DBUsers.Authorize(login.text, password.text);
-        if (user != null)
+        userData = DBUsers.Authorize(login.text, password.text);
+        if (userData != null)
         {
-            canvasController.SelectCanvas((int)user.role + 1);
+            canvasController.SelectCanvas((int)userData.role + 1);
         }
     }
 }

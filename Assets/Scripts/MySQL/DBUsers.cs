@@ -143,6 +143,8 @@ public static class DBUsers
         }
     }
 }
+
+[Serializable]
 public class User
 {
     public int id;

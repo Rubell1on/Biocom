@@ -40,6 +40,40 @@ public class DBResearches
             return null;
         }
     }
+
+    public static List<Research> GetResearchesByUserId(int id)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.seriesId " +
+                $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
+                $"JOIN {SQLConnection.database}.{DBTableNames.users} " +
+                $"ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
+                $"WHERE {DBTableNames.users}.id = {id}";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+            List<Research> researches = new List<Research>();
+
+            while (reader.Read())
+            {
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString())));
+            }
+            reader.Close();
+
+            connection.Close();
+            return researches;
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+
+            return null;
+        }
+    }
     //public static bool AddUser(string userName, string password, string role)
     //{
     //    MySqlConnection connection = null;
