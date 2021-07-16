@@ -8,14 +8,13 @@ using System.Linq;
 
 public static class DBUsers
 {
-    static string usersTable = "users";
     public static User Authorize(string user, string password)
     {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT id, username, role FROM {usersTable} WHERE username = \"{user}\" AND password = \"{password}\";";
+            string sql = $"SELECT id, username, role FROM {DBTableNames.users} WHERE username = \"{user}\" AND password = \"{password}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -48,7 +47,7 @@ public static class DBUsers
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT id, username, role FROM {usersTable};";
+            string sql = $"SELECT id, username, role FROM {DBTableNames.users};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -77,7 +76,7 @@ public static class DBUsers
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"INSERT INTO {usersTable} SET username = \"{userName}\", password = \"{password}\", role = \"{role}\";";
+            string sql = $"INSERT INTO {DBTableNames.users} SET username = \"{userName}\", password = \"{password}\", role = \"{role}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
@@ -100,7 +99,7 @@ public static class DBUsers
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"DELETE FROM {usersTable} WHERE id = \"{id}\";";
+            string sql = $"DELETE FROM {DBTableNames.users} WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
@@ -124,7 +123,7 @@ public static class DBUsers
         try
         { 
             connection = SQLConnection.GetConnection();
-            string sql = $"UPDATE {usersTable} " +
+            string sql = $"UPDATE {DBTableNames.users} " +
                 $"SET username = \"{userName}\", {(password.Length > 0 ? $"password = \"{password}\", " : "")} role = \"{role}\" " +
                 $"WHERE id = \"{id}\";";
 

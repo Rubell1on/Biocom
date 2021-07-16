@@ -23,7 +23,7 @@ public class UserDataFormCreator : MonoBehaviour
         form.applyButton.onClick.AddListener(() =>
         {
             DBUsers.AddUser(form.username.text, form.password.text, form.role.options[form.role.value].text);
-            dataGridView.GetComponent<UsersData>().FillUserData();
+            dataGridView.GetComponent<UsersData>().FillData();
             Destroy(panel);
         });
     }
@@ -53,7 +53,7 @@ public class UserDataFormCreator : MonoBehaviour
         form.applyButton.onClick.AddListener(() =>
         {
             DBUsers.EditUser(id, form.username.text, form.password.text, form.role.options[form.role.value].text);
-            dataGridView.GetComponent<UsersData>().FillUserData();
+            dataGridView.GetComponent<UsersData>().FillData();
             Destroy(panel);
         });
 

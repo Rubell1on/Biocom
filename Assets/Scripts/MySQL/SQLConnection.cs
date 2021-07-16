@@ -8,7 +8,7 @@ using System.Linq;
 
 public static class SQLConnection
 {
-    private static string
+    public static string
         host = "127.0.0.1",
         database = "biocom",
         user = "admin",
@@ -41,3 +41,4 @@ public static class SQLConnection
     }
 
 }
+

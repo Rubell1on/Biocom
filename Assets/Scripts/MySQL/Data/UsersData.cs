@@ -4,24 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using CatchyClick;
 
-public class UsersData : MonoBehaviour
+public class UsersData : TableData<UsersData>
 {
-    DataGridView dataGridView;
-    public DataGridViewRow selectedRow;
-
-    void Start()
-    {
-        dataGridView = GetComponent<DataGridView>();
-        dataGridView.cellClicked.AddListener(OnCellClicked);
-        FillUserData();
-    }
-
-    private void OnCellClicked(DataGridViewEventArgs e)
-    {
-        selectedRow = dataGridView.rows[e.row];
-    }
-
-    public void FillUserData()
+    public override void FillData()
     {
         List<User> users = DBUsers.GetUsers();
 
