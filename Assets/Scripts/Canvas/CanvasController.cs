@@ -9,7 +9,7 @@ public class CanvasController : MonoBehaviour
     public List<Canvas> canvas;
     public enum Direction {Left, Up, Right, Down};
     public Direction selecteDirection;
-    public bool instante = false;
+    public bool instant = false;
     [Range(0.1f, 5)]public float speed = 2;
     List<Vector3> list = new List<Vector3>()
     {
@@ -65,7 +65,7 @@ public class CanvasController : MonoBehaviour
 
         currentTransform.anchoredPosition = list[(int)selecteDirection];
 
-        if (instante == true)
+        if (instant == false)
             while (lerp < 1 / speed)
             {
                 previousGroup.alpha = 1 - lerp * speed;
