@@ -11,6 +11,7 @@ public class ModalWindow : MonoBehaviour
     public Image icon;
     public Button close;
     public GameObject body;
+    public List<GameObject> alsoDestroy = new List<GameObject>();
 
     public ModalWindowCloseEvent modalWindowClosing = new ModalWindowCloseEvent();
     public UnityEvent modalWindowClosed = new UnityEvent();
@@ -33,6 +34,7 @@ public class ModalWindow : MonoBehaviour
         if (!eventArgs.cancel)
         {
             modalWindowClosed.Invoke();
+            alsoDestroy.ForEach(o => Destroy(o));
             Destroy(gameObject);
         }
     }

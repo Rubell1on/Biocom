@@ -10,30 +10,31 @@ using Dummiesman;
 
 public class ResearchLoader : MonoBehaviour
 {
+    public RectTransform mainCanvas;
     public string outputPath = "E:/tmp";
     public DataGridView dataGrid;
+    public RectTransform progressWindowTemplate;
 
     public UnityEvent meshesLoaded = new UnityEvent();
 
-    // Start is called before the first frame update
+    private GameObject progressWindow;
+
     void Start()
     {
         dataGrid = GetComponent<DataGridView>();
         dataGrid.cellClicked.AddListener(OnCellClicked);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        meshesLoaded.AddListener(OnMeshLoaded);
     }
 
     public async void OnCellClicked(DataGridViewEventArgs args)
     {
+
         DataGridViewRow row = dataGrid.rows[args.row];
         int index;
 
         if (Int32.TryParse(row.cells[0].value, out index)) {
+            progressWindow = Instantiate(progressWindowTemplate.gameObject, mainCanvas);
+
             List<Part> parts = DBParts.GetPartsByResearchId(index);
             List<MeshData> meshDatas = parts.Select(p => new MeshData(p.partName, p.filePath, $"{outputPath}/{p.partName}", new Threshold(1, 100))).ToList();
 
@@ -62,5 +63,10 @@ public class ResearchLoader : MonoBehaviour
         {
 
         }
+    }
+
+    void OnMeshLoaded()
+    {
+        Destroy(progressWindow);
     }
 }
