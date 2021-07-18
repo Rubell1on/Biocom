@@ -14,10 +14,10 @@ public class DBResearches
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.seriesId " +
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.seriesId, {DBTableNames.series}.name " +
                 $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.users} " +
-                $"ON {DBTableNames.researches}.userId = {DBTableNames.users}.id;";
+                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
+                $"JOIN {SQLConnection.database}.{DBTableNames.series} ON {DBTableNames.researches}.seriesId = {DBTableNames.series}.id;";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -25,7 +25,7 @@ public class DBResearches
 
             while (reader.Read())
             {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString())));
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString()), reader[8].ToString()));
             }
             reader.Close();
 
@@ -59,7 +59,7 @@ public class DBResearches
 
             while (reader.Read())
             {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString())));
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString()), reader[8].ToString()));
             }
             reader.Close();
 
@@ -74,78 +74,79 @@ public class DBResearches
             return null;
         }
     }
-    //public static bool AddUser(string userName, string password, string role)
-    //{
-    //    MySqlConnection connection = null;
-    //    try
-    //    {
-    //        connection = SQLConnection.GetConnection();
-    //        string sql = $"INSERT INTO {tableName} SET username = \"{userName}\", password = \"{password}\", role = \"{role}\";";
+    public static bool AddResearch(int userId, string dateTime, string description, string note, string state, int seriesId)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"INSERT INTO {DBTableNames.researches} SET userId = \"{userId}\", date = \"{dateTime}\", description = \"{description}\", note = \"{note}\", state = \"{state}\", seriesId = \"{seriesId}\";";
 
-    //        MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlCommand command = new MySqlCommand(sql, connection);
 
-    //        using (MySqlDataReader reader = command.ExecuteReader())
-    //        {
-    //            connection.Close();
-    //            return true;
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Ошибка: " + e);
-    //        connection.Close();
-    //        return false;
-    //    }
-    //}
-    //public static bool RemoveUser(int id)
-    //{
-    //    MySqlConnection connection = null;
-    //    try
-    //    {
-    //        connection = SQLConnection.GetConnection();
-    //        string sql = $"DELETE FROM {tableName} WHERE id = \"{id}\";";
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
+    public static bool RemoveResearch(int id)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"DELETE FROM {DBTableNames.researches} WHERE id = \"{id}\";";
 
-    //        MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlCommand command = new MySqlCommand(sql, connection);
 
-    //        using (MySqlDataReader reader = command.ExecuteReader())
-    //        {
-    //            connection.Close();
-    //            return true;
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Ошибка: " + e);
-    //        connection.Close();
-    //        return false;
-    //    }
-    //}
-    //public static bool EditUser(int id, string userName, string password, string role)
-    //{
-    //    MySqlConnection connection = null;
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
 
-    //    try
-    //    {
-    //        connection = SQLConnection.GetConnection();
-    //        string sql = $"UPDATE {tableName} " +
-    //            $"SET username = \"{userName}\", {(password.Length > 0 ? $"password = \"{password}\", " : "")} role = \"{role}\" " +
-    //            $"WHERE id = \"{id}\";";
+    public static bool EditResearch(int researchId, int userId, string description, string note, string state, int seriesId)
+    {
+        MySqlConnection connection = null;
 
-    //        MySqlCommand command = new MySqlCommand(sql, connection);
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"UPDATE {DBTableNames.researches} " +
+                $"SET userId = \"{userId}\", description = \"{description}\", note = \"{note}\", state = \"{state}\", seriesId = \"{seriesId}\"" +
+                $"WHERE id = \"{researchId}\";";
 
-    //        using (MySqlDataReader reader = command.ExecuteReader())
-    //        {
-    //            connection.Close();
-    //            return true;
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Ошибка: " + e);
-    //        connection.Close();
-    //        return false;
-    //    }
-    //}
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
 }
 public class Research
 {
@@ -156,10 +157,11 @@ public class Research
     public int userId;
     public string userName;
     public int seriesId;
+    public string seriesName;
     public enum State { newResearch, inProgress, finished };
     public State state;
 
-    public Research(int id, string date, string description, string note, string state, int userId, string userName, int seriesId)
+    public Research(int id, string date, string description, string note, string state, int userId, string userName, int seriesId, string seriesName)
     {
         this.id = id;
         this.date = DateTime.Parse(date);
@@ -169,6 +171,7 @@ public class Research
         this.userId = userId;
         this.userName = userName;
         this.seriesId = seriesId;
+        this.seriesName = seriesName;
     }
 
     private static State GetState(string state)

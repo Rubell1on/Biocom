@@ -2247,7 +2247,7 @@ GameObject:
   - component: {fileID: 6285141406105056933}
   - component: {fileID: 5337537554344963595}
   m_Layer: 5
-  m_Name: EditPanel
+  m_Name: EditUserPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

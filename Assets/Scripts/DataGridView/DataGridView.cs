@@ -112,69 +112,74 @@ namespace CatchyClick {
 
         public void OnChange()
         {
-            if (rows?[0].cells.Count == columns?.Count)
+            if (rows.Count > 0)
             {
-                if (uiRows.Count > 0)
+                if (rows?[0].cells.Count == columns?.Count)
                 {
-                    uiRows.ForEach(r => Destroy(r.gameObject));
-                    uiRows.Clear();
-                }
-
-                for(int i = 0; i < rows.Count; i++)
-                {
-                    DataGridViewRow row = rows[i];
-                    GameObject rowObject = DataGridViewRowUI.CreateRow();
-                    DataGridViewRowUI rowUI = rowObject.GetComponent<DataGridViewRowUI>();
-
-                    Image rowImage = rowObject.GetComponent<Image>();
-                    if (colorRows)
+                    if (uiRows.Count > 0)
                     {
-                        rowImage = rowObject.GetComponent<Image>();
-                        rowImage.color = i == 0 || i % 2 == 0 ? even : odd;
-                    } else
-                    {
-                        rowImage.color = even;
+                        uiRows.ForEach(r => Destroy(r.gameObject));
+                        uiRows.Clear();
                     }
 
-                    for (int j = 0; j < row.cells.Count; j++)
+                    for (int i = 0; i < rows.Count; i++)
                     {
+                        DataGridViewRow row = rows[i];
+                        GameObject rowObject = DataGridViewRowUI.CreateRow();
+                        DataGridViewRowUI rowUI = rowObject.GetComponent<DataGridViewRowUI>();
 
-                        GameObject cell = DataGridViewCellUI.CreateCell();
-
-                        RectTransform cellRT = cell.GetComponent<RectTransform>();
-                        RectTransform headerRT = columns[j].GetComponent<RectTransform>();
-                        cellRT.sizeDelta = new Vector2(headerRT.sizeDelta.x, cellRT.sizeDelta.y);
-
-                        cell.transform.SetParent(rowUI.transform);
-                        DataGridViewCellUI cellUI = cell.GetComponent<DataGridViewCellUI>();
-                        cellUI.textComponent.text = row.cells[j].value;
-
-                        Button cellButton = cell.GetComponent<Button>();
-                        DataGridViewEventArgs args = new DataGridViewEventArgs(i, j);
-                        cellButton.onClick.AddListener(OnClick);
-
-                        rowUI.cells.Add(cellUI);
-
-                        void OnClick()
+                        Image rowImage = rowObject.GetComponent<Image>();
+                        if (colorRows)
                         {
-                            cellClicked.Invoke(args);
+                            rowImage = rowObject.GetComponent<Image>();
+                            rowImage.color = i == 0 || i % 2 == 0 ? even : odd;
                         }
+                        else
+                        {
+                            rowImage.color = even;
+                        }
+
+                        for (int j = 0; j < row.cells.Count; j++)
+                        {
+
+                            GameObject cell = DataGridViewCellUI.CreateCell();
+
+                            RectTransform cellRT = cell.GetComponent<RectTransform>();
+                            RectTransform headerRT = columns[j].GetComponent<RectTransform>();
+                            cellRT.sizeDelta = new Vector2(headerRT.sizeDelta.x, cellRT.sizeDelta.y);
+
+                            cell.transform.SetParent(rowUI.transform);
+                            DataGridViewCellUI cellUI = cell.GetComponent<DataGridViewCellUI>();
+                            cellUI.textComponent.text = row.cells[j].value;
+
+                            Button cellButton = cell.GetComponent<Button>();
+                            DataGridViewEventArgs args = new DataGridViewEventArgs(i, j);
+                            cellButton.onClick.AddListener(OnClick);
+
+                            rowUI.cells.Add(cellUI);
+
+                            void OnClick()
+                            {
+                                cellClicked.Invoke(args);
+                            }
+                        }
+
+                        uiRows.Add(rowUI);
                     }
 
-                    uiRows.Add(rowUI);
+                    uiRows.ForEach(r =>
+                    {
+                        r.transform.SetParent(rowsComponent.transform);
+                        RectTransform rowRT = r.GetComponent<RectTransform>();
+                        rowRT.anchoredPosition3D = Vector3.zero;
+                        rowRT.localScale = Vector3.one;
+                    });
+
                 }
-
-                uiRows.ForEach(r =>
+                else
                 {
-                    r.transform.SetParent(rowsComponent.transform);
-                    RectTransform rowRT = r.GetComponent<RectTransform>();
-                    rowRT.anchoredPosition3D = Vector3.zero;
-                    rowRT.localScale = Vector3.one;
-                });
-
-            } else
-            {
-                throw new System.Exception("Cells count don't match with header!");
+                    throw new System.Exception("Cells count don't match with header!");
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ public static class DBSeries
 
             while (reader.Read())
             {
-                serires.Add(new Series(Convert.ToInt32(reader[0]), reader[1].ToString()));
+                serires.Add(new Series(Convert.ToInt32(reader[0]),reader[1].ToString(), reader[2].ToString()));
             }
             reader.Close();
 
@@ -113,11 +113,13 @@ public static class DBSeries
 public class Series
 {
     public int id;
+    public string name;
     public string description;
 
-    public Series(int id, string description)
+    public Series(int id, string name, string description)
     {
         this.id = id;
+        this.name = name;
         this.description = description;
     }
 }

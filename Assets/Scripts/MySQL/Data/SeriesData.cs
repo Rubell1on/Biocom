@@ -15,6 +15,7 @@ public class SeriesData : TableData<SeriesData>
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
             {
                 new DataGridViewCell(u.id.ToString()),
+                new DataGridViewCell(u.name.ToString()),
                 new DataGridViewCell(u.description.ToString())
             };
 

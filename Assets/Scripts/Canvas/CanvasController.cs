@@ -43,12 +43,15 @@ public class CanvasController : MonoBehaviour
         {
             previous = current;
             current = canvas[id];
-            current.gameObject.SetActive(true);
-            move = StartCoroutine(Move(() => 
-            { 
-                previous.gameObject.SetActive(false);
-                move = null;
-            }));
+            if (previous != current)
+            {
+                current.gameObject.SetActive(true);
+                move = StartCoroutine(Move(() =>
+                {
+                    previous.gameObject.SetActive(false);
+                    move = null;
+                }));
+            }
         }
     }
 

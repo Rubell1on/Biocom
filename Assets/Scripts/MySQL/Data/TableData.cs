@@ -6,11 +6,16 @@ public abstract class TableData<T> : MonoBehaviour
     public DataGridView dataGridView;
     public DataGridViewRow selectedRow;
 
-    void Start()
+    void OnEnable()
     {
         dataGridView = GetComponent<DataGridView>();
         dataGridView.cellClicked.AddListener(OnCellClicked);
         FillData();
+    }
+
+    private void OnDisable()
+    {
+        dataGridView.cellClicked.RemoveListener(OnCellClicked);
     }
 
     private void OnCellClicked(DataGridViewEventArgs e)

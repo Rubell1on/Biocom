@@ -70,6 +70,7 @@ public static class DBUsers
             return null;
         }
     }
+
     public static bool AddUser(string userName, string password, string role)
     {
         MySqlConnection connection = null;
