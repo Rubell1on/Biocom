@@ -34,6 +34,7 @@ public class UserDataFormCreator : MonoBehaviour
         if (userData.selectedRow != null)
         {
             DBUsers.RemoveUser(id);
+            dataGridView.GetComponent<UsersData>().FillData();
         }
         else
         {
