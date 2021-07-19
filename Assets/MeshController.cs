@@ -11,9 +11,9 @@ public class MeshController : MonoBehaviour
 
     void Start()
     {
-        Center();
-        Resize(size);
-        Rotate(rotation);
+        //Center();
+        //Resize(size);
+        //Rotate(rotation);
 
     }
 
