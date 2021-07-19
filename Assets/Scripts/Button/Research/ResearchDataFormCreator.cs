@@ -44,6 +44,7 @@ public class ResearchDataFormCreator : MonoBehaviour
         if (researchData.selectedRow != null)
         {
             DBResearches.RemoveResearch(id);
+            dataGridView.GetComponent<ResearchesData>().FillData();
         }
         else
         {

@@ -37,78 +37,78 @@ public static class DBSeries
             return null;
         }
     }
-    //public static bool AddUser(string userName, string password, string role)
-    //{
-    //    MySqlConnection connection = null;
-    //    try
-    //    {
-    //        connection = SQLConnection.GetConnection();
-    //        string sql = $"INSERT INTO {DBTableNames.users} SET username = \"{userName}\", password = \"{password}\", role = \"{role}\";";
 
-    //        MySqlCommand command = new MySqlCommand(sql, connection);
+    public static bool AddSeries(string seriesName, string description)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\";";
+            MySqlCommand command = new MySqlCommand(sql, connection);
 
-    //        using (MySqlDataReader reader = command.ExecuteReader())
-    //        {
-    //            connection.Close();
-    //            return true;
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Ошибка: " + e);
-    //        connection.Close();
-    //        return false;
-    //    }
-    //}
-    //public static bool RemoveUser(int id)
-    //{
-    //    MySqlConnection connection = null;
-    //    try
-    //    {
-    //        connection = SQLConnection.GetConnection();
-    //        string sql = $"DELETE FROM {DBTableNames.users} WHERE id = \"{id}\";";
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
+    public static bool RemoveSeries(int id)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"DELETE FROM {DBTableNames.series} WHERE id = \"{id}\";";
+            MySqlCommand command = new MySqlCommand(sql, connection);
 
-    //        MySqlCommand command = new MySqlCommand(sql, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
 
-    //        using (MySqlDataReader reader = command.ExecuteReader())
-    //        {
-    //            connection.Close();
-    //            return true;
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Ошибка: " + e);
-    //        connection.Close();
-    //        return false;
-    //    }
-    //}
-    //public static bool EditUser(int id, string userName, string password, string role)
-    //{
-    //    MySqlConnection connection = null;
+    public static bool EditSeries(int id, string seriesName, string description)
+    {
+        MySqlConnection connection = null;
 
-    //    try
-    //    {
-    //        connection = SQLConnection.GetConnection();
-    //        string sql = $"UPDATE {DBTableNames.users} " +
-    //            $"SET username = \"{userName}\", {(password.Length > 0 ? $"password = \"{password}\", " : "")} role = \"{role}\" " +
-    //            $"WHERE id = \"{id}\";";
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"UPDATE {DBTableNames.series} " +
+                $"SET name = \"{seriesName}\", description = \"{description}\" " +
+                $"WHERE id = \"{id}\";";
 
-    //        MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlCommand command = new MySqlCommand(sql, connection);
 
-    //        using (MySqlDataReader reader = command.ExecuteReader())
-    //        {
-    //            connection.Close();
-    //            return true;
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.Log("Ошибка: " + e);
-    //        connection.Close();
-    //        return false;
-    //    }
-    //}
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
 }
 public class Series
 {
