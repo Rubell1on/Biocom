@@ -7,7 +7,7 @@ public class MeshController : MonoBehaviour
 {
     public List<MeshFilter> filters;
     public Vector3 size = new Vector3(0.05f, 0.05f, 0.05f);
-    public Vector3 rotation = new Vector3(-90, 180, 0);
+    public Vector3 rotation = new Vector3(-90f, 180f, 0f);
 
     void Start()
     {
@@ -31,7 +31,7 @@ public class MeshController : MonoBehaviour
         if (combines.Length > 0)
         {
             Mesh mesh = new Mesh();
-            mesh.CombineMeshes(combines);
+            mesh.CombineMeshes(combines, true, true);
 
             List<Vector3> vertices = mesh.vertices.ToList();
             Vector3 pivot = vertices.Aggregate(Vector3.zero, (acc, curr) => acc + curr) / vertices.Count;
@@ -52,6 +52,14 @@ public class MeshController : MonoBehaviour
 
     public void Rotate(Vector3 rotation)
     {
-        filters.ForEach(f => f.transform.localRotation = Quaternion.Euler(rotation));
+        filters.ForEach(f => f.transform.parent.rotation = Quaternion.Euler(rotation));
+    }
+
+    public void Rotate(Quaternion rotation)
+    {
+        //filters.ForEach(f => gameObjects.Add(f.gameObject));
+        //gameObjects.ForEach(g => g.transform.rotation = rotation);
+        filters.ForEach(f => f.transform.parent.localRotation = rotation);
+        filters.ForEach(f => f.gameObject.transform.localRotation.Set(rotation.x, rotation.y, rotation.z, rotation.w));
     }
 }

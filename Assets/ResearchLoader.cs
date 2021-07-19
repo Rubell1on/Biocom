@@ -14,6 +14,8 @@ public class ResearchLoader : MonoBehaviour
     public string outputPath = "E:/tmp";
     public DataGridView dataGrid;
     public RectTransform progressWindowTemplate;
+    public MeshController meshController;
+    public Material meshMaterial;
 
     public UnityEvent meshesLoaded = new UnityEvent();
 
@@ -55,7 +57,17 @@ public class ResearchLoader : MonoBehaviour
             foreach (MeshData data in meshDatas)
             {
                 GameObject go = new OBJLoader().Load($"{data.outputFilePath}/Segmentation.obj");
+                meshController.filters.Add(go.GetComponentInChildren<MeshFilter>());
+                go.transform.SetParent(meshController.transform);
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localScale = Vector3.one;
+                go.GetComponentInChildren<MeshRenderer>().material = meshMaterial;
             }
+
+            meshController.Resize(meshController.size);
+            meshController.Center();
+
+            //transform.localRotation = Quaternion.Euler(meshController.rotation);
 
             Debug.Log("Finished");
             meshesLoaded.Invoke();
