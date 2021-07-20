@@ -13,7 +13,9 @@ public class DBParts : MonoBehaviour
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT * FROM {DBTableNames.parts};";
+            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
+                $"FROM {DBTableNames.parts} " +
+                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id;";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -22,17 +24,59 @@ public class DBParts : MonoBehaviour
             while (reader.Read())
             {
                 int id = Convert.ToInt32(reader[0]);
-                int resId = Convert.ToInt32(reader[1]);
+                int serId = Convert.ToInt32(reader[1]);
                 int remoteId = Convert.ToInt32(reader[2]);
                 string filePath = reader[3].ToString();
                 string partName = reader[4].ToString();
+                string seriesName = reader[5].ToString();
 
-                serires.Add(new Part(id, partName, resId, remoteId, filePath));
+                serires.Add(new Part(id, partName, serId, remoteId, filePath, seriesName));
             }
             reader.Close();
 
             connection.Close();
             return serires;
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+
+            return null;
+        }
+    }
+
+    public static Part GetPart(int partId)
+    {
+        MySqlConnection connection = null;
+        Part part = null;
+
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
+                $"FROM {DBTableNames.parts} " +
+                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
+                $"WHERE {DBTableNames.parts}.id = \"{partId}\"";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int id = Convert.ToInt32(reader[0]);
+                int serId = Convert.ToInt32(reader[1]);
+                int remoteId = Convert.ToInt32(reader[2]);
+                string filePath = reader[3].ToString();
+                string partName = reader[4].ToString();
+                string seriesName = reader[5].ToString();
+
+                part = new Part(id, partName, serId, remoteId, filePath, seriesName);
+            }
+            reader.Close();
+
+            connection.Close();
+            return part;
         }
         catch (Exception e)
         {
@@ -49,7 +93,10 @@ public class DBParts : MonoBehaviour
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT * FROM {DBTableNames.parts} WHERE {DBTableNames.parts}.researchId = \"{researchId}\";";
+            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
+                $"FROM {DBTableNames.parts} " +
+                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
+                $"WHERE {DBTableNames.parts}.researchId = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -58,12 +105,13 @@ public class DBParts : MonoBehaviour
             while (reader.Read())
             {
                 int id = Convert.ToInt32(reader[0]);
-                int resId = Convert.ToInt32(reader[1]);
+                int serId = Convert.ToInt32(reader[1]);
                 int remoteId = Convert.ToInt32(reader[2]);
                 string filePath = reader[3].ToString();
                 string partName = reader[4].ToString();
+                string seriesName = reader[5].ToString();
 
-                serires.Add(new Part(id, partName, resId, remoteId, filePath));
+                serires.Add(new Part(id, partName, serId, remoteId, filePath, seriesName));
             }
             reader.Close();
 
@@ -78,22 +126,101 @@ public class DBParts : MonoBehaviour
             return null;
         }
     }
+
+    public static bool AddPart(int seriesId, string partName, string filePath, int remoteId = -1)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"INSERT INTO {DBTableNames.parts} " +
+                $"SET {DBTableNames.parts}.seriesId = \"{seriesId}\", {DBTableNames.parts}.partName = \"{partName}\", {DBTableNames.parts}.filePath = \"{filePath}\", {DBTableNames.parts}.remoteId = \"{remoteId}\";";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+
+            return false;
+        }
+    }
+
+    public static bool EditPart(int id, int seriesId, string partName, string filePath, int remoteId = -1)
+    {
+        MySqlConnection connection = null;
+
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"UPDATE {DBTableNames.parts} " +
+                $"SET seriesId = \"{seriesId}\", partName = \"{partName}\", filePath = \"{filePath}\", remoteId = \"{remoteId}\" " +
+                $"WHERE id = \"{id}\";";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
+
+    public static bool RemovePart(int id)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"DELETE FROM {DBTableNames.parts} WHERE id = \"{id}\";";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                connection.Close();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+            return false;
+        }
+    }
 }
 
 public class Part
 {
     public int id;
-    public int researchId;
+    public int seriesId;
     public int remoteId;
     public string filePath;
     public string partName;
+    public string seriesName;
 
-    public Part(int id, string partName, int researchId, int remoteId, string filePath)
+    public Part(int id, string partName, int seriesId, int remoteId, string filePath, string seriesName)
     {
         this.id = id;
-        this.researchId = researchId;
+        this.seriesId = seriesId;
         this.remoteId = remoteId;
         this.filePath = filePath;
         this.partName = partName;
+        this.seriesName = seriesName;
     }
 }

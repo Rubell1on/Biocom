@@ -15,9 +15,10 @@ public class PartsData : TableData<PartsData>
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
             {
                 new DataGridViewCell(u.id.ToString()),
-                new DataGridViewCell(u.researchId.ToString()),
+                new DataGridViewCell(u.seriesId.ToString()),
                 new DataGridViewCell(u.remoteId.ToString()),
-                new DataGridViewCell(u.filePath.ToString())
+                new DataGridViewCell(u.filePath.ToString()),
+                new DataGridViewCell(u.seriesName.ToString())
             };
 
             return new DataGridViewRow(cells);

@@ -9,7 +9,7 @@ public class ResearchDataFormCreator : MonoBehaviour
 {
     public GameObject template;
     public DataGridView dataGridView;
-    public ResearchesData researchData;
+    public PartsData researchData;
     List<User> users;
     List<Series> series;
     int id;
@@ -25,15 +25,15 @@ public class ResearchDataFormCreator : MonoBehaviour
         List<string> userNames = users.Where(u => u.role == User.Role.user).Select(user => user.userName).ToList();
 
         form.SetInfo("Создать", "Добавить исследование", userNames);
-        form.applyButton.onClick.AddListener(() =>
+        form.applyButton.onClick.AddListener((UnityEngine.Events.UnityAction)(() =>
         {
             int id = users.Find(u => u.userName == form.userName.options[form.userName.value].text).id;
             string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-            DBResearches.AddResearch(id,date, form.description.text, form.note.text, form.state.options[form.state.value].text);
-            dataGridView.GetComponent<ResearchesData>().FillData();
+            DBResearches.AddResearch(id, date, form.description.text, form.note.text, form.state.options[form.state.value].text);
+            dataGridView.GetComponent<PartsData>().FillData();
             Destroy(panel);
-        });
+        }));
     }
 
     public void DeleteResearchData()
@@ -42,7 +42,7 @@ public class ResearchDataFormCreator : MonoBehaviour
         if (researchData.selectedRow != null)
         {
             DBResearches.RemoveResearch(id);
-            dataGridView.GetComponent<ResearchesData>().FillData();
+            dataGridView.GetComponent<PartsData>().FillData();
         }
         else
         {
@@ -70,14 +70,14 @@ public class ResearchDataFormCreator : MonoBehaviour
         int stateId = form.state.options.FindIndex(s => s.text == researchData.selectedRow.cells[4].value);
         form.state.value = stateId;
 
-        form.applyButton.onClick.AddListener(() =>
+        form.applyButton.onClick.AddListener((UnityEngine.Events.UnityAction)(() =>
         {
             int userId = users.Find(u => u.userName == form.userName.options[form.userName.value].text).id;
             string state = form.state.options[form.state.value].text;
             DBResearches.EditResearch(id, userId, form.description.text, form.note.text, state);
-            dataGridView.GetComponent<ResearchesData>().FillData();
+            dataGridView.GetComponent<PartsData>().FillData();
             Destroy(panel);
-        });
+        }));
 
     }
 }
