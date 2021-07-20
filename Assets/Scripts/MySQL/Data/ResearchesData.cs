@@ -19,7 +19,6 @@ public class ResearchesData : TableData<ResearchesData>
                 new DataGridViewCell(r.note.ToString()),
                 new DataGridViewCell(r.state.ToString()),
                 new DataGridViewCell(r.userName.ToString()),
-                new DataGridViewCell(r.seriesName.ToString())
             };
 
             return new DataGridViewRow(cells);

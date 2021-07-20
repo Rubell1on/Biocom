@@ -14,15 +14,24 @@ public class SeriesDataFormCreator : MonoBehaviour
     int id;
     GameObject panel;
     SeriesDataForm form;
+    List<Research> researches;
+
     public void CreateSeriesDataAddForm()
     {
         panel = Instantiate(editPanel, gameObject.transform.parent);
         form = panel.GetComponent<SeriesDataForm>();
-
         form.SetInfo("Создать", "Добавить серию");
+
+        form.researchId.ClearOptions();
+        researches = DBResearches.GetResearches();
+
+        List<string> researchIds = researches.Select(r => r.id.ToString()).ToList();
+        form.researchId.AddOptions(researchIds);
+
         form.applyButton.onClick.AddListener(() =>
         {
-            DBSeries.AddSeries(form.seriesName.text,form.description.text);
+            int researchId = Convert.ToInt32(form.researchId.options[form.researchId.value].text);
+            DBSeries.AddSeries(form.seriesName.text,form.description.text, researchId);
             dataGridView.GetComponent<SeriesData>().FillData();
             Destroy(panel);
         });
@@ -51,9 +60,21 @@ public class SeriesDataFormCreator : MonoBehaviour
         form.SetInfo("Изменить", "Редактировать серию");
         form.seriesName.text = seriesData.selectedRow.cells[1].value;
         form.description.text = seriesData.selectedRow.cells[2].value;
+
+        form.researchId.ClearOptions();
+
+        researches = DBResearches.GetResearches();
+        List<string> researchIds = researches.Select(r => r.id.ToString()).ToList();
+        form.researchId.AddOptions(researchIds);
+
+        int researchId = form.researchId.options.FindIndex(o => o.text == seriesData.selectedRow.cells[3].value);
+
+        form.researchId.value = researchId;
+
         form.applyButton.onClick.AddListener(() =>
         {
-            DBSeries.EditSeries(id, form.seriesName.text, form.description.text);
+            int researchId = Convert.ToInt32(form.researchId.options[form.researchId.value].text);
+            DBSeries.EditSeries(id, form.seriesName.text, form.description.text, researchId);
             dataGridView.GetComponent<SeriesData>().FillData();
             Destroy(panel);
         });

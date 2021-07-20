@@ -14,9 +14,8 @@ public class ResearchDataForm : MonoBehaviour
     public InputField note;
     public Dropdown state;
     public Dropdown userName;
-    public Dropdown series;
 
-    public void SetInfo(string buttonText, string labelText, List<string> userNames, List<string> series, string description = "", string note = "")
+    public void SetInfo(string buttonText, string labelText, List<string> userNames, string description = "", string note = "")
     {
         applyButton.GetComponentInChildren<Text>().text = buttonText;
         text.text = labelText;
@@ -25,9 +24,7 @@ public class ResearchDataForm : MonoBehaviour
         this.note.text = note;
         state.ClearOptions();
         userName.ClearOptions();
-        this.series.ClearOptions();
         state.AddOptions(new List<string>(Enum.GetNames(typeof(Research.State))));
         userName.AddOptions(userNames);
-        this.series.AddOptions(series);
     }
 }

@@ -14,10 +14,9 @@ public class DBResearches
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.seriesId, {DBTableNames.series}.name " +
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
                 $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.series} ON {DBTableNames.researches}.seriesId = {DBTableNames.series}.id;";
+                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id;";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -25,7 +24,7 @@ public class DBResearches
 
             while (reader.Read())
             {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString()), reader[8].ToString()));
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString()));
             }
             reader.Close();
 
@@ -47,11 +46,10 @@ public class DBResearches
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.seriesId, {DBTableNames.series}.name " +
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.series}.id, {DBTableNames.series}.name " +
                 $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
                 $"JOIN {SQLConnection.database}.{DBTableNames.users} " +
                 $"ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.series} ON {DBTableNames.researches}.seriesId = {DBTableNames.series}.id " +
                 $"WHERE {DBTableNames.users}.id = {id};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -60,7 +58,7 @@ public class DBResearches
 
             while (reader.Read())
             {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), Convert.ToInt32(reader[7].ToString()), reader[8].ToString()));
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString()));
             }
             reader.Close();
 
@@ -75,13 +73,13 @@ public class DBResearches
             return null;
         }
     }
-    public static bool AddResearch(int userId, string dateTime, string description, string note, string state, int seriesId)
+    public static bool AddResearch(int userId, string dateTime, string description, string note, string state)
     {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"INSERT INTO {DBTableNames.researches} SET userId = \"{userId}\", date = \"{dateTime}\", description = \"{description}\", note = \"{note}\", state = \"{state}\", seriesId = \"{seriesId}\";";
+            string sql = $"INSERT INTO {DBTableNames.researches} SET userId = \"{userId}\", date = \"{dateTime}\", description = \"{description}\", note = \"{note}\", state = \"{state}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
@@ -122,7 +120,7 @@ public class DBResearches
         }
     }
 
-    public static bool EditResearch(int researchId, int userId, string description, string note, string state, int seriesId)
+    public static bool EditResearch(int researchId, int userId, string description, string note, string state)
     {
         MySqlConnection connection = null;
 
@@ -130,7 +128,7 @@ public class DBResearches
         {
             connection = SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.researches} " +
-                $"SET userId = \"{userId}\", description = \"{description}\", note = \"{note}\", state = \"{state}\", seriesId = \"{seriesId}\"" +
+                $"SET userId = \"{userId}\", description = \"{description}\", note = \"{note}\", state = \"{state}\" " +
                 $"WHERE id = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -162,7 +160,7 @@ public class Research
     public enum State { newResearch, inProgress, finished };
     public State state;
 
-    public Research(int id, string date, string description, string note, string state, int userId, string userName, int seriesId, string seriesName)
+    public Research(int id, string date, string description, string note, string state, int userId, string userName)
     {
         this.id = id;
         this.date = DateTime.Parse(date);
@@ -171,8 +169,6 @@ public class Research
         this.state = GetState(state);
         this.userId = userId;
         this.userName = userName;
-        this.seriesId = seriesId;
-        this.seriesName = seriesName;
     }
 
     private static State GetState(string state)

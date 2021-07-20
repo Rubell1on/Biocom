@@ -14,7 +14,9 @@ public static class DBSeries
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT * FROM {DBTableNames.series};";
+            string sql = $"SELECT {DBTableNames.series}.id, {DBTableNames.series}.name, {DBTableNames.series}.description, {DBTableNames.researches}.id " +
+                $"FROM {DBTableNames.series} " + 
+                $"LEFT JOIN {DBTableNames.researches} ON {DBTableNames.researches}.id = {DBTableNames.series}.researchId;";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -22,7 +24,13 @@ public static class DBSeries
 
             while (reader.Read())
             {
-                serires.Add(new Series(Convert.ToInt32(reader[0]),reader[1].ToString(), reader[2].ToString()));
+                int researchId;
+                if (!Int32.TryParse(reader[3].ToString(), out researchId))
+                {
+                    researchId = -1;
+                }
+
+                serires.Add(new Series(Convert.ToInt32(reader[0]),reader[1].ToString(), reader[2].ToString(), researchId));
             }
             reader.Close();
 
@@ -38,13 +46,13 @@ public static class DBSeries
         }
     }
 
-    public static bool AddSeries(string seriesName, string description)
+    public static bool AddSeries(string seriesName, string description, int researchId)
     {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\";";
+            string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\";";
             MySqlCommand command = new MySqlCommand(sql, connection);
 
             using (MySqlDataReader reader = command.ExecuteReader())
@@ -83,7 +91,7 @@ public static class DBSeries
         }
     }
 
-    public static bool EditSeries(int id, string seriesName, string description)
+    public static bool EditSeries(int id, string seriesName, string description, int researchId)
     {
         MySqlConnection connection = null;
 
@@ -91,7 +99,7 @@ public static class DBSeries
         {
             connection = SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.series} " +
-                $"SET name = \"{seriesName}\", description = \"{description}\" " +
+                $"SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\" " +
                 $"WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -115,11 +123,13 @@ public class Series
     public int id;
     public string name;
     public string description;
+    public int researchId;
 
-    public Series(int id, string name, string description)
+    public Series(int id, string name, string description, int researchId)
     {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.researchId = researchId;
     }
 }
