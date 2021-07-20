@@ -46,10 +46,9 @@ public class DBResearches
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.series}.id, {DBTableNames.series}.name " +
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
                 $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.users} " +
-                $"ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
+                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " + 
                 $"WHERE {DBTableNames.users}.id = {id};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);

@@ -96,7 +96,8 @@ public class DBParts : MonoBehaviour
             string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
                 $"FROM {DBTableNames.parts} " +
                 $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
-                $"WHERE {DBTableNames.parts}.researchId = \"{researchId}\";";
+                $"JOIN {DBTableNames.researches} ON {DBTableNames.series}.researchId = {DBTableNames.researches}.id " +
+                $"WHERE {DBTableNames.researches}.id = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -222,5 +223,15 @@ public class Part
         this.filePath = filePath;
         this.partName = partName;
         this.seriesName = seriesName;
+    }
+
+    public static Dictionary<int, List<Part>> GetSeries(List<Part> parts)
+    {
+        List<int> keysSet = new HashSet<int>(parts.Select(p => p.seriesId)).ToList();
+        Dictionary<int, List<Part>> series = new Dictionary<int, List<Part>>();
+        keysSet.ForEach(k => series[k] = new List<Part>());
+        parts.ForEach(p => series[p.seriesId].Add(p));
+
+        return series;
     }
 }

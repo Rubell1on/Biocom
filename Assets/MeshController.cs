@@ -8,13 +8,13 @@ public class MeshController : MonoBehaviour
     public List<MeshFilter> filters;
     public Vector3 size = new Vector3(0.05f, 0.05f, 0.05f);
     public Vector3 rotation = new Vector3(-90f, 180f, 0f);
+    public List<GameObject> meshes;
 
     void Start()
     {
         //Center();
         //Resize(size);
         //Rotate(rotation);
-
     }
 
     public void Center()
@@ -57,9 +57,14 @@ public class MeshController : MonoBehaviour
 
     public void Rotate(Quaternion rotation)
     {
-        //filters.ForEach(f => gameObjects.Add(f.gameObject));
-        //gameObjects.ForEach(g => g.transform.rotation = rotation);
         filters.ForEach(f => f.transform.parent.localRotation = rotation);
         filters.ForEach(f => f.gameObject.transform.localRotation.Set(rotation.x, rotation.y, rotation.z, rotation.w));
+    }
+
+    public void RemoveMeshes()
+    {
+        meshes.ForEach(m => Destroy(m));
+        meshes.Clear();
+        filters.Clear();
     }
 }
