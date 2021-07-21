@@ -21,7 +21,7 @@ namespace CatchyClick
             GameObject textObject = new GameObject("Text");
 
             Text text = textObject.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = Resources.Load<Font>("Fonts/PT Astra Sans/PT-Astra-Sans_Regular");
             text.color = Color.black;
             text.alignment = TextAnchor.MiddleCenter;
             text.text = "HeaderElement";
