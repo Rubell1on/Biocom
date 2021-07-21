@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 3ba36e4adc35dab45910a3b71f420eee
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - PT Astra Sans
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c47863d5ab1e743489384818873b5339, type: 3}
+  - {fileID: 12800000, guid: 29ded204206da4f4a9b28498b153aff0, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

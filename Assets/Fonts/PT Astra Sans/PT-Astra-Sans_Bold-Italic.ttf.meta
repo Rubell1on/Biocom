@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 675d4b84b9552bf45aee660d35c57f84
+guid: c47863d5ab1e743489384818873b5339
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Times New Roman
+  - PT Astra Sans
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
