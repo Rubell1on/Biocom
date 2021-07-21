@@ -56,6 +56,7 @@ namespace CatchyClick
             headerHLG.childAlignment = TextAnchor.MiddleLeft;
             headerHLG.childForceExpandWidth = false;
             headerHLG.childControlHeight = true;
+            headerHLG.spacing = 5;
 
             GameObject rows = new GameObject("Rows");
             rows.AddComponent<Image>();

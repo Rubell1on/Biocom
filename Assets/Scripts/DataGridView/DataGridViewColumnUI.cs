@@ -54,7 +54,7 @@ namespace CatchyClick
             horSizeRT.anchorMax = Vector2.one;
             horSizeRT.offsetMin = Vector2.zero;
             horSizeRT.offsetMax = new Vector2(5, 0);
-            horSizeRT.anchoredPosition3D = Vector3.zero;
+            horSizeRT.anchoredPosition3D = new Vector3(2.5f, 0, 0);
 
             BoxCollider2D horSizeCollider = horSizeObject.AddComponent<BoxCollider2D>();
             horSizeCollider.offset = new Vector2(-0.0001375675f, -0.02674484f);
