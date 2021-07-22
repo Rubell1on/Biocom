@@ -57,43 +57,16 @@ namespace CatchyClick
             headerHLG.childAlignment = TextAnchor.MiddleLeft;
             headerHLG.childForceExpandWidth = false;
             headerHLG.childControlHeight = true;
-            headerHLG.spacing = 5;
-
-            GameObject rows = new GameObject("Rows");
-            rows.AddComponent<Image>();
-
-            RectTransform rowsRt = rows.GetComponent<RectTransform>();
-            rowsRt.SetParent(dgvRt);
-            rowsRt.localScale = Vector3.one;
-            rowsRt.anchorMin = Vector2.zero;
-            rowsRt.anchorMax = Vector2.one;
-            rowsRt.pivot = new Vector2(0.5f, 1);
-            rowsRt.anchoredPosition3D = Vector3.zero;
-            rowsRt.offsetMin = new Vector2(-15, 0);
-            rowsRt.offsetMax = new Vector2(0f, -50f);
-
-            ScrollRect scrollRect = rows.AddComponent<ScrollRect>();
-            scrollRect.scrollSensitivity = 20;
-            scrollRect.horizontal = false;
-            scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+            headerHLG.spacing = 1;
 
             GameObject scrollObject = new GameObject("Scrollbar Vertical");
             Image scrollImage = scrollObject.AddComponent<Image>();
             scrollImage.color = new Color32(229, 229, 229, 255);
 
             RectTransform scrollRT = scrollObject.GetComponent<RectTransform>();
-            scrollRT.SetParent(rowsRt);
-
-            scrollRT.localScale = Vector3.one;
-            scrollRT.anchorMin = new Vector2(1, 0);
-            scrollRT.anchorMax = Vector2.one;
-            scrollRT.pivot = Vector2.one;
-            scrollRT.anchoredPosition3D = Vector3.zero;
-            scrollRT.offsetMax = Vector2.zero;
-            scrollRT.offsetMin = new Vector2(-20, -17);
 
             Scrollbar scrollbar = scrollObject.AddComponent<Scrollbar>();
-            scrollRect.verticalScrollbar = scrollbar;
+            
             scrollbar.direction = Scrollbar.Direction.BottomToTop;
 
             GameObject slidingArea = new GameObject("Sliding Area");
@@ -115,9 +88,40 @@ namespace CatchyClick
             handleRT.localScale = Vector3.one;
             handleRT.anchorMin = new Vector2(0, 1);
             handleRT.anchorMax = Vector2.one;
-            handleRT.anchoredPosition3D = Vector3.zero;
+            handleRT.anchoredPosition3D = new Vector3(5, 0, 0);
             handleRT.offsetMin = new Vector2(-10, 0);
             handleRT.offsetMax = new Vector2(10, 0);
+
+            GameObject rows = new GameObject("Rows");
+            rows.AddComponent<Mask>();
+            rows.AddComponent<Image>();
+
+            RectTransform rowsRt = rows.GetComponent<RectTransform>();
+            rowsRt.SetParent(dgvRt);
+            rowsRt.localScale = Vector3.one;
+            rowsRt.anchorMin = Vector2.zero;
+            rowsRt.anchorMax = Vector2.one;
+            rowsRt.pivot = new Vector2(0.5f, 1);
+            rowsRt.anchoredPosition3D = Vector3.zero;
+            rowsRt.offsetMin = Vector2.zero;
+            rowsRt.offsetMax = new Vector2(0f, -50f);
+
+            ScrollRect scrollRect = rows.AddComponent<ScrollRect>();
+            scrollRect.verticalScrollbar = scrollbar;
+            scrollRect.scrollSensitivity = 20;
+            scrollRect.horizontal = false;
+            scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+            scrollRect.verticalScrollbarSpacing = -20;
+
+            scrollRT.SetParent(rowsRt);
+
+            scrollRT.localScale = Vector3.one;
+            scrollRT.anchorMin = new Vector2(1, 0);
+            scrollRT.anchorMax = Vector2.one;
+            scrollRT.pivot = Vector2.one;
+            scrollRT.anchoredPosition3D = Vector3.zero;
+            scrollRT.offsetMax = Vector2.zero;
+            scrollRT.offsetMin = new Vector2(-20, -17);
 
             GameObject viewport = new GameObject("Viewport");
             Image viewportImage = viewport.AddComponent<Image>();
@@ -158,7 +162,9 @@ namespace CatchyClick
             ContentSizeFitter csf = content.AddComponent<ContentSizeFitter>();
             csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            DataGridView dgv = dataGridView.AddComponent<DataGridView>();
+            scrollRT.SetSiblingIndex(1);
+
+            DataGridView dgv = dataGridView.GetComponent<DataGridView>();
             dgv.rows.changed.AddListener(dgv.OnChange);
             dgv.columnsComponent = header;
             dgv.rowsComponent = content;
