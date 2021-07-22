@@ -24,6 +24,7 @@ namespace CatchyClick
                 dataGridView.transform.parent = Selection.activeTransform;
             }
 
+            dataGridView.AddComponent<DataGridViewRowSelector>();
             Image image = dataGridView.AddComponent<Image>();
             image.enabled = false;
             Color color = Color.white;

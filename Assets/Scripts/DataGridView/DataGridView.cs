@@ -19,7 +19,8 @@ namespace CatchyClick {
         public List<DataGridViewColumn> columns;
         [SerializeField]
         public CustomList<DataGridViewRow> rows = new CustomList<DataGridViewRow>();
-        List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
+        [HideInInspector]
+        public List<DataGridViewRowUI> uiRows = new List<DataGridViewRowUI>();
         [Space(10)]
 
         [Header("Row colors")]
@@ -128,21 +129,21 @@ namespace CatchyClick {
                         GameObject rowObject = DataGridViewRowUI.CreateRow();
                         DataGridViewRowUI rowUI = rowObject.GetComponent<DataGridViewRowUI>();
 
-                        Image rowImage = rowObject.GetComponent<Image>();
-                        if (colorRows)
-                        {
-                            rowImage = rowObject.GetComponent<Image>();
-                            rowImage.color = i == 0 || i % 2 == 0 ? even : odd;
-                        }
-                        else
-                        {
-                            rowImage.color = even;
-                        }
-
                         for (int j = 0; j < row.cells.Count; j++)
                         {
 
                             GameObject cell = DataGridViewCellUI.CreateCell();
+
+                            Image cellImage = cell.GetComponent<Image>();
+                            if (colorRows)
+                            {
+                                cellImage = cell.GetComponent<Image>();
+                                cellImage.color = i == 0 || i % 2 == 0 ? even : odd;
+                            }
+                            else
+                            {
+                                cellImage.color = even;
+                            }
 
                             RectTransform cellRT = cell.GetComponent<RectTransform>();
                             RectTransform headerRT = columns[j].GetComponent<RectTransform>();

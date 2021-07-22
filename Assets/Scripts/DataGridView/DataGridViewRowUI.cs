@@ -13,12 +13,11 @@ namespace CatchyClick
         public static GameObject CreateRow()
         {
             GameObject row = new GameObject("Row");
-            Image image = row.AddComponent<Image>();
-            RectTransform rowRT = row.GetComponent<RectTransform>();
+            RectTransform rowRT = row.AddComponent<RectTransform>();
             rowRT.sizeDelta = new Vector2(100f, 50f);
-            image.color = new Color(.5f, .5f, .5f);
             DataGridViewRowUI rowUI = row.AddComponent<DataGridViewRowUI>();
             HorizontalLayoutGroup horLayout = row.AddComponent<HorizontalLayoutGroup>();
+            horLayout.spacing = 1;
             horLayout.childForceExpandWidth = false;
             horLayout.childControlHeight = false;
             horLayout.childControlWidth = false;

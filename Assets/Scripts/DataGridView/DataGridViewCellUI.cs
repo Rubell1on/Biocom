@@ -16,6 +16,7 @@ namespace CatchyClick
             Button cellButton = cellObject.AddComponent<Button>();
             RectTransform cellRT = cellObject.AddComponent<RectTransform>();
             cellRT.sizeDelta = new Vector2(100f, 50f);
+            cellObject.AddComponent<Image>();
 
             DataGridViewCellUI cell = cellObject.AddComponent<DataGridViewCellUI>();
             GameObject textObject = new GameObject("Text");
