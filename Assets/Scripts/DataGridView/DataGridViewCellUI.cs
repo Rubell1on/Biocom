@@ -23,7 +23,7 @@ namespace CatchyClick
 
             Text text = textObject.AddComponent<Text>();
             text.font = Resources.Load<Font>("Fonts/PT Astra Sans/PT-Astra-Sans_Regular");
-            text.color = Color.black;
+            text.color = Color.white;
             text.alignment = TextAnchor.MiddleCenter;
             text.text = "HeaderElement";
 
