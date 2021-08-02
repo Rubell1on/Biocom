@@ -43,32 +43,8 @@ public static class DBUsers
     }
     public static List<User> GetUsers()
     {
-        MySqlConnection connection = null;
-        try
-        {
-            connection = SQLConnection.GetConnection();
-            string sql = $"SELECT id, username, role FROM {DBTableNames.users};";
-
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
-            List<User> users = new List<User>();
-
-            while (reader.Read())
-            {
-                users.Add(new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString()));
-            }
-            reader.Close();
-
-            connection.Close();
-            return users;
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Ошибка: " + e);
-            connection.Close();
-
-            return null;
-        }
+        QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
+        return GetUsers(query);
     }
 
     public static bool AddUser(string userName, string password, string role)
@@ -142,6 +118,38 @@ public static class DBUsers
             Debug.Log("Ошибка: " + e);
             connection.Close();
             return false;
+        }
+    }
+
+    public static List<User> GetUsers(QueryBuilder queryBuilder)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            List<string> regexp = new List<string>() { "userName" };
+            string query = queryBuilder.ToQueryString(regexp);
+            string sql = $"SELECT id, username, role FROM {DBTableNames.users} {(!String.IsNullOrEmpty(query) ? $"WHERE {query}" : "")};";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+            List<User> users = new List<User>();
+
+            while (reader.Read())
+            {
+                users.Add(new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString()));
+            }
+            reader.Close();
+
+            connection.Close();
+            return users;
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+
+            return null;
         }
     }
 }

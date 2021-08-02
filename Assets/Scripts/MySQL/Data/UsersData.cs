@@ -9,7 +9,11 @@ public class UsersData : TableData<UsersData>
     public override void FillData()
     {
         List<User> users = DBUsers.GetUsers();
+        FillData(users);
+    }
 
+    public void FillData(List<User> users)
+    {
         List<DataGridViewRow> rows = users.Select(u =>
         {
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
