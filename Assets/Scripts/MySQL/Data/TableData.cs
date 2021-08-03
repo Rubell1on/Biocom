@@ -7,6 +7,8 @@ public abstract class TableData<T> : MonoBehaviour
     public DataGridView dataGridView;
     public DataGridViewRow selectedRow;
 
+    public QueryBuilder filterQuery = new QueryBuilder(new Dictionary<string, string>());
+
     void OnEnable()
     {
         dataGridView = GetComponent<DataGridView>();
@@ -25,4 +27,10 @@ public abstract class TableData<T> : MonoBehaviour
     }
 
     public abstract void FillData();
+
+    public void OnFilterChanged(QueryBuilder queryBuilder)
+    {
+        this.filterQuery = queryBuilder;
+        FillData();
+    }
 }

@@ -5,15 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SeriesFilter : MonoBehaviour
+public class SeriesFilter : Filter
 {
     public InputField seriesName;
     public InputField description;
 
     public Button apply;
     public Button reset;
-
-    public SeriesData seriesData;
 
     void Start()
     {
@@ -29,16 +27,14 @@ public class SeriesFilter : MonoBehaviour
             { $"{DBTableNames.series}.description", description.text}
         };
 
-        QueryBuilder queryBuilder = new QueryBuilder(dictionary);
-        List<Series> users = DBSeries.GetSeries(queryBuilder);
-        seriesData.FillData(users);
+        base.SetFilter(dictionary);
     }
 
-    public void ResetFilter()
+    protected override void ResetFilter()
     {
         seriesName.text = "";
         description.text = "";
 
-        seriesData.FillData();
+        base.ResetFilter();
     }
 }

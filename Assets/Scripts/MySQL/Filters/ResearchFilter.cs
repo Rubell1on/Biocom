@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResearchFilter : MonoBehaviour
+public class ResearchFilter : Filter
 {
     public InputField description;
     public InputField note;
@@ -15,8 +15,6 @@ public class ResearchFilter : MonoBehaviour
     public Button apply;
     public Button reset;
 
-    public ResearchesData researchesData;
-
     private void Start()
     {
         if (state.options.Count > 0) state.ClearOptions();
@@ -24,11 +22,11 @@ public class ResearchFilter : MonoBehaviour
         states.Insert(0, "Все");
         state.AddOptions(states);
 
-        apply.onClick.AddListener(Filter);
+        apply.onClick.AddListener(SetFilter);
         reset.onClick.AddListener(ResetFilter);
     }
 
-    public void Filter()
+    public void SetFilter()
     {
         Dictionary<string, string> dictionary = new Dictionary<string, string>()
         {
@@ -38,17 +36,16 @@ public class ResearchFilter : MonoBehaviour
             { "state", state.value != 0 ? state.options[state.value].text : ""}
         };
 
-        QueryBuilder queryBuilder = new QueryBuilder(dictionary);
-        List<Research> users = DBResearches.GetResearches(queryBuilder);
-        researchesData.FillData(users);
+        base.SetFilter(dictionary);
     }
 
-    public void ResetFilter()
+    protected override void ResetFilter()
     {
         description.text = "";
         note.text = "";
         date.text = "";
         state.value = 0;
-        researchesData.FillData();
+
+        base.ResetFilter();
     }
 }

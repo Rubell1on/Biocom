@@ -16,6 +16,18 @@ public class UserResearchesFilter : Filter
 
     public Authorization authorization;
 
+    void OnEnable()
+    {
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { $"{DBTableNames.users}.id", authorization.userData.id.ToString() }
+        };
+
+        this.defaultQuery = new QueryBuilder(dictionary);
+
+        SetFilter(dictionary);
+    }
+
     private void Start()
     {
         if (state.options.Count > 0) state.ClearOptions();
@@ -25,18 +37,6 @@ public class UserResearchesFilter : Filter
 
         apply.onClick.AddListener(SetFilter);
         reset.onClick.AddListener(ResetFilter);
-    }
-
-    void OnEnable()
-    {
-        Dictionary<string, string> dictionary = new Dictionary<string, string>()
-        {
-            { $"{DBTableNames.users}.id", authorization.userData.id.ToString() } 
-        };
-
-        this.defaultQuery = new QueryBuilder(dictionary);
-
-        SetFilter(dictionary);
     }
 
     private void SetFilter()

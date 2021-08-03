@@ -8,7 +8,7 @@ public class SeriesData : TableData<SeriesData>
 {
     public override void FillData()
     {
-        List<Series> series = DBSeries.GetSeries();
+        List<Series> series = DBSeries.GetSeries(filterQuery);
         FillData(series);
     }
 

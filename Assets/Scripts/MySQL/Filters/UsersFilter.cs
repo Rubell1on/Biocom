@@ -5,15 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UsersFilter : MonoBehaviour
+public class UsersFilter : Filter
 {
     public InputField userName;
     public Dropdown role;
 
     public Button apply;
     public Button reset;
-
-    public UsersData usersData;
 
     // Start is called before the first frame update
     void Start()
@@ -35,15 +33,14 @@ public class UsersFilter : MonoBehaviour
             { "role", role.value != 0 ? role.options[role.value].text : ""}
         };
 
-        QueryBuilder queryBuilder = new QueryBuilder(dictionary);
-        List<User> users = DBUsers.GetUsers(queryBuilder);
-        usersData.FillData(users);
+        base.SetFilter(dictionary);
     }
 
-    public void ResetFilter()
+    protected override void ResetFilter()
     {
         userName.text = "";
         role.value = 0;
-        usersData.FillData();
+
+        base.ResetFilter();
     }
 }

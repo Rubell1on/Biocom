@@ -7,7 +7,7 @@ public class ResearchesData : TableData<ResearchesData>
 {
     public override void FillData()
     {
-        List<Research> researches = DBResearches.GetResearches();
+        List<Research> researches = DBResearches.GetResearches(filterQuery);
         FillData(researches);
     }
 

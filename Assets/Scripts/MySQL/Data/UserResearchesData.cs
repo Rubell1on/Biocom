@@ -7,15 +7,6 @@ using UnityEngine;
 public class UserResearchesData : TableData<UserResearchesData>
 {
     public Authorization authorization;
-    public Filter filter;
-
-    public QueryBuilder filterQuery;
-
-    public void Start()
-    {
-        filterQuery = filter.query;
-        filter.filterChanged.AddListener(OnFilterChanged);
-    }
 
     public override void FillData()
     {
@@ -28,12 +19,6 @@ public class UserResearchesData : TableData<UserResearchesData>
         {
             Debug.LogError("Необходимо авторизоваться");
         }
-    }
-
-    public void OnFilterChanged(QueryBuilder queryBuilder)
-    {
-        this.filterQuery = queryBuilder;
-        FillData();
     }
 
     public void FillData(List<Research> researches)

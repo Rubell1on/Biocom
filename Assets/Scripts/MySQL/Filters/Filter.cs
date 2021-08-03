@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,5 +22,6 @@ public abstract class Filter : MonoBehaviour
         filterChanged.Invoke(query);
     }
 
+    [Serializable]
     public class FilterChangedEvent : UnityEvent<QueryBuilder> { }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PartsFilter : MonoBehaviour
+public class PartsFilter : Filter
 {
     public InputField partPath;
     public InputField seriesName;
@@ -29,15 +29,14 @@ public class PartsFilter : MonoBehaviour
             { $"{DBTableNames.series}.name", seriesName.text }
         };
 
-        QueryBuilder queryBuilder = new QueryBuilder(dictionary);
-        List<Part> parts = DBParts.GetParts(queryBuilder);
-        partsData.FillData(parts);
+        base.SetFilter(dictionary);
     }
 
-    public void ResetFilter()
+    protected override void ResetFilter()
     {
         partPath.text = "";
         seriesName.text = "";
-        partsData.FillData();
+
+        base.ResetFilter();
     }
 }

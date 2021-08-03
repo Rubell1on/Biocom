@@ -6,9 +6,10 @@ using CatchyClick;
 
 public class UsersData : TableData<UsersData>
 {
+
     public override void FillData()
     {
-        List<User> users = DBUsers.GetUsers();
+        List<User> users = DBUsers.GetUsers(filterQuery);
         FillData(users);
     }
 

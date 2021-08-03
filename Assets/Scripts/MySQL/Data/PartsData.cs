@@ -8,7 +8,7 @@ public class PartsData : TableData<PartsData>
 {
     public override void FillData()
     {
-        List<Part> parts = DBParts.GetParts();
+        List<Part> parts = DBParts.GetParts(filterQuery);
         FillData(parts);
     }
 
