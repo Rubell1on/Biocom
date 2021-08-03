@@ -268,7 +268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 289, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 33}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2632280267581972267
@@ -2980,6 +2980,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ModalWIndow
       objectReference: {fileID: 0}
+    - target: {fileID: 46588073213598129, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 46588073213598130, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3193,7 +3198,7 @@ PrefabInstance:
     - target: {fileID: 46588074605488007, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 46588074605488007, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
         type: 3}

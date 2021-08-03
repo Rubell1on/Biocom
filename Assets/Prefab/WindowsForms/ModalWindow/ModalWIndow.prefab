@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 46588073213598140}
   - component: {fileID: 46588073213598131}
   - component: {fileID: 46588073213598141}
+  - component: {fileID: 2285140286222896266}
+  - component: {fileID: 2596613922481695472}
   m_Layer: 0
   m_Name: ModalWIndow
   m_TagString: Untagged
@@ -101,6 +103,32 @@ MonoBehaviour:
   modalWindowClosed:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &2285140286222896266
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46588073213598129}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &2596613922481695472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46588073213598129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1696645451bc6a4cab6937e8dbb66fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 15
+  scale: 0.97
 --- !u!1 &46588073414346380
 GameObject:
   m_ObjectHideFlags: 0
