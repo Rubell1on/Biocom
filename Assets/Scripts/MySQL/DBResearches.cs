@@ -10,46 +10,22 @@ public class DBResearches
 { 
     public static List<Research> GetResearches()
     {
-        MySqlConnection connection = null;
-        try
-        {
-            connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
-                $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id;";
-
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
-            List<Research> researches = new List<Research>();
-
-            while (reader.Read())
-            {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString()));
-            }
-            reader.Close();
-
-            connection.Close();
-            return researches;
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Ошибка: " + e);
-            connection.Close();
-
-            return null;
-        }
+        QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
+        return GetResearches(query);
     }
 
-    public static List<Research> GetResearchesByUserId(int id)
+    public static List<Research> GetResearches(QueryBuilder queryBuilder)
     {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
+            List<string> regexp = new List<string>() { "description", "note", "date" };
+            string query = queryBuilder.ToQueryString(regexp);
             string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
                 $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " + 
-                $"WHERE {DBTableNames.users}.id = {id};";
+                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id" +
+                $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -72,6 +48,7 @@ public class DBResearches
             return null;
         }
     }
+
     public static bool AddResearch(int userId, string dateTime, string description, string note, string state)
     {
         MySqlConnection connection = null;

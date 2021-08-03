@@ -8,7 +8,11 @@ public class ResearchesData : TableData<ResearchesData>
     public override void FillData()
     {
         List<Research> researches = DBResearches.GetResearches();
+        FillData(researches);
+    }
 
+    public void FillData(List<Research> researches)
+    {
         List<DataGridViewRow> rows = researches.Select(r =>
         {
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
@@ -25,7 +29,7 @@ public class ResearchesData : TableData<ResearchesData>
         }).ToList();
 
         if (dataGridView.rows.Count > 0)
-            dataGridView.rows.Clear();
+            dataGridView.ClearRows();
 
         dataGridView.rows.AddRange(rows);
     }

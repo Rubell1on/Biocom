@@ -119,8 +119,7 @@ namespace CatchyClick {
                 {
                     if (uiRows.Count > 0)
                     {
-                        uiRows.ForEach(r => Destroy(r.gameObject));
-                        uiRows.Clear();
+                        ClearRows();
                     }
 
                     for (int i = 0; i < rows.Count; i++)
@@ -182,6 +181,13 @@ namespace CatchyClick {
                     throw new System.Exception("Cells count don't match with header!");
                 }
             }
+        }
+
+        public void ClearRows()
+        {
+            uiRows.ForEach(r => Destroy(r.gameObject));
+            uiRows.Clear();
+            rows.Clear();
         }
     }
 

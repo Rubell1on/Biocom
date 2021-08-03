@@ -27,7 +27,7 @@ public class UsersData : TableData<UsersData>
         }).ToList();
 
         if (dataGridView.rows.Count > 0)
-            dataGridView.rows.Clear();
+            dataGridView.ClearRows();
 
         dataGridView.rows.AddRange(rows);
     }

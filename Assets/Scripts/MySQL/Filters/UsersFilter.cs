@@ -18,15 +18,16 @@ public class UsersFilter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        role.ClearOptions();
+        if (role.options.Count > 0) role.ClearOptions();
         List<string> roles = Enum.GetNames(typeof(User.Role)).ToList();
         roles.Insert(0, "Все");
         role.AddOptions(roles);
-        apply.onClick.AddListener(Filter);
+
+        apply.onClick.AddListener(SetFilter);
         reset.onClick.AddListener(ResetFilter);
     }
 
-    public void Filter()
+    public void SetFilter()
     {
         Dictionary<string, string> dictionary = new Dictionary<string, string>()
         {

@@ -10,13 +10,22 @@ public static class DBSeries
 {
     public static List<Series> GetSeries()
     {
+        QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
+        return GetSeries(query);
+    }
+
+    public static List<Series> GetSeries(QueryBuilder queryBuilder)
+    {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
+            List<string> regexp = new List<string>() { "name", $"{DBTableNames.series}.description" };
+            string query = queryBuilder.ToQueryString(regexp);
             string sql = $"SELECT {DBTableNames.series}.id, {DBTableNames.series}.name, {DBTableNames.series}.description, {DBTableNames.researches}.id " +
-                $"FROM {DBTableNames.series} " + 
-                $"LEFT JOIN {DBTableNames.researches} ON {DBTableNames.researches}.id = {DBTableNames.series}.researchId;";
+                $"FROM {DBTableNames.series} " +
+                $"LEFT JOIN {DBTableNames.researches} ON {DBTableNames.researches}.id = {DBTableNames.series}.researchId" +
+                $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
@@ -30,7 +39,7 @@ public static class DBSeries
                     researchId = -1;
                 }
 
-                serires.Add(new Series(Convert.ToInt32(reader[0]),reader[1].ToString(), reader[2].ToString(), researchId));
+                serires.Add(new Series(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), researchId));
             }
             reader.Close();
 

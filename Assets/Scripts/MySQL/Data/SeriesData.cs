@@ -9,7 +9,11 @@ public class SeriesData : TableData<SeriesData>
     public override void FillData()
     {
         List<Series> series = DBSeries.GetSeries();
+        FillData(series);
+    }
 
+    public void FillData(List<Series> series)
+    {
         List<DataGridViewRow> rows = series.Select(u =>
         {
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
@@ -24,7 +28,7 @@ public class SeriesData : TableData<SeriesData>
         }).ToList();
 
         if (dataGridView.rows.Count > 0)
-            dataGridView.rows.Clear();
+            dataGridView.ClearRows();
 
         dataGridView.rows.AddRange(rows);
     }

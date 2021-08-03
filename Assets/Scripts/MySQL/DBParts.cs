@@ -9,13 +9,22 @@ public class DBParts : MonoBehaviour
 {
     public static List<Part> GetParts()
     {
+        QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
+        return GetParts(query);
+    }
+
+    public static List<Part> GetParts(QueryBuilder queryBuilder)
+    {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
+            List<string> regexp = new List<string>() { $"{DBTableNames.parts}.filePath", $"{DBTableNames.series}.name" };
+            string query = queryBuilder.ToQueryString(regexp);
             string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
                 $"FROM {DBTableNames.parts} " +
-                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id;";
+                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id" +
+                $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();

@@ -8,9 +8,13 @@ public class PartsData : TableData<PartsData>
 {
     public override void FillData()
     {
-        List<Part> series = DBParts.GetParts();
+        List<Part> parts = DBParts.GetParts();
+        FillData(parts);
+    }
 
-        List<DataGridViewRow> rows = series.Select(u =>
+    public void FillData(List<Part> parts)
+    {
+        List<DataGridViewRow> rows = parts.Select(u =>
         {
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
             {
@@ -25,7 +29,7 @@ public class PartsData : TableData<PartsData>
         }).ToList();
 
         if (dataGridView.rows.Count > 0)
-            dataGridView.rows.Clear();
+            dataGridView.ClearRows();
 
         dataGridView.rows.AddRange(rows);
     }
