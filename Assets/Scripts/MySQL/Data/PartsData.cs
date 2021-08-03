@@ -29,7 +29,10 @@ public class PartsData : TableData<PartsData>
         }).ToList();
 
         if (dataGridView.rows.Count > 0)
+        {
             dataGridView.ClearRows();
+            dataGridView.rows.Clear();
+        }   
 
         dataGridView.rows.AddRange(rows);
     }

@@ -164,6 +164,7 @@ namespace CatchyClick {
                             }
                         }
 
+
                         uiRows.Add(rowUI);
                     }
 
@@ -187,7 +188,6 @@ namespace CatchyClick {
         {
             uiRows.ForEach(r => Destroy(r.gameObject));
             uiRows.Clear();
-            rows.Clear();
         }
     }
 
