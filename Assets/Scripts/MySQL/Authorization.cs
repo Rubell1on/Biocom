@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Authorization : MonoBehaviour
 {
-    public Button button;
+    public Button enterButton;
+    public Button exitButton;
     public List<Text> userNames;
     public InputField login;
     public InputField password;
@@ -14,7 +15,8 @@ public class Authorization : MonoBehaviour
 
     private void Start()
     {
-        button.onClick.AddListener(Authorize);
+        enterButton.onClick.AddListener(Authorize);
+        exitButton.onClick.AddListener(Exit);
     }
 
     private void Authorize()
@@ -28,5 +30,10 @@ public class Authorization : MonoBehaviour
             });
             canvasController.SelectCanvas((int)userData.role + 1);
         }
+    }
+
+    private void Exit()
+    {
+        Application.Quit();
     }
 }

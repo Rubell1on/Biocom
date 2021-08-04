@@ -22,6 +22,7 @@ public class ResearchLoader : MonoBehaviour
     public UnityEvent meshesLoaded = new UnityEvent();
 
     private GameObject progressWindow;
+    private DataGridViewEventArgs args;
 
     void Start()
     {
@@ -29,14 +30,13 @@ public class ResearchLoader : MonoBehaviour
         dataGrid.cellClicked.AddListener(OnCellClicked);
         meshesLoaded.AddListener(OnMeshLoaded);
     }
-
-    public async void OnCellClicked(DataGridViewEventArgs args)
+    public async void LoadResearch()
     {
-
         DataGridViewRow row = dataGrid.rows[args.row];
         int index;
 
-        if (Int32.TryParse(row.cells[0].value, out index)) {
+        if (Int32.TryParse(row.cells[0].value, out index))
+        {
             progressWindow = Instantiate(progressWindowTemplate.gameObject, mainCanvas);
 
             List<Part> parts = DBParts.GetPartsByResearchId(index);
@@ -52,10 +52,15 @@ public class ResearchLoader : MonoBehaviour
             {
 
             }
-        } else
+        }
+        else
         {
 
         }
+    }
+    public void OnCellClicked(DataGridViewEventArgs args)
+    {
+        this.args = args;
     }
 
     async void OnSeriesChanged(int seriesId)
