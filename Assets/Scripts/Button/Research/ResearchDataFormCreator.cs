@@ -9,7 +9,7 @@ public class ResearchDataFormCreator : MonoBehaviour
 {
     public GameObject template;
     public DataGridView dataGridView;
-    public PartsData researchData;
+    public ResearchesData researchData;
     List<User> users;
     List<Series> series;
     int id;

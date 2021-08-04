@@ -69,13 +69,13 @@ public class CanvasController : MonoBehaviour
         currentTransform.anchoredPosition = list[(int)selecteDirection];
 
         if (instant == false)
-            while (lerp < 1 / speed)
+            while (lerp < 1)
             {
-                previousGroup.alpha = 1 - lerp * speed;
+                previousGroup.alpha = 1 - lerp;
                 currentGroup.alpha = lerp * speed;
                 previousTransform.anchoredPosition = Vector3.Lerp(previousTransform.anchoredPosition, targetPosition, lerp * speed);
                 currentTransform.anchoredPosition = Vector3.Lerp(currentTransform.anchoredPosition, Vector3.zero, lerp * speed);
-                lerp += Time.deltaTime;
+                lerp += Time.deltaTime * speed;
 
                 yield return new WaitForEndOfFrame();
             }

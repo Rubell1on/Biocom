@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace CatchyClick
 {
@@ -9,7 +10,8 @@ namespace CatchyClick
     public class DataGridViewRowSelector : MonoBehaviour
     {
         public Color32 selectedColor = new Color32(149, 149, 149, 255);
-        private DataGridViewRowUI selectedRow;
+        public DataGridViewRowUI selectedRow;
+        public UnityEvent<DataGridViewRowUI> rowSelectionChanged = new UnityEvent<DataGridViewRowUI>();
         private DataGridView dataGrid;
         private Color32 color;
 
@@ -17,6 +19,10 @@ namespace CatchyClick
         {
             dataGrid = GetComponent<DataGridView>();
             dataGrid.cellClicked.AddListener(OnCellClicked);
+        }
+        private void OnDisable()
+        {
+            selectedRow = null;
         }
 
         void OnCellClicked(DataGridViewEventArgs args)
@@ -33,8 +39,9 @@ namespace CatchyClick
             {
                 Image cellImage = cellUI.GetComponent<Image>();
                 color = cellImage.color;
-
+                
                 selectedRow.cells.ForEach(c => c.GetComponent<Image>().color = selectedColor);
+                rowSelectionChanged.Invoke(selectedRow);
             }
         }
     }
