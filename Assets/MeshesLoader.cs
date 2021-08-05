@@ -5,17 +5,21 @@ using Dummiesman;
 
 public class MeshesLoader : MonoBehaviour
 {
-    List<string> paths = new List<string>()
-    {
-        "E:/tmp/lungs/Segmentation.obj",
-        "E:/tmp/trahea/Segmentation.obj",
-        "E:/tmp/vessels/Segmentation.obj",
-    };
+    public string dirPath = "C:/tmp";
+    List<string> paths;
 
     public MeshController meshController;
     public Material material;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        paths = new List<string>()
+        {
+            $"{dirPath}/lungs/Segmentation.obj",
+            $"{dirPath}/trahea/Segmentation.obj",
+            $"{dirPath}/vessels/Segmentation.obj",
+        };
+    }
     void Start()
     {
         foreach (string path in paths)
@@ -28,9 +32,8 @@ public class MeshesLoader : MonoBehaviour
             go.GetComponentInChildren<MeshRenderer>().material = material;
         }
 
-        meshController.Resize(meshController.size);
         meshController.Center();
-
-        transform.localRotation = Quaternion.Euler(meshController.rotation);
+        meshController.Resize(meshController.size);
+        meshController.Rotate(meshController.rotation);
     }
 }

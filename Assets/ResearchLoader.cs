@@ -102,10 +102,11 @@ public class ResearchLoader : MonoBehaviour
             go.GetComponentInChildren<MeshRenderer>().material = meshMaterial;
         }
 
-        meshController.Resize(meshController.size);
         meshController.Center();
+        meshController.Resize(meshController.size);
+        meshController.Rotate(meshController.rotation);
 
-        meshes.transform.localRotation = Quaternion.Euler(meshController.rotation);
+        //meshes.transform.localRotation = Quaternion.Euler(meshController.rotation);
 
         Debug.Log("Finished");
         meshesLoaded.Invoke();
