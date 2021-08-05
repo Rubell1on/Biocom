@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8300233151112352513}
   - component: {fileID: 8300233151112352573}
   - component: {fileID: 8300233151112352574}
-  - component: {fileID: 8300233151112352575}
   - component: {fileID: 8300233151112352512}
+  - component: {fileID: 3613609303835513929}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -77,32 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!61 &8300233151112352575
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8300233151112352514}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &8300233151112352512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,6 +97,19 @@ MonoBehaviour:
   zoom: 0.25
   zoomMax: 10
   zoomMin: 3
+--- !u!65 &3613609303835513929
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8300233151112352514}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8300233151283408507
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,8 +1,10 @@
-﻿public class MeshData
+﻿using UnityEngine;
+public class MeshData
 {
     public string name;
     public string inputFilePath;
     public string outputFilePath;
+    public GameObject gameObject;
 
     public Threshold threshold;
 

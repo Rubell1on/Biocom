@@ -16,12 +16,12 @@ public class CameraRotateAround : MonoBehaviour
 	public float zoomMin = 3; // мин. увеличение
 	private float X, Y;
 
-	private BoxCollider2D coliderPanel;
+	private BoxCollider coliderPanel;
 
 
 	void Start()
 	{
-		coliderPanel = GetComponent<BoxCollider2D>();
+		coliderPanel = GetComponent<BoxCollider>();
 		coliderPanel.size = GetComponent<RectTransform>().rect.size;
 		
 		limit = Mathf.Abs(limit);

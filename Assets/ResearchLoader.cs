@@ -18,6 +18,7 @@ public class ResearchLoader : MonoBehaviour
     public Material meshMaterial;
     public GameObject meshes;
     public SeriesController seriesController;
+    public List<MeshData> meshDatas;
 
     public UnityEvent meshesLoaded = new UnityEvent();
 
@@ -76,7 +77,7 @@ public class ResearchLoader : MonoBehaviour
 
     async Task LoadMeshes(List<Part> parts)
     {
-        List<MeshData> meshDatas = parts.Select(p => new MeshData(p.partName, p.filePath, $"{outputPath}/{p.partName}", new Threshold(1, 100))).ToList();
+        meshDatas = parts.Select(p => new MeshData(p.partName, p.filePath, $"{outputPath}/{p.partName}", new Threshold(1, 100))).ToList();
         int i = 0;
 
         List<Task> tasks = meshDatas.Select((meshData) =>
@@ -94,6 +95,7 @@ public class ResearchLoader : MonoBehaviour
         foreach (MeshData data in meshDatas)
         {
             GameObject go = new OBJLoader().Load($"{data.outputFilePath}/Segmentation.obj");
+            data.gameObject = go;
             meshController.filters.Add(go.GetComponentInChildren<MeshFilter>());
             meshController.meshes.Add(go);
             go.transform.SetParent(meshController.transform);
@@ -104,9 +106,9 @@ public class ResearchLoader : MonoBehaviour
 
         meshController.Center();
         meshController.Resize(meshController.size);
-        meshController.Rotate(meshController.rotation);
+        //meshController.Rotate(meshController.rotation);
 
-        //meshes.transform.localRotation = Quaternion.Euler(meshController.rotation);
+        meshes.transform.localRotation = Quaternion.Euler(meshController.rotation);
 
         Debug.Log("Finished");
         meshesLoaded.Invoke();
