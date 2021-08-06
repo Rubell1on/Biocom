@@ -15,10 +15,11 @@ public class ResearchLoader : MonoBehaviour
     public DataGridView dataGrid;
     public RectTransform progressWindowTemplate;
     public MeshController meshController;
-    public Material meshMaterial;
+    public List<Material> meshMaterials;
     public GameObject meshes;
     public SeriesController seriesController;
     public List<MeshData> meshDatas;
+    public MeshFilterController mFController;
 
     public UnityEvent meshesLoaded = new UnityEvent();
 
@@ -92,8 +93,9 @@ public class ResearchLoader : MonoBehaviour
 
         await Task.WhenAll(tasks);
 
-        foreach (MeshData data in meshDatas)
+        for (int j = 0; j < meshDatas.Count; j++)  
         {
+            MeshData data = meshDatas[j];
             GameObject go = new OBJLoader().Load($"{data.outputFilePath}/Segmentation.obj");
             data.gameObject = go;
             meshController.filters.Add(go.GetComponentInChildren<MeshFilter>());
@@ -101,12 +103,20 @@ public class ResearchLoader : MonoBehaviour
             go.transform.SetParent(meshController.transform);
             go.transform.localPosition = Vector3.zero;
             go.transform.localScale = Vector3.one;
-            go.GetComponentInChildren<MeshRenderer>().material = meshMaterial;
+
+            Material material = j < meshMaterials.Count ? meshMaterials[j] : meshMaterials[0];
+            go.GetComponentInChildren<MeshRenderer>().material = material;
+
+            MeshFilterElement MFE = mFController.AddElement(data.name, material.color);
+
+            MFE.toggle.onValueChanged.AddListener(value => go.SetActive(value));
+            MFE.colorChanged.AddListener(color => material.color = color);
         }
 
         meshController.Center();
         meshController.Resize(meshController.size);
         //meshController.Rotate(meshController.rotation);
+        meshController.Optimize();
 
         meshes.transform.localRotation = Quaternion.Euler(meshController.rotation);
 

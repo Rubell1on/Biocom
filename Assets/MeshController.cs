@@ -67,4 +67,9 @@ public class MeshController : MonoBehaviour
         meshes.Clear();
         filters.Clear();
     }
+
+    public void Optimize()
+    {
+        filters.ForEach(f => f.mesh.Optimize());
+    }
 }
