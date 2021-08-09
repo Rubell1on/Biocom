@@ -9,7 +9,7 @@ public class MeshFilterController : MonoBehaviour
     public GameObject body;
     public ToggleGroup toggleGroup;
 
-    private List<MeshFilterElement> elements = new List<MeshFilterElement>();
+    public List<MeshFilterElement> elements = new List<MeshFilterElement>();
     
     public MeshFilterElement AddElement()
     {
@@ -35,10 +35,7 @@ public class MeshFilterController : MonoBehaviour
     public void RemoveElements()
     {
         elements.ForEach(p => Destroy(p));
+        elements.Clear();
     }
 
-    //private void OnDisable()
-    //{
-    //    RemoveElements();
-    //}
 }

@@ -36,6 +36,7 @@ public class ResearchLoader : MonoBehaviour
     {
         DataGridViewRow row = dataGrid.rows[args.row];
         int index;
+        seriesController.RemoveSeries();
 
         if (Int32.TryParse(row.cells[0].value, out index))
         {
@@ -78,6 +79,7 @@ public class ResearchLoader : MonoBehaviour
 
     async Task LoadMeshes(List<Part> parts)
     {
+        mFController.RemoveElements();
         meshDatas = parts.Select(p => new MeshData(p.partName, p.filePath, $"{outputPath}/{p.partName}", new Threshold(1, 100))).ToList();
         int i = 0;
 

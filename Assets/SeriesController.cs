@@ -53,4 +53,10 @@ public class SeriesController : MonoBehaviour
     {
         current = seriesId;
     }
+
+    public void RemoveSeries()
+    {
+        seriesUIs.ForEach(s => Destroy(s));
+        seriesUIs.Clear();
+    }
 }
