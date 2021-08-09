@@ -25,13 +25,6 @@ public class ResearchLoader : MonoBehaviour
 
     private GameObject progressWindow;
     private DataGridViewEventArgs args;
-    private Dictionary<string, string> translation = new Dictionary<string, string>()
-    {
-        { "lungs", "Легкие" },
-        { "vessels", "Бронхи" },
-        { "trahea", "Трахея" },
-        { "mate", "Матовое стекло"}
-    };
 
     void Start()
     {
@@ -116,7 +109,7 @@ public class ResearchLoader : MonoBehaviour
             Material material = j < meshMaterials.Count ? meshMaterials[j] : meshMaterials[0];
             go.GetComponentInChildren<MeshRenderer>().material = material;
 
-            MeshFilterElement MFE = mFController.AddElement(data.name, material.color);
+            MeshFilterElement MFE = mFController.AddElement(data.Name, material.color);
 
             MFE.toggle.onValueChanged.AddListener(value => go.SetActive(value));
             MFE.colorChanged.AddListener(color => material.color = color);
