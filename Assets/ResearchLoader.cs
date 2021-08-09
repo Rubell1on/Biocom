@@ -25,6 +25,13 @@ public class ResearchLoader : MonoBehaviour
 
     private GameObject progressWindow;
     private DataGridViewEventArgs args;
+    private Dictionary<string, string> translation = new Dictionary<string, string>()
+    {
+        { "lungs", "Легкие" },
+        { "vessels", "Бронхи" },
+        { "trahea", "Трахея" },
+        { "mate", "Матовое стекло"}
+    };
 
     void Start()
     {
@@ -73,13 +80,13 @@ public class ResearchLoader : MonoBehaviour
             RemoveMeshes();
         }
 
+        mFController.RemoveElements();
         int id = seriesController.series.Keys.ToArray()[seriesId];
         await LoadMeshes(seriesController.series[id]);
     }
 
     async Task LoadMeshes(List<Part> parts)
     {
-        mFController.RemoveElements();
         meshDatas = parts.Select(p => new MeshData(p.partName, p.filePath, $"{outputPath}/{p.partName}", new Threshold(1, 100))).ToList();
         int i = 0;
 

@@ -34,7 +34,7 @@ public class MeshFilterController : MonoBehaviour
 
     public void RemoveElements()
     {
-        elements.ForEach(p => Destroy(p));
+        elements.ForEach(p => Destroy(p.gameObject));
         elements.Clear();
     }
 
