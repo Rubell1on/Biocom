@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class NotificationManager : Singleton<NotificationManager>
 {
@@ -12,31 +13,53 @@ public class NotificationManager : Singleton<NotificationManager>
     public List<Notification> notifications;
     public float destroySpeed = 5;
 
-    public static void Log(string str)
+    public void Log(string str)
     {
         Notificate(str, Notification.NotificationType.Log);
     }
 
-    public static void Warning(string str)
+    public void Warning(string str)
     {
         Notificate(str, Notification.NotificationType.Warning);
     }
 
-    public static void Error(string str)
+    public void Error(string str)
     {
         Notificate(str, Notification.NotificationType.Error);
     }
 
-    private static void Notificate(string str, Notification.NotificationType type)
+    private void Notificate(string str, Notification.NotificationType type)
     {
         NotificationManager notificationManager = GetInstance();
-        GameObject panel = Instantiate(notificationManager.prefab, notificationManager.managerPanel.transform);
+        GameObject panel = Instantiate(prefab, managerPanel.transform);
         Notification nt = panel.GetComponent<Notification>();
         nt.text.text = str;
-        nt.image.sprite = notificationManager.icons[(int)type];
+        nt.image.sprite = icons[(int)type];
         nt.type = type;
-        notificationManager.notifications.Add(nt);
 
-        Destroy(panel.gameObject, notificationManager.destroySpeed);
+        Coroutine coroutine = StartCoroutine(TimeOut(() => Destroy(nt)));
+        nt.button.onClick.AddListener(OnClick);
+        notifications.Add(nt);
+
+        void OnClick()
+        {
+            if (coroutine != null) StopCoroutine(coroutine);
+            Destroy(nt);
+        }
+    }
+
+    private IEnumerator TimeOut(Action callback)
+    {
+        yield return new WaitForSeconds(destroySpeed);
+        callback();
+    }
+
+    private void Destroy(Notification notification)
+    {
+        if (notification != null)
+        {
+            Destroy(notification.gameObject);
+            notifications.Remove(notification);
+        }
     }
 }
