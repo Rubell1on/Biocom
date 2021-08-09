@@ -8,22 +8,17 @@ using System.Linq;
 
 public static class SQLConnection
 {
-    public static string
-        host = "127.0.0.1",
-        database = "biocom",
-        user = "admin",
-        password = "1Lovelena";
-    public static bool pooling = true;
     private static string connectionString;
+    public static ConnectionData connectionData = null;
     private static MySqlConnection connection = null;
 
     public static MySqlConnection GetConnection()
     {
-        connectionString = $"Server={host};Database={database};User={user};{(password.Length > 0 ? "Password=" + password + ";" : "")}Pooling=";
-        if (pooling)
-            connectionString += "True";
-        else
-            connectionString += "False";
+        if (connectionData == null)
+        {
+            connectionString = GetConnectionString();
+            connectionData = ConnectionData.Parse(connectionString);
+        }
 
         try
         {
@@ -40,5 +35,9 @@ public static class SQLConnection
         }
     }
 
-}
+    public static string GetConnectionString()
+    {
 
+        return UnityEngine.Resources.Load<TextAsset>("connectionString").text;
+    }
+}

@@ -23,8 +23,8 @@ public class DBResearches
             List<string> regexp = new List<string>() { "description", "note", "date" };
             string query = queryBuilder.ToQueryString(regexp);
             string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
-                $"FROM {SQLConnection.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id" +
+                $"FROM {SQLConnection.connectionData.database}.{DBTableNames.researches} " +
+                $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id" +
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
