@@ -12,7 +12,7 @@ public class UserResearchesData : TableData<UserResearchesData>
     {
         if (authorization?.userData != null)
         {
-            List<Research> researches = DBResearches.GetResearches(filterQuery);
+            List<Research> researches = DBResearches.GetResearches(filterQuery, $"{DBTableNames.users}.id");
             FillData(researches);
         }
         else

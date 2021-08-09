@@ -14,7 +14,7 @@ public class DBResearches
         return GetResearches(query);
     }
 
-    public static List<Research> GetResearches(QueryBuilder queryBuilder)
+    public static List<Research> GetResearches(QueryBuilder queryBuilder, string groupBy = "")
     {
         MySqlConnection connection = null;
         try
@@ -24,8 +24,9 @@ public class DBResearches
             string query = queryBuilder.ToQueryString(regexp);
             string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
                 $"FROM {SQLConnection.connectionData.database}.{DBTableNames.researches} " +
-                $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id" +
-                $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
+                $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
+                $"{(!String.IsNullOrEmpty(query) ? $"WHERE {query} " : "")}" +
+                $"{(!String.IsNullOrEmpty(groupBy) ? $"GROUP BY {groupBy}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
