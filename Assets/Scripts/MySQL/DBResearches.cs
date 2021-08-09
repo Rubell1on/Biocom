@@ -50,6 +50,23 @@ public class DBResearches
         }
     }
 
+    public static Research GetReasearchById(int id)
+    {
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { $"{DBTableNames.researches}.id", id.ToString() }
+        };
+
+        QueryBuilder query = new QueryBuilder(dictionary);
+        List<Research> researches = GetResearches(query);
+        if (researches.Count > 0)
+        {
+            return researches[0];
+        }
+
+        return null;
+    }
+
     public static bool AddResearch(int userId, string dateTime, string description, string note, string state)
     {
         MySqlConnection connection = null;

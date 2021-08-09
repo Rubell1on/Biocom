@@ -48,9 +48,10 @@ public class UserDataFormCreator : MonoBehaviour
         form = panel.GetComponent<UserDataForm>();
         id = Convert.ToInt32(userData.selectedRow.cells[0].value);
 
+        User user = DBUsers.GetUserById(id);
         form.SetInfo("Изменить", "Редактировать пользователя");
-        form.username.text = userData.selectedRow.cells[1].value;
-        form.role.value = Enum.GetNames(typeof(User.Role)).ToList().FindIndex(e => e == userData.selectedRow.cells[2].value);  
+        form.username.text = user.userName;
+        form.role.value = Enum.GetNames(typeof(User.Role)).ToList().FindIndex(e => e == user.role.ToString());  
         form.applyButton.onClick.AddListener(() =>
         {
             DBUsers.EditUser(id, form.username.text, form.password.text, form.role.options[form.role.value].text);

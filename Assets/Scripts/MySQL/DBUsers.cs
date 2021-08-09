@@ -121,6 +121,23 @@ public static class DBUsers
         }
     }
 
+    public static User GetUserById(int id)
+    {
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { $"{DBTableNames.users}.id", id.ToString() }
+        };
+
+        QueryBuilder query = new QueryBuilder(dictionary);
+        List<User> users = GetUsers(query);
+        if (users.Count > 0)
+        {
+            return users[0];
+        }
+
+        return null;
+    }
+
     public static List<User> GetUsers(QueryBuilder queryBuilder)
     {
         MySqlConnection connection = null;
@@ -143,6 +160,42 @@ public static class DBUsers
 
             connection.Close();
             return users;
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ошибка: " + e);
+            connection.Close();
+
+            return null;
+        }
+    }
+
+    public static User GetUserByResearchId(int id)
+    {
+        MySqlConnection connection = null;
+        try
+        {
+            connection = SQLConnection.GetConnection();
+            string sql = $"SELECT {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.users}.role " +
+                $"FROM {SQLConnection.connectionData.database}.{DBTableNames.researches} " +
+                $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} " +
+                $"ON {SQLConnection.connectionData.database}.{DBTableNames.researches}.userId = {SQLConnection.connectionData.database}.{DBTableNames.users}.id " +
+                $"WHERE {SQLConnection.connectionData.database}.{DBTableNames.researches}.id = \"{id}\";";
+                //$"GROUP BY {SQLConnection.connectionData.database}.{DBTableNames.users}.id";
+
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader reader = command.ExecuteReader();
+
+            User user = null;
+            if (reader.Read())
+            {
+                user = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
+            }
+
+            reader.Close();
+            connection.Close();
+
+            return user;
         }
         catch (Exception e)
         {

@@ -26,14 +26,13 @@ public class UserResearchesData : TableData<UserResearchesData>
         List<DataGridViewRow> rows = researches.Select(r =>
         {
             List<DataGridViewCell> cells = new List<DataGridViewCell>()
-                {
+            {
                 new DataGridViewCell(r.id.ToString()),
                 new DataGridViewCell(r.date.ToString()),
                 new DataGridViewCell(r.description.ToString()),
                 new DataGridViewCell(r.note.ToString()),
-                new DataGridViewCell(r.state.ToString()),
-                new DataGridViewCell(r.userName.ToString()),
-                };
+                new DataGridViewCell(r.state.ToString())
+            };
 
             return new DataGridViewRow(cells);
         }).ToList();
