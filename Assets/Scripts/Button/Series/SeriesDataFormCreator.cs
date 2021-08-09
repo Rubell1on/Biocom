@@ -58,8 +58,10 @@ public class SeriesDataFormCreator : MonoBehaviour
         id = Convert.ToInt32(seriesData.selectedRow.cells[0].value);
 
         form.SetInfo("Изменить", "Редактировать серию");
-        form.seriesName.text = seriesData.selectedRow.cells[1].value;
-        form.description.text = seriesData.selectedRow.cells[2].value;
+
+        Series series = DBSeries.GetSeriesById(id);
+        form.seriesName.text = series.name;
+        form.description.text = series.description;
 
         form.researchId.ClearOptions();
 
@@ -67,7 +69,7 @@ public class SeriesDataFormCreator : MonoBehaviour
         List<string> researchIds = researches.Select(r => r.id.ToString()).ToList();
         form.researchId.AddOptions(researchIds);
 
-        int researchId = form.researchId.options.FindIndex(o => o.text == seriesData.selectedRow.cells[3].value);
+        int researchId = form.researchId.options.FindIndex(o => o.text == series.researchId.ToString());
 
         form.researchId.value = researchId;
 

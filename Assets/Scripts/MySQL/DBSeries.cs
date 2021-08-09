@@ -55,6 +55,22 @@ public static class DBSeries
         }
     }
 
+    public static Series GetSeriesById(int id)
+    {
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { $"{DBTableNames.series}.id", id.ToString() }
+        };
+
+        List<Series> series = GetSeries(new QueryBuilder(dictionary));
+        if (series.Count > 0)
+        {
+            return series[0];
+        }
+
+        return null;
+    }
+
     public static bool AddSeries(string seriesName, string description, int researchId)
     {
         MySqlConnection connection = null;
