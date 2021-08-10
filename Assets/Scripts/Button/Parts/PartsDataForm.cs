@@ -10,7 +10,7 @@ public class PartsDataForm : MonoBehaviour
     public Button applyButton;
     public Text text;
 
-    public InputField partName;
+    public Dropdown tissue;
     public InputField partPath;
     public Dropdown seriesId;
 
@@ -20,5 +20,6 @@ public class PartsDataForm : MonoBehaviour
         text.text = labelText;
         seriesId.ClearOptions();
         seriesId.AddOptions(series);
+        tissue.ClearOptions();
     }
 }

@@ -19,7 +19,7 @@ public class UserDataFormCreator : MonoBehaviour
         panel = Instantiate(editPanel, gameObject.transform.parent);
         form = panel.GetComponent<UserDataForm>();
 
-        form.SetInfo("Создать", "Добавить пользователя");
+        form.SetInfo("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
         form.applyButton.onClick.AddListener(() =>
         {
             DBUsers.AddUser(form.username.text, form.password.text, form.role.options[form.role.value].text);
@@ -38,7 +38,7 @@ public class UserDataFormCreator : MonoBehaviour
         }
         else
         {
-            //Добавить логику на ошибку.
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
         }
     }
 
@@ -49,7 +49,7 @@ public class UserDataFormCreator : MonoBehaviour
         id = Convert.ToInt32(userData.selectedRow.cells[0].value);
 
         User user = DBUsers.GetUserById(id);
-        form.SetInfo("Изменить", "Редактировать пользователя");
+        form.SetInfo("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
         form.username.text = user.userName;
         form.role.value = Enum.GetNames(typeof(User.Role)).ToList().FindIndex(e => e == user.role.ToString());  
         form.applyButton.onClick.AddListener(() =>

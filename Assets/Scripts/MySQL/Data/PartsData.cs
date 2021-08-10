@@ -22,7 +22,8 @@ public class PartsData : TableData<PartsData>
                 new DataGridViewCell(u.seriesId.ToString()),
                 new DataGridViewCell(u.remoteId.ToString()),
                 new DataGridViewCell(u.filePath.ToString()),
-                new DataGridViewCell(u.seriesName.ToString())
+                new DataGridViewCell(u.seriesName.ToString()),
+                new DataGridViewCell(u.tissue.rusName)
             };
 
             return new DataGridViewRow(cells);

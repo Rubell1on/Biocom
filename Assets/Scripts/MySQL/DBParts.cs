@@ -21,9 +21,10 @@ public class DBParts : MonoBehaviour
             connection = SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { $"{DBTableNames.parts}.filePath", $"{DBTableNames.series}.name" };
             string query = queryBuilder.ToQueryString(regexp);
-            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
+            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.tissueId, {DBTableNames.series}.name, {DBTableNames.tissues}.name, {DBTableNames.tissues}.rusName, {DBTableNames.tissues}.color " +
                 $"FROM {DBTableNames.parts} " +
-                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id" +
+                $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
+                $"LEFT JOIN {DBTableNames.tissues} ON {DBTableNames.parts}.tissueId = {DBTableNames.tissues}.id " +
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -36,10 +37,21 @@ public class DBParts : MonoBehaviour
                 int serId = Convert.ToInt32(reader[1]);
                 int remoteId = Convert.ToInt32(reader[2]);
                 string filePath = reader[3].ToString();
-                string partName = reader[4].ToString();
                 string seriesName = reader[5].ToString();
 
-                serires.Add(new Part(id, partName, serId, remoteId, filePath, seriesName));
+                int tissueId = Convert.ToInt32(reader[4]);
+                string tissueName = reader[6].ToString();
+                string tissueRusName = reader[7].ToString();
+
+                Color color = new Color();
+
+                ColorUtility.TryParseHtmlString(reader[8].ToString(), out color);
+
+                Tissue tissue = new Tissue(tissueId, tissueName, tissueRusName, color);
+                Part part = new Part(id, serId, remoteId, filePath, seriesName);
+                part.tissue = tissueId != -1 ? tissue : new Tissue(tissueId, "default", "default");
+
+                serires.Add(part);
             }
             reader.Close();
 
@@ -63,9 +75,10 @@ public class DBParts : MonoBehaviour
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
+            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.tissueId, {DBTableNames.series}.name, {DBTableNames.tissues}.name, {DBTableNames.tissues}.rusName, {DBTableNames.tissues}.color " +
                 $"FROM {DBTableNames.parts} " +
                 $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
+                $"LEFT JOIN {DBTableNames.tissues} ON {DBTableNames.parts}.tissueId = {DBTableNames.tissues}.id " +
                 $"WHERE {DBTableNames.parts}.id = \"{partId}\"";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -77,10 +90,18 @@ public class DBParts : MonoBehaviour
                 int serId = Convert.ToInt32(reader[1]);
                 int remoteId = Convert.ToInt32(reader[2]);
                 string filePath = reader[3].ToString();
-                string partName = reader[4].ToString();
                 string seriesName = reader[5].ToString();
 
-                part = new Part(id, partName, serId, remoteId, filePath, seriesName);
+                int tissueId = Convert.ToInt32(reader[4]);
+
+                string tissueName = reader[6].ToString();
+                string tissueRusName = reader[7].ToString();
+
+                Color color = new Color();
+
+                ColorUtility.TryParseHtmlString(reader[8].ToString(), out color);
+                Tissue tissue = new Tissue(tissueId, tissueName, tissueRusName, color);
+                part = new Part(id, serId, remoteId, filePath, seriesName, tissue);
             }
             reader.Close();
 
@@ -102,10 +123,11 @@ public class DBParts : MonoBehaviour
         try
         {
             connection = SQLConnection.GetConnection();
-            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.partName, {DBTableNames.series}.name " +
+            string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.tissueId, {DBTableNames.series}.name, {DBTableNames.tissues}.name, {DBTableNames.tissues}.rusName, {DBTableNames.tissues}.color " +
                 $"FROM {DBTableNames.parts} " +
                 $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
                 $"JOIN {DBTableNames.researches} ON {DBTableNames.series}.researchId = {DBTableNames.researches}.id " +
+                $"LEFT JOIN {DBTableNames.tissues} ON {DBTableNames.parts}.tissueId = {DBTableNames.tissues}.id " +
                 $"WHERE {DBTableNames.researches}.id = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -118,10 +140,18 @@ public class DBParts : MonoBehaviour
                 int serId = Convert.ToInt32(reader[1]);
                 int remoteId = Convert.ToInt32(reader[2]);
                 string filePath = reader[3].ToString();
-                string partName = reader[4].ToString();
                 string seriesName = reader[5].ToString();
 
-                serires.Add(new Part(id, partName, serId, remoteId, filePath, seriesName));
+                int tissueId = Convert.ToInt32(reader[4]);
+                string tissueName = reader[6].ToString();
+                string tissueRusName = reader[7].ToString();
+
+                Color color = new Color();
+
+                ColorUtility.TryParseHtmlString(reader[8].ToString(), out color);
+                Tissue tissue = new Tissue(tissueId, tissueName, tissueRusName, color);
+
+                serires.Add(new Part(id, serId, remoteId, filePath, seriesName, tissue));
             }
             reader.Close();
 
@@ -137,14 +167,14 @@ public class DBParts : MonoBehaviour
         }
     }
 
-    public static bool AddPart(int seriesId, string partName, string filePath, int remoteId = -1)
+    public static bool AddPart(int seriesId, int tissueId, string filePath, int remoteId = -1)
     {
         MySqlConnection connection = null;
         try
         {
             connection = SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.parts} " +
-                $"SET {DBTableNames.parts}.seriesId = \"{seriesId}\", {DBTableNames.parts}.partName = \"{partName}\", {DBTableNames.parts}.filePath = \"{filePath}\", {DBTableNames.parts}.remoteId = \"{remoteId}\";";
+                $"SET {DBTableNames.parts}.seriesId = \"{seriesId}\", {DBTableNames.parts}.tissueId = \"{tissueId}\", {DBTableNames.parts}.filePath = \"{filePath}\", {DBTableNames.parts}.remoteId = \"{remoteId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
@@ -163,7 +193,7 @@ public class DBParts : MonoBehaviour
         }
     }
 
-    public static bool EditPart(int id, int seriesId, string partName, string filePath, int remoteId = -1)
+    public static bool EditPart(int id, int seriesId, int tissieId, string filePath, int remoteId = -1)
     {
         MySqlConnection connection = null;
 
@@ -171,7 +201,7 @@ public class DBParts : MonoBehaviour
         {
             connection = SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.parts} " +
-                $"SET seriesId = \"{seriesId}\", partName = \"{partName}\", filePath = \"{filePath}\", remoteId = \"{remoteId}\" " +
+                $"SET seriesId = \"{seriesId}\", tissueId = \"{tissieId}\", filePath = \"{filePath}\", remoteId = \"{remoteId}\" " +
                 $"WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
@@ -221,17 +251,27 @@ public class Part
     public int seriesId;
     public int remoteId;
     public string filePath;
-    public string partName;
+    public Tissue tissue;
     public string seriesName;
 
-    public Part(int id, string partName, int seriesId, int remoteId, string filePath, string seriesName)
+    public Part(int id, int seriesId, int remoteId, string filePath, string seriesName)
     {
         this.id = id;
         this.seriesId = seriesId;
         this.remoteId = remoteId;
         this.filePath = filePath;
-        this.partName = partName;
         this.seriesName = seriesName;
+        this.tissue = new Tissue();
+    }
+
+    public Part(int id, int seriesId, int remoteId, string filePath, string seriesName, Tissue tissue)
+    {
+        this.id = id;
+        this.seriesId = seriesId;
+        this.remoteId = remoteId;
+        this.filePath = filePath;
+        this.seriesName = seriesName;
+        this.tissue = tissue;
     }
 
     public static Dictionary<int, List<Part>> GetSeries(List<Part> parts)

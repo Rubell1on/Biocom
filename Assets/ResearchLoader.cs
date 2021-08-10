@@ -11,11 +11,11 @@ using Dummiesman;
 public class ResearchLoader : MonoBehaviour
 {
     public RectTransform mainCanvas;
-    public string outputPath = "E:/tmp";
+    public string slicerPath = "H:/Program Files/Slicer 4.11.20210226";
+    public string outputPath = "H:/tmp";
     public DataGridView dataGrid;
     public RectTransform progressWindowTemplate;
     public MeshController meshController;
-    public List<Material> meshMaterials;
     public GameObject meshes;
     public SeriesController seriesController;
     public List<MeshData> meshDatas;
@@ -80,13 +80,13 @@ public class ResearchLoader : MonoBehaviour
 
     async Task LoadMeshes(List<Part> parts)
     {
-        meshDatas = parts.Select(p => new MeshData(p.partName, p.filePath, $"{outputPath}/{p.partName}", new Threshold(1, 100))).ToList();
+        meshDatas = parts.Select(p => new MeshData(p.tissue.rusName, p.filePath, $"{outputPath}/{p.tissue.name}", new Threshold(1, 100))).ToList();
         int i = 0;
 
         List<Task> tasks = meshDatas.Select((meshData) =>
         {
             ServerParams serverParams = new ServerParams() { port = (uint)(80 + i) };
-            Slicer3D slicer = new Slicer3D("E:/Programms/Slicer 4.11.20210226");
+            Slicer3D slicer = new Slicer3D(slicerPath);
             Task task = slicer.GenerateMesh(meshData, serverParams);
             i++;
 
@@ -105,11 +105,12 @@ public class ResearchLoader : MonoBehaviour
             go.transform.SetParent(meshController.transform);
             go.transform.localPosition = Vector3.zero;
             go.transform.localScale = Vector3.one;
+            
+            Material material = go.GetComponentInChildren<MeshRenderer>().material;
+            Color32 color = parts[j].tissue.color;
+            material.color = color;
 
-            Material material = j < meshMaterials.Count ? meshMaterials[j] : meshMaterials[0];
-            go.GetComponentInChildren<MeshRenderer>().material = material;
-
-            MeshFilterElement MFE = mFController.AddElement(data.Name, material.color);
+            MeshFilterElement MFE = mFController.AddElement(data.Name, color);
 
             MFE.toggle.onValueChanged.AddListener(value => go.SetActive(value));
             MFE.colorChanged.AddListener(color => material.color = color);

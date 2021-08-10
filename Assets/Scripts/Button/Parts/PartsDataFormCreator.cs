@@ -13,6 +13,7 @@ public class PartsDataFormCreator : MonoBehaviour
 
     List<Series> series;
     List<Part> parts;
+    List<Tissue> tissues;
     Part part;
     int id;
 
@@ -26,21 +27,27 @@ public class PartsDataFormCreator : MonoBehaviour
         series = DBSeries.GetSeries();
         List<string> seriesNames = series.Select(s => s.name).ToList();
 
-        form.SetInfo("Создать", "Добавить элемент", seriesNames);
+        tissues = DBTissues.GetTissues();
+        List<string> tissueNames = tissues.Select(s => s.rusName).ToList();
+
+        form.SetInfo("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", seriesNames);
+
+        form.tissue.AddOptions(tissueNames);
         form.applyButton.onClick.AddListener(() =>
         {
             int seriesId = series.Find(s => s.name == form.seriesId.options[form.seriesId.value].text).id;
-            string partName = form.partName.text;
+            int tissueId = tissues.Find(t => t.rusName == form.tissue.options[form.tissue.value].text).id;
+
             string partPath = form.partPath.text;
 
-            if (DBParts.AddPart(seriesId, partName, partPath))
+            if (DBParts.AddPart(seriesId, tissueId, partPath))
             {
                 dataGridView.GetComponent<PartsData>().FillData();
                 Destroy(panel);
             }
             else
             {
-                //Логика на ошибку!
+                //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!
             }
         });
     }
@@ -56,12 +63,12 @@ public class PartsDataFormCreator : MonoBehaviour
             }
             else
             {
-                //Добавить логику на ошибку.
+                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
             }
         }
         else
         {
-            //Добавить логику на ошибку.
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
         }
     }
 
@@ -74,25 +81,32 @@ public class PartsDataFormCreator : MonoBehaviour
 
         List<string> seriesNames = series.Select(s => s.name).ToList();
 
-        form.SetInfo("Изменить", "Редактировать элемент", seriesNames);
+        form.SetInfo("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", seriesNames);
         part = DBParts.GetPart(Convert.ToInt32(partsData.selectedRow.cells[0].value));
 
-        form.partName.text = part.partName;
         form.partPath.text = part.filePath;
         form.seriesId.value = seriesNames.FindIndex(s => s == part.seriesName);
+
+        tissues = DBTissues.GetTissues();
+        List<string> tissueNames = tissues.Select(s => s.rusName).ToList();
+        form.tissue.AddOptions(tissueNames);
+
+        int tissueId = tissueNames.FindIndex(t => t == part.tissue.rusName);
+        form.tissue.value = tissueId;
 
         form.applyButton.onClick.AddListener(() =>
         {
             int seriesId = series.Find(s => s.name == form.seriesId.options[form.seriesId.value].text).id;
+            int tissueId = tissues.Find(t => t.rusName == form.tissue.options[form.tissue.value].text).id;
 
-            if (DBParts.EditPart(part.id, seriesId, form.partName.text, form.partPath.text))
+            if (DBParts.EditPart(part.id, seriesId, tissueId, form.partPath.text))
             {
                 dataGridView.GetComponent<PartsData>().FillData();
                 Destroy(panel);
             }
             else
             {
-                //Добавить логику на ошибку.
+                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
             }
         });
     }

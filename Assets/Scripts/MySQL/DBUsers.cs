@@ -70,6 +70,7 @@ public static class DBUsers
             return false;
         }
     }
+
     public static bool RemoveUser(int id)
     {
         MySqlConnection connection = null;
