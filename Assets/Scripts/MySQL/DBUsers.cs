@@ -213,8 +213,11 @@ public class User
 {
     public int id;
     public string userName;
+    public string password;
     public enum Role { admin, user };
     public Role role;
+
+    public User() { }
 
     public User(int id, string userName, string role)
     {
