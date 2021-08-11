@@ -56,7 +56,7 @@ public class SeriesController : MonoBehaviour
 
     public void RemoveSeries()
     {
-        seriesUIs.ForEach(s => Destroy(s));
+        seriesUIs.ForEach(s => Destroy(s.gameObject));
         seriesUIs.Clear();
     }
 }
