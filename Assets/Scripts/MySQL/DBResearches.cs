@@ -43,7 +43,7 @@ public class DBResearches
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -80,12 +80,13 @@ public class DBResearches
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Исследование добавлено в базу данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -103,12 +104,13 @@ public class DBResearches
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Исследование удалено из базы данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -130,12 +132,13 @@ public class DBResearches
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Исследование успешно изменено.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }

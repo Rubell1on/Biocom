@@ -60,7 +60,7 @@ public class DBParts : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -110,7 +110,7 @@ public class DBParts : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -160,7 +160,7 @@ public class DBParts : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -181,12 +181,13 @@ public class DBParts : MonoBehaviour
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Элемент, добавлен в базу данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return false;
@@ -209,12 +210,13 @@ public class DBParts : MonoBehaviour
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Элемент успешно изменен.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -233,12 +235,13 @@ public class DBParts : MonoBehaviour
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Элемент удален из базы данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }

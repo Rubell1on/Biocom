@@ -87,5 +87,6 @@ public class Authorization : MonoBehaviour
     private void Exit()
     {
         Application.Quit();
+        Logger.GetInstance().Log("Выход из программы.");
     }
 }

@@ -1,1 +1,1 @@
-server=127.0.0.1;database=biocom;user id=root;pwd=Dimas1996;pooling=True;
+server=127.0.0.1;database=biocom;user id=root;pwd=1Lovelena;pooling=True;

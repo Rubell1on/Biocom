@@ -48,7 +48,7 @@ public static class DBSeries
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -83,12 +83,13 @@ public static class DBSeries
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Серия {seriesName}, добавлена в базу данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -105,12 +106,13 @@ public static class DBSeries
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Серия успешно удалена.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -132,12 +134,13 @@ public static class DBSeries
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Серия изменина в базе данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }

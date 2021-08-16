@@ -24,13 +24,12 @@ public static class SQLConnection
         {
             connection = new MySqlConnection(connectionString);
             connection.Open();
-            Debug.Log("Состояние подключение: " + connection.State);
             return connection;
         }
         catch (Exception e)
         {
-            Debug.Log("Состояние подключение:" + connection.State);
-            Debug.Log("Ошибка подключения базы данных: " + e);
+            Logger.GetInstance().Error("Состояние подключение: " + connection.State);
+            Logger.GetInstance().Error("Ошибка подключения базы данных: " + e);
             return null;
         }
     }

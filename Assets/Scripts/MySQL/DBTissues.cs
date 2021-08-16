@@ -38,7 +38,7 @@ class DBTissues
 
                 if (!ColorUtility.TryParseHtmlString(reader[3].ToString(), out color))
                 {
-                    Debug.LogError("Can't parse color from string!");
+                    Logger.GetInstance().Error("Can't parse color from string!");
                 }
 
                 tissues.Add(new Tissue(id, name, rusName, color));
@@ -50,7 +50,7 @@ class DBTissues
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -87,12 +87,13 @@ class DBTissues
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Ткань успешно удалена.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -111,12 +112,13 @@ class DBTissues
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Ткань {name}, добавлена в базу данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -136,12 +138,13 @@ class DBTissues
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Ткань изменена в базе данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }

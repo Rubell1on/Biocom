@@ -84,6 +84,12 @@
       "dependencies": {},
       "url": "https://npm.cloudsmith.io/jillejr/newtonsoft-json-for-unity"
     },
+    "net.wraithavengames.unityinterfacesupport": {
+      "version": "file:net.wraithavengames.unityinterfacesupport",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

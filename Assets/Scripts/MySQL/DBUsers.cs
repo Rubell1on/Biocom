@@ -27,16 +27,16 @@ public static class DBUsers
             reader.Close();
 
             if (userInstance != null)
-                Debug.Log("Вход выполнен");
+                Logger.GetInstance().Log($"Здравствуйте, {user}.");
             else
-                Debug.Log("Don't search users!!!!!");
+                Logger.GetInstance().Warning($"Внимание. Введен не верный логин/пароль. Попробуйте, еще раз.");
 
             connection.Close();
             return userInstance;
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return null;
         }
@@ -60,12 +60,13 @@ public static class DBUsers
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Пользователь {userName}, добавлен в базу данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -84,12 +85,13 @@ public static class DBUsers
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Пользователь, удален из базы данных.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -111,12 +113,13 @@ public static class DBUsers
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
+                Logger.GetInstance().Log($"Пользователь изменен.");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
             return false;
         }
@@ -164,7 +167,7 @@ public static class DBUsers
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;
@@ -200,7 +203,7 @@ public static class DBUsers
         }
         catch (Exception e)
         {
-            Debug.Log("Ошибка: " + e);
+            Logger.GetInstance().Error("Ошибка: " + e);
             connection.Close();
 
             return null;

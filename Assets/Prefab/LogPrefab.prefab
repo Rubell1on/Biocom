@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8606562180237435485}
   - component: {fileID: 94162877885408844}
   - component: {fileID: 420008023681973823}
+  - component: {fileID: 7659978102645930391}
   m_Layer: 0
   m_Name: Image (1)
   m_TagString: Untagged
@@ -65,16 +66,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 46f884fb908f1fd42a0f5f2e9546b2f2, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7659978102645930391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225049596090133875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12fbf3c82d7c8cf4cafb86f7dc94aacc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2956235205178716209
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +269,8 @@ GameObject:
   - component: {fileID: 4211900682164616648}
   - component: {fileID: 7329763136191201961}
   - component: {fileID: 4889380469498505190}
+  - component: {fileID: 9073390657463444837}
+  - component: {fileID: 6236257116366706718}
   m_Layer: 0
   m_Name: LogPrefab
   m_TagString: Untagged
@@ -421,6 +436,32 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &9073390657463444837
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3264030896904330136}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &6236257116366706718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3264030896904330136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5049d5c5777274f803c6131510a9a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  scale: 0.97
 --- !u!1 &6244256735592687807
 GameObject:
   m_ObjectHideFlags: 0
