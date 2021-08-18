@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
-public class ButtonTransition : MonoBehaviour
+public class ButtonTransition : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public RectTransform gameObj;
     public RectTransform maskWrapper;
@@ -16,6 +17,16 @@ public class ButtonTransition : MonoBehaviour
     private HorizontalLayoutGroup horizontalLayoutGroup;
     private VerticalLayoutGroup verticalLayoutGroup;
     private Coroutine coroutine;
+
+    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
+    {
+        Slide(false);
+    }
+
+    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
+    {
+        Slide(true);
+    }
 
     public void Start()
     {
