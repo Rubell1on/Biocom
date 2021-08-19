@@ -1,45 +1,85 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class ImagesLoader : MonoBehaviour
 {
     public string path = "C://tmp/images";
-    public List<Texture2D> textures;
-    public ImageViewer viewer;
+    public List<ImageViewer> viewers;
     public Vector2 imageSize = new Vector2(512, 412);
 
-    void Start()
+    async void Start()
     {
         List<string> directories = Directory.GetDirectories(path).ToList();
 
         if (directories.Count > 0)
         {
-            List<string> filePaths = Directory.GetFiles(directories[0]).ToList();
+            Texture2D[][] textures = await GetImagesFromDirectories(directories);
 
-            StartCoroutine(LoadImages(
-                filePaths, 
-                (textures) => viewer.SetImages(textures)));
+            for (int i = 0; i < directories.Count; i++)
+            {
+                viewers[i].SetImages(textures[i].ToList());
+            }
         }
     }
 
-    private IEnumerator LoadImages(List<string> paths, Action<List<Texture2D>> loadedCallback)
+    public async Task<Texture2D[][]> GetImagesFromDirectories(List<string> directories)
     {
-        List<Texture2D> textures = new List<Texture2D>();
+        Task<Texture2D[]>[] textureTasks = directories.Select(GetImagesTask).ToArray();
 
-        foreach(string path in paths)
+        async Task<Texture2D[]> GetImagesTask(string directory)
         {
-            WWW www = new WWW(path);
-            yield return www;
-            Texture2D texTmp = new Texture2D((int)imageSize.x, (int)imageSize.y, TextureFormat.DXT1, false);
-            www.LoadImageIntoTexture(texTmp);
-            textures.Add(texTmp);
+            List<string> filePaths = Directory.GetFiles(directory).ToList();
+            filePaths.Sort(PathsComparer);
+
+            Texture2D[] textures = await LoadImages(filePaths);
+            return textures;
         }
 
-        loadedCallback(textures);
+        Texture2D[][] textures = await Task.WhenAll(textureTasks);
+        return textures;
+    }
+
+    private async Task<Texture2D[]> LoadImages(List<string> paths)
+    {
+        Task<Texture2D>[] operations = paths.Select(GetTexture).ToArray();
+
+        Texture2D[] textures = await Task.WhenAll(operations);
+
+        async Task<Texture2D> GetTexture(string path)
+        {
+            UnityWebRequest request = UnityWebRequestTexture.GetTexture(path);
+            await request.SendWebRequest();
+            Texture2D texture = DownloadHandlerTexture.GetContent(request);
+
+            return texture;
+        }
+
+        return textures;
+    }
+
+    private int PathsComparer(string a, string b)
+    {
+        string[] firstPath = a.Split('\\');
+        string[] secondPath = b.Split('\\');
+
+        string firstName = firstPath[firstPath.Length - 1].Split('.')[0];
+        string secondName = secondPath[secondPath.Length - 1].Split('.')[0];
+
+        int firstId = 0;
+        int secondId = 0;
+
+        if (Int32.TryParse(firstName, out firstId) && Int32.TryParse(secondName, out secondId))
+        {
+            return firstId.CompareTo(secondId);
+        }
+
+        return firstName.CompareTo(secondName);
     }
 }
