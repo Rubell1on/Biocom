@@ -22,7 +22,7 @@ public class DBResearches
             connection = SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "description", "note", "date" };
             string query = queryBuilder.ToQueryString(regexp);
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.sourceNiiFilePath " +
                 $"FROM {SQLConnection.connectionData.database}.{DBTableNames.researches} " +
                 $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
                 $"{(!String.IsNullOrEmpty(query) ? $"WHERE {query} " : "")}" +
@@ -34,7 +34,7 @@ public class DBResearches
 
             while (reader.Read())
             {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString()));
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), reader[7].ToString()));
             }
             reader.Close();
 
@@ -156,8 +156,9 @@ public class Research
     public string seriesName;
     public enum State { newResearch, inProgress, finished };
     public State state;
+    public string sourceNiiFilePath;
 
-    public Research(int id, string date, string description, string note, string state, int userId, string userName)
+    public Research(int id, string date, string description, string note, string state, int userId, string userName, string sourceNiiFilePath = "")
     {
         this.id = id;
         this.date = DateTime.Parse(date);
@@ -166,6 +167,7 @@ public class Research
         this.state = GetState(state);
         this.userId = userId;
         this.userName = userName;
+        this.sourceNiiFilePath = sourceNiiFilePath;
     }
 
     private static State GetState(string state)

@@ -14,20 +14,20 @@ public class ImagesLoader : MonoBehaviour
     public List<ImageViewer> viewers;
     public Vector2 imageSize = new Vector2(512, 412);
 
-    async void Start()
-    {
-        List<string> directories = Directory.GetDirectories(path).ToList();
+    //async void Start()
+    //{
+    //    List<string> directories = Directory.GetDirectories(path).ToList();
 
-        if (directories.Count > 0)
-        {
-            Texture2D[][] textures = await GetImagesFromDirectories(directories);
+    //    if (directories.Count > 0)
+    //    {
+    //        Texture2D[][] textures = await GetImagesFromDirectories(directories);
 
-            for (int i = 0; i < directories.Count; i++)
-            {
-                viewers[i].SetImages(textures[i].ToList());
-            }
-        }
-    }
+    //        for (int i = 0; i < directories.Count; i++)
+    //        {
+    //            viewers[i].SetImages(textures[i].ToList());
+    //        }
+    //    }
+    //}
 
     public async Task<Texture2D[][]> GetImagesFromDirectories(List<string> directories)
     {

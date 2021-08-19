@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections;
@@ -21,6 +22,8 @@ public class ResearchLoader : MonoBehaviour
     public List<MeshData> meshDatas;
     public MeshFilterController mFController;
 
+    public ImagesLoader imagesLoader;
+
     public UnityEvent meshesLoaded = new UnityEvent();
 
     private GameObject progressWindow;
@@ -41,6 +44,26 @@ public class ResearchLoader : MonoBehaviour
         if (Int32.TryParse(row.cells[0].value, out index))
         {
             progressWindow = Instantiate(progressWindowTemplate.gameObject, mainCanvas);
+
+            //Images
+            Research research = DBResearches.GetReasearchById(index);
+            string imagesOutputDir = "C://tmp";
+
+            await NiiImagesExporter.Run(research.sourceNiiFilePath, imagesOutputDir);
+
+            List<string> directories = Directory.GetDirectories($"{imagesOutputDir}/images").ToList();
+
+            if (directories.Count > 0)
+            {
+                Texture2D[][] textures = await imagesLoader.GetImagesFromDirectories(directories);
+
+                for (int i = 0; i < directories.Count; i++)
+                {
+                    imagesLoader.viewers[i].SetImages(textures[i].ToList());
+                }
+            }
+
+            //Parts
 
             List<Part> parts = DBParts.GetPartsByResearchId(index);
             if (parts.Count > 0)
