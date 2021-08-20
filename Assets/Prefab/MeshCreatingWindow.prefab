@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 4226999810416093250}
   - component: {fileID: 1785277463155088476}
   - component: {fileID: 2920725683323015523}
+  - component: {fileID: 5484398536282968132}
   m_Layer: 5
   m_Name: MeshCreatingWindow
   m_TagString: Untagged
@@ -180,6 +181,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5484398536282968132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713451948404591603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a12bb53f8de594aa0b3ef834cd495f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modalWindow: {fileID: 1350842603382092645}
+  bodyText: {fileID: 8422494745810673003}
 --- !u!1 &8422494745810673005
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,7 +495,7 @@ PrefabInstance:
     - target: {fileID: 46588074605488007, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 46588074605488007, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
         type: 3}
@@ -530,6 +545,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1304543796237118168}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1350842603382092645 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 46588073213598141, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1304543796237118168}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 839472fb26011c240a295ddda61faaba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7320424359553424995 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8614810495857947835, guid: 39a1ec73b5e1a1343b37234f0c82c99d,

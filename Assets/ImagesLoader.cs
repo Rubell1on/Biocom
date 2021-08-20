@@ -46,6 +46,11 @@ public class ImagesLoader : MonoBehaviour
         return textures;
     }
 
+    public void ClearViews()
+    {
+        viewers.ForEach(v => v.RemoveImages());
+    }
+
     private async Task<Texture2D[]> LoadImages(List<string> paths)
     {
         Task<Texture2D>[] operations = paths.Select(GetTexture).ToArray();

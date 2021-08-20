@@ -30,6 +30,13 @@ public class ImageViewer : MonoBehaviour
         SelectImage(0);
     }
 
+    public void RemoveImages()
+    {
+        scrollbar.numberOfSteps = 0;
+        textures.Clear();
+        image.texture = null;
+    }
+
     public void SelectImage(int id)
     {
         if (textures.Count > 0)

@@ -26,7 +26,7 @@ public class ResearchLoader : MonoBehaviour
 
     public UnityEvent meshesLoaded = new UnityEvent();
 
-    private GameObject progressWindow;
+    private LoadingModalWindow progressWindow;
     private DataGridViewEventArgs args;
 
     void Start()
@@ -43,13 +43,21 @@ public class ResearchLoader : MonoBehaviour
 
         if (Int32.TryParse(row.cells[0].value, out index))
         {
-            progressWindow = Instantiate(progressWindowTemplate.gameObject, mainCanvas);
+            GameObject modalWindowInstance = Instantiate(progressWindowTemplate.gameObject, mainCanvas);
+            if (modalWindowInstance)
+            {
+                progressWindow = modalWindowInstance.GetComponent<LoadingModalWindow>();
+            }
 
             //Images
             Research research = DBResearches.GetReasearchById(index);
-            string imagesOutputDir = "C://tmp";
 
+            progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
+
+            string imagesOutputDir = "C://tmp";
             await NiiImagesExporter.Run(research.sourceNiiFilePath, imagesOutputDir);
+
+            progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
 
             List<string> directories = Directory.GetDirectories($"{imagesOutputDir}/images").ToList();
 
@@ -64,6 +72,8 @@ public class ResearchLoader : MonoBehaviour
             }
 
             //Parts
+
+            progressWindow.bodyText.text = $"Идет процесс генерации мешей";
 
             List<Part> parts = DBParts.GetPartsByResearchId(index);
             if (parts.Count > 0)
@@ -95,6 +105,8 @@ public class ResearchLoader : MonoBehaviour
         {
             RemoveMeshes();
         }
+
+        imagesLoader.ClearViews();
 
         mFController.RemoveElements();
         int id = seriesController.series.Keys.ToArray()[seriesId];
@@ -158,6 +170,6 @@ public class ResearchLoader : MonoBehaviour
 
     void OnMeshLoaded()
     {
-        Destroy(progressWindow);
+        Destroy(progressWindow.gameObject);
     }
 }
