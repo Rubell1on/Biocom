@@ -1252,7 +1252,6 @@ GameObject:
   - component: {fileID: 55636292}
   - component: {fileID: 55636295}
   - component: {fileID: 55636294}
-  - component: {fileID: 55636296}
   - component: {fileID: 55636293}
   m_Layer: 5
   m_Name: Scrollbar
@@ -1322,8 +1321,8 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 55636294}
-  m_FillRect: {fileID: 720194083}
-  m_HandleRect: {fileID: 1628495327}
+  m_FillRect: {fileID: 1405451880}
+  m_HandleRect: {fileID: 506339869}
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 1
@@ -1370,20 +1369,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55636291}
   m_CullTransparentMesh: 1
---- !u!114 &55636296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55636291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ad5a827abc861f45a8c2d3d914eaa6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scrollbar: {fileID: 0}
-  field: {fileID: 1994049173}
 --- !u!1 &57185725
 GameObject:
   m_ObjectHideFlags: 0
@@ -12909,9 +12894,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &510279951
 GameObject:
@@ -17495,7 +17480,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &723468557
 GameObject:
@@ -19516,7 +19501,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 10, y: -57}
-  m_SizeDelta: {x: 350, y: 50}
+  m_SizeDelta: {x: 350, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &825666353
 MonoBehaviour:
@@ -23226,13 +23211,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 998426804}
   m_TextComponent: {fileID: 1307960764}
   m_Placeholder: {fileID: 1552029390}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -23382,7 +23367,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 977044918}
   m_Direction: 0
   m_MinValue: 1
-  m_MaxValue: 400
+  m_MaxValue: 10
   m_WholeNumbers: 1
   m_Value: 1
   m_OnValueChanged:
@@ -24305,8 +24290,8 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1023780090}
-  m_FillRect: {fileID: 720194083}
-  m_HandleRect: {fileID: 1628495327}
+  m_FillRect: {fileID: 1628495327}
+  m_HandleRect: {fileID: 720194083}
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 1
@@ -29069,7 +29054,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 25}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1230734301
 MonoBehaviour:
@@ -29114,13 +29099,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1230734302}
   m_TextComponent: {fileID: 356120614}
   m_Placeholder: {fileID: 19134347}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -32023,7 +32008,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -55, y: -110}
-  m_SizeDelta: {x: 370, y: 117}
+  m_SizeDelta: {x: 370, y: 67}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1340985686
 MonoBehaviour:
@@ -34047,9 +34032,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.2, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 10}
+  m_SizeDelta: {x: 40, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1405451881
 MonoBehaviour:
@@ -34623,7 +34608,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 40, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1433496695
@@ -39687,7 +39672,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 10}
+  m_SizeDelta: {x: 40, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1628495328
 MonoBehaviour:
@@ -48385,10 +48370,10 @@ RectTransform:
   m_Father: {fileID: 1405451880}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 25}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1994049173
 MonoBehaviour:
@@ -48433,13 +48418,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1994049174}
   m_TextComponent: {fileID: 634560326}
   m_Placeholder: {fileID: 2073304911}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -49577,7 +49562,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 94.5, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 189, y: 66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2043510243
 MonoBehaviour:
@@ -49591,8 +49576,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!114 &2043510244
 MonoBehaviour:
   m_ObjectHideFlags: 0
