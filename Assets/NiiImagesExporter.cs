@@ -16,9 +16,9 @@ public class NiiImagesExporter
             try
             {
                 string pathToScript = $"{UnityEngine.Application.dataPath}/Scripts/python/SimpleITK/ExportImages.py";
-                ProcessStartInfo startInfo = new ProcessStartInfo("py", $"{pathToScript} {inputFilePath} {outputDirPath}");
-                startInfo.UseShellExecute = true;
-                startInfo.CreateNoWindow = true;
+                ProcessStartInfo startInfo = new ProcessStartInfo("python", $"{pathToScript} \"{inputFilePath}\" \"{outputDirPath}\"");
+                //startInfo.UseShellExecute = true;
+                //startInfo.CreateNoWindow = true;
                 process.StartInfo = startInfo;
 
                 process.EnableRaisingEvents = true;
@@ -27,6 +27,7 @@ public class NiiImagesExporter
             }
             catch (Exception ex)
             {
+                UnityEngine.Debug.LogError(ex.Message);
                 return;
             }
 

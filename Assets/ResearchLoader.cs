@@ -54,12 +54,12 @@ public class ResearchLoader : MonoBehaviour
 
             progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
 
-            string imagesOutputDir = "C://tmp";
-            await NiiImagesExporter.Run(research.sourceNiiFilePath, imagesOutputDir);
+            //string imagesOutputDir = "C://tmp";
+            await NiiImagesExporter.Run(research.sourceNiiFilePath, outputPath);
 
             progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
 
-            List<string> directories = Directory.GetDirectories($"{imagesOutputDir}/images").ToList();
+            List<string> directories = Directory.GetDirectories($"{outputPath}/images").ToList();
 
             if (directories.Count > 0)
             {

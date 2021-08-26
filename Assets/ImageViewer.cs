@@ -9,7 +9,8 @@ using System;
 public class ImageViewer : MonoBehaviour
 {
     public RawImage image;
-    public Scrollbar scrollbar;
+    public Slider slider;
+    public InputField field;
     [HideInInspector]
     public int id = -1;
 
@@ -18,21 +19,23 @@ public class ImageViewer : MonoBehaviour
     private List<Texture2D> textures;
 
     private void Start()
-    {
-        scrollbar.onValueChanged.AddListener(OnScrollChanged);
+    {   
+        slider.minValue = 1;
+        field.text = slider.value.ToString();
+        slider.onValueChanged.AddListener(OnScrollChanged);
         valueChanged.AddListener(OnValueChanged);
     }
 
     public void SetImages(List<Texture2D> textures)
     {
         this.textures = textures;
-        scrollbar.numberOfSteps = textures.Count;
+        slider.maxValue = textures.Count;
         SelectImage(0);
     }
 
     public void RemoveImages()
     {
-        scrollbar.numberOfSteps = 0;
+        slider.maxValue = 1;
         textures.Clear();
         image.texture = null;
     }
@@ -47,13 +50,22 @@ public class ImageViewer : MonoBehaviour
 
     private void OnScrollChanged(float value)
     {
-        double rounded = Math.Floor(value * scrollbar.numberOfSteps);
-        int id = Convert.ToInt32(value == 1 ? rounded - 1: rounded);
+        int id = Convert.ToInt32(value);
         if (this.id != id)
         {
-            valueChanged.Invoke(id);
+            field.text = id.ToString();
+            valueChanged.Invoke(id - 1);
             this.id = id;
         }
+    }
+
+    public void ChangeShort()
+    {
+        if (Convert.ToUInt32(field.text) > slider.maxValue)
+            field.text = slider.maxValue.ToString();
+
+        OnScrollChanged(Convert.ToUInt32(field.text));
+        slider.value = Convert.ToUInt32(field.text);
     }
 
     private void OnValueChanged(int id)
