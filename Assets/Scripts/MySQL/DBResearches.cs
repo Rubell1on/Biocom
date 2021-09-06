@@ -21,7 +21,7 @@ public class DBResearches
         {
             connection = SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "description", "note", "date" };
-            string query = queryBuilder.ToQueryString(regexp);
+            string query = queryBuilder.ToSearchQueryString(regexp);
             string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.sourceNiiFilePath " +
                 $"FROM {SQLConnection.connectionData.database}.{DBTableNames.researches} " +
                 $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +

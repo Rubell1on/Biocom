@@ -21,7 +21,7 @@ public static class DBSeries
         {
             connection = SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "name", $"{DBTableNames.series}.description" };
-            string query = queryBuilder.ToQueryString(regexp);
+            string query = queryBuilder.ToSearchQueryString(regexp);
             string sql = $"SELECT {DBTableNames.series}.id, {DBTableNames.series}.name, {DBTableNames.series}.description, {DBTableNames.researches}.id " +
                 $"FROM {DBTableNames.series} " +
                 $"LEFT JOIN {DBTableNames.researches} ON {DBTableNames.researches}.id = {DBTableNames.series}.researchId" +

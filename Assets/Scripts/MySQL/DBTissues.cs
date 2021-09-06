@@ -21,7 +21,7 @@ class DBTissues
         {
             connection = SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "name", "rusName" };
-            string query = queryBuilder.ToQueryString(regexp);
+            string query = queryBuilder.ToSearchQueryString(regexp);
 
             string sql = $"SELECT * FROM {DBTableNames.tissues}{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 

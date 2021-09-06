@@ -9,7 +9,7 @@ class Slicer3D
     public string slicerDirPath;
     Process process;
 
-    public Slicer3D(string slicerDirPath, string exeFileName = "Slicer")
+    public Slicer3D(string slicerDirPath, string exeFileName = "Slicer.exe")
     {
         this.exeFileName = exeFileName;
         this.slicerDirPath = slicerDirPath;
@@ -22,7 +22,8 @@ class Slicer3D
         server.Get("/event/Slicer3d/connected", OnConnected);
         server.Get("/event/Slicer3d/MeshCreated", OnMeshCreated);
 
-        ProcessStartInfo processInfo = new ProcessStartInfo($"{slicerDirPath}/{exeFileName}", $" --no-main-window --python-script \"{Application.dataPath}/Scripts/python/GenerateMesh.py\" -p {serverParams.port}")
+        string fileName = slicerDirPath.Length > 0 ? $"{slicerDirPath}/{exeFileName}" : exeFileName;
+        ProcessStartInfo processInfo = new ProcessStartInfo(fileName, $" --no-main-window --python-script \"{Application.dataPath}/Scripts/python/GenerateMesh.py\" -p {serverParams.port}")
         {
             CreateNoWindow = true,
             UseShellExecute = false

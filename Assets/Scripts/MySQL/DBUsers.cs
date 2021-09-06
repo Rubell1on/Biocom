@@ -149,7 +149,7 @@ public static class DBUsers
         {
             connection = SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "userName" };
-            string query = queryBuilder.ToQueryString(regexp);
+            string query = queryBuilder.ToSearchQueryString(regexp);
             string sql = $"SELECT id, username, role FROM {DBTableNames.users}{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);

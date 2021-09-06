@@ -11,7 +11,17 @@ public class QueryBuilder
         this.dictionary = dictionary;
     }
 
-    public string ToQueryString(List<string> regexp)
+    public string ToUpdateQueryString()
+    {
+        List<string> temp = dictionary
+            .Where(kvp => !String.IsNullOrEmpty(kvp.Value))
+            .Select(kvp => $"{kvp.Key} = \"{kvp.Value}\"")
+            .ToList();
+
+        return String.Join(", ", temp);
+    }
+
+    public string ToSearchQueryString(List<string> regexp)
     {
         List<string> temp = dictionary
             .Where(kvp => !String.IsNullOrEmpty(kvp.Value))

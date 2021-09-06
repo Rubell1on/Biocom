@@ -19,12 +19,15 @@ public class ResearchLoader : MonoBehaviour
     public MeshController meshController;
     public GameObject meshes;
     public SeriesController seriesController;
-    public List<MeshData> meshDatas;
+    public List<MeshData> meshesData;
     public MeshFilterController mFController;
 
     public ImagesLoader imagesLoader;
 
-    public UnityEvent meshesLoaded = new UnityEvent();
+    public CanvasController canvasController;
+
+    public UnityEvent researchLoaded = new UnityEvent();
+    public UnityEvent researchLoadFailed = new UnityEvent();
 
     private LoadingModalWindow progressWindow;
     private DataGridViewEventArgs args;
@@ -33,8 +36,10 @@ public class ResearchLoader : MonoBehaviour
     {
         dataGrid = GetComponent<DataGridView>();
         dataGrid.cellClicked.AddListener(OnCellClicked);
-        meshesLoaded.AddListener(OnMeshLoaded);
+        researchLoaded.AddListener(OnResearchLoaded);
+        researchLoadFailed.AddListener(OnReasearchLoadFailed);
     }
+
     public async void LoadResearch()
     {
         DataGridViewRow row = dataGrid.rows[args.row];
@@ -49,27 +54,27 @@ public class ResearchLoader : MonoBehaviour
                 progressWindow = modalWindowInstance.GetComponent<LoadingModalWindow>();
             }
 
-            //Images
-            Research research = DBResearches.GetReasearchById(index);
+            ////Images
+            //Research research = DBResearches.GetReasearchById(index);
 
-            progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
+            //progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
 
-            //string imagesOutputDir = "C://tmp";
-            await NiiImagesExporter.Run(research.sourceNiiFilePath, outputPath);
+            ////string imagesOutputDir = "C://tmp";
+            //await NiiImagesExporter.Run(research.sourceNiiFilePath, outputPath);
 
-            progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
+            //progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
 
-            List<string> directories = Directory.GetDirectories($"{outputPath}/images").ToList();
+            //List<string> directories = Directory.GetDirectories($"{outputPath}/images").ToList();
 
-            if (directories.Count > 0)
-            {
-                Texture2D[][] textures = await imagesLoader.GetImagesFromDirectories(directories);
+            //if (directories.Count > 0)
+            //{
+            //    Texture2D[][] textures = await imagesLoader.GetImagesFromDirectories(directories);
 
-                for (int i = 0; i < directories.Count; i++)
-                {
-                    imagesLoader.viewers[i].SetImages(textures[i].ToList());
-                }
-            }
+            //    for (int i = 0; i < directories.Count; i++)
+            //    {
+            //        imagesLoader.viewers[i].SetImages(textures[i].ToList());
+            //    }
+            //}
 
             //Parts
 
@@ -80,9 +85,43 @@ public class ResearchLoader : MonoBehaviour
             {
                 Dictionary<int, List<Part>> series = Part.GetSeries(parts);
                 int seriesId = series.Keys.ToArray()[seriesController.current];
-                await LoadMeshes(series[seriesId]);
-                seriesController.AddSeriesRange(series);
-                seriesController.seriesChanged.AddListener(OnSeriesChanged);
+
+                List<Part> singleSeries = series[seriesId];
+                meshesData = GetMeshesData(singleSeries);
+
+                bool meshesExists = singleSeries
+                    .Select(p => File.Exists(p.meshFilePath))
+                    .All(e => e == true);
+
+                if (!meshesExists)
+                {
+                    bool generationFinished = await GenerateMeshes(meshesData);
+
+                    if (generationFinished)
+                    {
+                        bool partsUpdated = UpdatePartsData(singleSeries);
+
+                        if (partsUpdated)
+                        {
+                            parts = DBParts.GetPartsByResearchId(index);
+                            series = Part.GetSeries(parts);
+                            seriesId = series.Keys.ToArray()[seriesController.current];
+                        }
+                    }
+                }
+
+                bool meshesLoaded = LoadMeshes(series[seriesId]);
+
+                if (meshesLoaded)
+                {
+                    seriesController.AddSeriesRange(series);
+                    seriesController.seriesChanged.AddListener(OnSeriesChanged);
+                    return;
+                }
+                else
+                {
+
+                }
             }
             else
             {
@@ -93,13 +132,32 @@ public class ResearchLoader : MonoBehaviour
         {
 
         }
+
+        researchLoadFailed.Invoke();
     }
+
+    private bool UpdatePartsData(List<Part> parts)
+    {
+        return meshesData.Select(m =>
+        {
+            int id = parts.Find(p => p.filePath == m.inputFilePath).id;
+            Dictionary<string, string> dictionary = new Dictionary<string, string>() { { "meshFilePath", $"{m.outputFilePath}/Segmentation.obj" } };
+            QueryBuilder queryBuilder = new QueryBuilder(dictionary);
+            return DBParts.EditPart(id, queryBuilder);
+        }).All(result => result == true);
+    }
+
+    private List<MeshData> GetMeshesData(List<Part> parts)
+    {
+        return parts.Select(p => new MeshData(p.tissue.rusName, p.filePath, $"{outputPath}/{p.tissue.name}", new Threshold(1, 100))).ToList();
+    }
+
     public void OnCellClicked(DataGridViewEventArgs args)
     {
         this.args = args;
     }
 
-    async void OnSeriesChanged(int seriesId)
+    void OnSeriesChanged(int seriesId)
     {
         if (meshController.meshes.Count > 0)
         {
@@ -110,12 +168,56 @@ public class ResearchLoader : MonoBehaviour
 
         mFController.RemoveElements();
         int id = seriesController.series.Keys.ToArray()[seriesId];
-        await LoadMeshes(seriesController.series[id]);
+        LoadMeshes(seriesController.series[id]);
     }
 
-    async Task LoadMeshes(List<Part> parts)
+    bool LoadMeshes(List<Part> parts)
     {
-        meshDatas = parts.Select(p => new MeshData(p.tissue.rusName, p.filePath, $"{outputPath}/{p.tissue.name}", new Threshold(1, 100))).ToList();
+        if (MeshFilesExists(parts))
+        {
+            for (int j = 0; j < meshesData.Count; j++)
+            {
+                Part part = parts[j];
+                MeshData data = meshesData[j];
+                GameObject go = new OBJLoader().Load($"{part.meshFilePath}");
+                data.gameObject = go;
+                meshController.filters.Add(go.GetComponentInChildren<MeshFilter>());
+                meshController.meshes.Add(go);
+                go.transform.SetParent(meshController.transform);
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localScale = Vector3.one;
+
+                Material material = go.GetComponentInChildren<MeshRenderer>().material;
+                Color32 color = part.tissue.color;
+                material.color = color;
+
+                MeshFilterElement MFE = mFController.AddElement(data.Name, color);
+
+                MFE.toggle.onValueChanged.AddListener(value => go.SetActive(value));
+                MFE.colorChanged.AddListener(color => material.color = color);
+            }
+
+            meshController.Center();
+            meshController.Resize(meshController.size);
+            meshController.Rotate(meshController.rotation);
+            meshController.Optimize();
+
+            Debug.Log("Finished");
+            researchLoaded.Invoke();
+
+            return true;
+        }
+
+        return false;
+
+        bool MeshFilesExists(List<Part> parts)
+        {
+            return parts.Select(p => File.Exists(p.meshFilePath)).All(p => p == true);
+        }
+    }
+
+    private async Task<bool> GenerateMeshes(List<MeshData> meshDatas)
+    {
         int i = 0;
 
         List<Task> tasks = meshDatas.Select((meshData) =>
@@ -128,38 +230,18 @@ public class ResearchLoader : MonoBehaviour
             return task;
         }).ToList();
 
-        await Task.WhenAll(tasks);
+        Task result = Task.WhenAll(tasks);
 
-        for (int j = 0; j < meshDatas.Count; j++)  
+        try
         {
-            MeshData data = meshDatas[j];
-            GameObject go = new OBJLoader().Load($"{data.outputFilePath}/Segmentation.obj");
-            data.gameObject = go;
-            meshController.filters.Add(go.GetComponentInChildren<MeshFilter>());
-            meshController.meshes.Add(go);
-            go.transform.SetParent(meshController.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            
-            Material material = go.GetComponentInChildren<MeshRenderer>().material;
-            Color32 color = parts[j].tissue.color;
-            material.color = color;
-
-            MeshFilterElement MFE = mFController.AddElement(data.Name, color);
-
-            MFE.toggle.onValueChanged.AddListener(value => go.SetActive(value));
-            MFE.colorChanged.AddListener(color => material.color = color);
+            await result;
+        }
+        catch(Exception e) {
+            print(e.Message);
+            return false;
         }
 
-        meshController.Center();
-        meshController.Resize(meshController.size);
-        meshController.Rotate(meshController.rotation);
-        meshController.Optimize();
-
-        Debug.Log("Finished");
-        meshesLoaded.Invoke();
-
-        return;
+        return result.Status == TaskStatus.RanToCompletion ? true : false;
     }
 
     void RemoveMeshes()
@@ -168,8 +250,16 @@ public class ResearchLoader : MonoBehaviour
         meshes.transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 
-    void OnMeshLoaded()
+    void OnResearchLoaded()
     {
+        Logger.GetInstance().Log("Исследование успешно загружено");
+        canvasController.SelectCanvas(3);
         Destroy(progressWindow.gameObject);
+    }
+
+    private void OnReasearchLoadFailed()
+    {
+        Logger.GetInstance().Error("При загрузке исследования произошла ошибка");
+        canvasController.SelectCanvas(2);
     }
 }
