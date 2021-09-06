@@ -32,6 +32,8 @@ public class ResearchLoader : MonoBehaviour
     private LoadingModalWindow progressWindow;
     private DataGridViewEventArgs args;
 
+    private string researchDirPath;
+
     void Start()
     {
         dataGrid = GetComponent<DataGridView>();
@@ -54,17 +56,28 @@ public class ResearchLoader : MonoBehaviour
                 progressWindow = modalWindowInstance.GetComponent<LoadingModalWindow>();
             }
 
+            if (!Directory.Exists(outputPath))
+            {
+                Directory.CreateDirectory(outputPath);
+            }
+
+            researchDirPath = $"{outputPath}/{index}";
+
+            if (!Directory.Exists(researchDirPath))
+            {
+                Directory.CreateDirectory(researchDirPath);
+            }
+
             ////Images
             //Research research = DBResearches.GetReasearchById(index);
 
             //progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
 
-            ////string imagesOutputDir = "C://tmp";
-            //await NiiImagesExporter.Run(research.sourceNiiFilePath, outputPath);
+            //await NiiImagesExporter.Run(research.sourceNiiFilePath, researchDirPath);
 
             //progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
 
-            //List<string> directories = Directory.GetDirectories($"{outputPath}/images").ToList();
+            //List<string> directories = Directory.GetDirectories($"{researchDirPath}/images").ToList();
 
             //if (directories.Count > 0)
             //{
@@ -149,7 +162,7 @@ public class ResearchLoader : MonoBehaviour
 
     private List<MeshData> GetMeshesData(List<Part> parts)
     {
-        return parts.Select(p => new MeshData(p.tissue.rusName, p.filePath, $"{outputPath}/{p.tissue.name}", new Threshold(1, 100))).ToList();
+        return parts.Select(p => new MeshData(p.tissue.rusName, p.filePath, $"{researchDirPath}/{p.tissue.name}", new Threshold(1, 100))).ToList();
     }
 
     public void OnCellClicked(DataGridViewEventArgs args)
