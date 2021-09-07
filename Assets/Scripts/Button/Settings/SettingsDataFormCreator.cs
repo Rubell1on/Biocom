@@ -17,7 +17,7 @@ public class SettingsDataFormCreator : MonoBehaviour
             panel = Instantiate(settingsPanel, gameObject.transform);
         else
         {
-            Destroy(panel);
+            panel.GetComponent<ModalWindow>().Close();
             panel = null;
         }
     }

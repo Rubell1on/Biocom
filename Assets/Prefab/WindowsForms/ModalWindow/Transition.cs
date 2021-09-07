@@ -31,8 +31,13 @@ public class Transition : MonoBehaviour
 
         if (appear)
         {
-            
-
+            while (lerp < 1)
+            {
+                canvasGroup.alpha = lerp;
+                transform.localScale = Vector3.Lerp(startScale, targetScale, lerp);
+                lerp += Time.deltaTime * speed;
+                yield return new WaitForEndOfFrame();
+            }
             canvasGroup.alpha = 1;
         }
         else
