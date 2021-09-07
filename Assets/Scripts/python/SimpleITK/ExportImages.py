@@ -3,6 +3,8 @@ import SimpleITK as sitk
 from SimpleITKImages import SimpleITKImages, SliceType
 
 print(len(sys.argv))
+print(" ".join(sys.argv))
+
 if len(sys.argv) is 3:
     inputImageName = sys.argv[1]
     output = sys.argv[2]

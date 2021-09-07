@@ -7,7 +7,7 @@ public class NiiImagesExporter
     private static Process process;
     private static TaskCompletionSource<bool> eventHandle;
 
-    public static async Task Run(string inputFilePath, string outputDirPath)
+    public static async Task<bool> Export(string inputFilePath, string outputDirPath)
     {
         eventHandle = new TaskCompletionSource<bool>();
 
@@ -16,9 +16,9 @@ public class NiiImagesExporter
             try
             {
                 string pathToScript = $"{UnityEngine.Application.dataPath}/Scripts/python/SimpleITK/ExportImages.py";
-                ProcessStartInfo startInfo = new ProcessStartInfo("python", $"{pathToScript} \"{inputFilePath}\" \"{outputDirPath}\"");
-                //startInfo.UseShellExecute = true;
-                //startInfo.CreateNoWindow = true;
+                ProcessStartInfo startInfo = new ProcessStartInfo("powershell", $"python \"{pathToScript}\" \"{inputFilePath}\" \"{outputDirPath}\"");
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
                 process.StartInfo = startInfo;
 
                 process.EnableRaisingEvents = true;
@@ -28,10 +28,10 @@ public class NiiImagesExporter
             catch (Exception ex)
             {
                 UnityEngine.Debug.LogError(ex.Message);
-                return;
+                eventHandle.SetResult(false);
             }
 
-            await Task.WhenAll(eventHandle.Task);
+            return await eventHandle.Task;
         }
     }
 

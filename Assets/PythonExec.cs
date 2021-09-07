@@ -8,7 +8,7 @@ public class PythonExec : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        await NiiImagesExporter.Run("C:/tmp/P029_source.nii", "C:/tmp");
+        await NiiImagesExporter.Export("C:/tmp/P029_source.nii", "C:/tmp");
         UnityEngine.Debug.Log("Done");
     }
 }

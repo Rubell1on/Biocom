@@ -68,26 +68,42 @@ public class ResearchLoader : MonoBehaviour
                 Directory.CreateDirectory(researchDirPath);
             }
 
-            ////Images
-            //Research research = DBResearches.GetReasearchById(index);
+            string researchImagesDirPath = $"{researchDirPath}/images";
 
-            //progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
-
-            //await NiiImagesExporter.Run(research.sourceNiiFilePath, researchDirPath);
-
-            //progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
-
-            //List<string> directories = Directory.GetDirectories($"{researchDirPath}/images").ToList();
-
-            //if (directories.Count > 0)
+            //if (Directory.Exists(researchImagesDirPath))
             //{
-            //    Texture2D[][] textures = await imagesLoader.GetImagesFromDirectories(directories);
-
-            //    for (int i = 0; i < directories.Count; i++)
-            //    {
-            //        imagesLoader.viewers[i].SetImages(textures[i].ToList());
-            //    }
+            //    if (Directory.Exists($"{researchImagesDirPath}/axial") && Directory.Exists($"{researchImagesDirPath}/sagittal") && Directory.Exists($"{researchImagesDirPath}/coronal"))
             //}
+
+            //Images
+            if (!Directory.Exists(researchImagesDirPath))
+            {
+                Research research = DBResearches.GetReasearchById(index);
+
+                progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
+
+                bool imagesExported = await NiiImagesExporter.Export(research.sourceNiiFilePath, researchDirPath);
+
+                if (!imagesExported)
+                {
+                    researchLoadFailed.Invoke();
+                    return;
+                }
+            }
+
+            progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
+
+            List<string> directories = Directory.GetDirectories($"{researchDirPath}/images").ToList();
+
+            if (directories.Count > 0)
+            {
+                Texture2D[][] textures = await imagesLoader.GetImagesFromDirectories(directories);
+
+                for (int i = 0; i < directories.Count; i++)
+                {
+                    imagesLoader.viewers[i].SetImages(textures[i].ToList());
+                }
+            }
 
             //Parts
 
@@ -272,6 +288,7 @@ public class ResearchLoader : MonoBehaviour
 
     private void OnReasearchLoadFailed()
     {
+        Destroy(progressWindow.gameObject);
         Logger.GetInstance().Error("При загрузке исследования произошла ошибка");
         canvasController.SelectCanvas(2);
     }
