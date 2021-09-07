@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -106,6 +107,8 @@ public class ResearchLoader : MonoBehaviour
             }
 
             //Parts
+            List<Process> processes = GetSlicerProcesses();
+            if (processes.Count > 0) CloseProcesses(processes);
 
             progressWindow.bodyText.text = $"Идет процесс генерации мешей";
 
@@ -163,6 +166,27 @@ public class ResearchLoader : MonoBehaviour
         }
 
         researchLoadFailed.Invoke();
+    }
+
+    private List<Process> GetSlicerProcesses()
+    {
+        Process[] slicers = Process.GetProcessesByName("Slicer");
+        Process[] slicerApps = Process.GetProcessesByName("SlicerApp-real");
+        List<Process> processes = new List<Process>();
+
+        processes.AddRange(slicers.ToList());
+        processes.AddRange(slicerApps.ToList());
+
+        return processes;
+    }
+
+    private static void CloseProcesses(List<Process> processes)
+    {
+        processes.ForEach(p =>
+        {
+            p.CloseMainWindow();
+            p.Close();
+        });
     }
 
     private bool UpdatePartsData(List<Part> parts)
@@ -231,7 +255,7 @@ public class ResearchLoader : MonoBehaviour
             meshController.Rotate(meshController.rotation);
             meshController.Optimize();
 
-            Debug.Log("Finished");
+            UnityEngine.Debug.Log("Finished");
             researchLoaded.Invoke();
 
             return true;
