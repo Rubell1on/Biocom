@@ -75,7 +75,7 @@ public class ResearchLoader : MonoBehaviour
             //{
             //    if (Directory.Exists($"{researchImagesDirPath}/axial") && Directory.Exists($"{researchImagesDirPath}/sagittal") && Directory.Exists($"{researchImagesDirPath}/coronal"))
             //}
-
+            
             //Images
             if (!Directory.Exists(researchImagesDirPath))
             {

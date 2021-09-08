@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WraithavenGames.UnityInterfaceSupport;
+//using WraithavenGames.UnityInterfaceSupport;
 
 public class Logger : Singleton<Logger>, ILogger
 {

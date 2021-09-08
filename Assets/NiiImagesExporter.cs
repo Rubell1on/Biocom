@@ -16,7 +16,7 @@ public class NiiImagesExporter
             try
             {
                 string pathToScript = $"{UnityEngine.Application.dataPath}/Scripts/python/SimpleITK/ExportImages.py";
-                ProcessStartInfo startInfo = new ProcessStartInfo("powershell", $"python \"{pathToScript}\" \"{inputFilePath}\" \"{outputDirPath}\"");
+                ProcessStartInfo startInfo = new ProcessStartInfo("powershell", $"py \"{pathToScript}\" \"{inputFilePath}\" \"{outputDirPath}\"");
                 startInfo.UseShellExecute = false;
                 startInfo.CreateNoWindow = true;
                 process.StartInfo = startInfo;
