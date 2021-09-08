@@ -61,8 +61,10 @@ public class ImageViewer : MonoBehaviour
 
     public void ChangeShort()
     {
-        if (Convert.ToUInt32(field.text) > slider.maxValue)
+        if (Convert.ToInt32(field.text) > slider.maxValue)
             field.text = slider.maxValue.ToString();
+        if (Convert.ToInt32(field.text) < 1)
+            field.text = "1";
 
         OnScrollChanged(Convert.ToUInt32(field.text));
         slider.value = Convert.ToUInt32(field.text);
