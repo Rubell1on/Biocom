@@ -55,9 +55,9 @@ public class ButtonTransition : MonoBehaviour, IPointerEnterHandler, IPointerExi
             while (maskWrapper.rect.width <= difference.x && maskWrapper.rect.height <= difference.y)
             {
                 if(maskWrapper.rect.width < difference.x)
-                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x + Time.deltaTime * speed, maskWrapper.sizeDelta.y);
+                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x + Time.fixedDeltaTime * speed, maskWrapper.sizeDelta.y);
                 if (maskWrapper.rect.width < difference.y)
-                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x, maskWrapper.sizeDelta.y + Time.deltaTime * speed);
+                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x, maskWrapper.sizeDelta.y + Time.fixedDeltaTime * speed);
                 yield return new WaitForEndOfFrame();
             }
             maskWrapper.sizeDelta = new Vector2(difference.x, difference.y);
@@ -70,9 +70,9 @@ public class ButtonTransition : MonoBehaviour, IPointerEnterHandler, IPointerExi
                 //Vector2 difference = new Vector2(gameObj.rect.width + spacing.x, gameObj.rect.height + spacing.y);
 
                 if (maskWrapper.rect.width > 0)
-                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x - Time.deltaTime * speed, maskWrapper.sizeDelta.y);
+                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x - Time.fixedDeltaTime * speed, maskWrapper.sizeDelta.y);
                 if (maskWrapper.rect.height > 0)
-                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x, maskWrapper.sizeDelta.y - Time.deltaTime * speed);
+                    maskWrapper.sizeDelta = new Vector2(maskWrapper.sizeDelta.x, maskWrapper.sizeDelta.y - Time.fixedDeltaTime * speed);
                 yield return new WaitForEndOfFrame();
             }
             maskWrapper.sizeDelta = Vector2.zero;

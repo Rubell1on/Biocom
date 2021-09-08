@@ -67,7 +67,7 @@ public class ProgressBar : MonoBehaviour
     {
         while(bar.anchoredPosition.x < wrapper.rect.width)
         {
-            bar.anchoredPosition = new Vector2(bar.anchoredPosition.x + speedMultiplyer * Time.deltaTime, 0);
+            bar.anchoredPosition = new Vector2(bar.anchoredPosition.x + speedMultiplyer * Time.fixedDeltaTime, 0);
             yield return new WaitForEndOfFrame();
         }
 

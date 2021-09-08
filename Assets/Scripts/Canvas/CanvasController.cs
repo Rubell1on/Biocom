@@ -75,7 +75,7 @@ public class CanvasController : MonoBehaviour
                 currentGroup.alpha = lerp * speed;
                 previousTransform.anchoredPosition = Vector3.Lerp(previousTransform.anchoredPosition, targetPosition, lerp * speed);
                 currentTransform.anchoredPosition = Vector3.Lerp(currentTransform.anchoredPosition, Vector3.zero, lerp * speed);
-                lerp += Time.deltaTime * speed;
+                lerp += Time.fixedDeltaTime * speed;
 
                 yield return new WaitForEndOfFrame();
             }

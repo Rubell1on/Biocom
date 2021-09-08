@@ -35,7 +35,7 @@ public class Transition : MonoBehaviour
             {
                 canvasGroup.alpha = lerp;
                 transform.localScale = Vector3.Lerp(startScale, targetScale, lerp);
-                lerp += Time.deltaTime * speed;
+                lerp += Time.fixedDeltaTime * speed;
                 yield return new WaitForEndOfFrame();
             }
             canvasGroup.alpha = 1;
@@ -46,7 +46,7 @@ public class Transition : MonoBehaviour
             {
                 canvasGroup.alpha = lerp;
                 transform.localScale = Vector3.Lerp(startScale, targetScale, lerp);
-                lerp -= Time.deltaTime * speed;
+                lerp -= Time.fixedDeltaTime * speed;
                 yield return new WaitForEndOfFrame();
             }
             canvasGroup.alpha = 0;
