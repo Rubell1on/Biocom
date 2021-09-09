@@ -16,56 +16,56 @@ public class SeriesDataFormCreator : MonoBehaviour
     SeriesDataForm form;
     List<Research> researches;
 
-    public void CreateSeriesDataAddForm()
+    public async void CreateSeriesDataAddForm()
     {
         panel = Instantiate(editPanel, gameObject.transform.parent);
         form = panel.GetComponent<SeriesDataForm>();
-        form.SetInfo("Создать", "Добавить серию");
+        form.SetInfo("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
 
         form.researchId.ClearOptions();
-        researches = DBResearches.GetResearches();
+        researches = await DBResearches.GetResearches();
 
         List<string> researchIds = researches.Select(r => r.id.ToString()).ToList();
         form.researchId.AddOptions(researchIds);
 
-        form.applyButton.onClick.AddListener(() =>
+        form.applyButton.onClick.AddListener(async () =>
         {
             int researchId = Convert.ToInt32(form.researchId.options[form.researchId.value].text);
-            DBSeries.AddSeries(form.seriesName.text,form.description.text, researchId);
-            dataGridView.GetComponent<SeriesData>().FillData();
+            await DBSeries.AddSeries(form.seriesName.text,form.description.text, researchId);
+            await dataGridView.GetComponent<SeriesData>().FillData();
             Destroy(panel);
         });
     }
 
-    public void DeleteSeriesData()
+    public async void DeleteSeriesData()
     {
         id = Convert.ToInt32(seriesData.selectedRow.cells[0].value);
         if (seriesData.selectedRow != null)
         {
-            DBSeries.RemoveSeries(id);
-            dataGridView.GetComponent<SeriesData>().FillData();
+            await DBSeries.RemoveSeries(id);
+            await dataGridView.GetComponent<SeriesData>().FillData();
         }
         else
         {
-            //Добавить логику на ошибку.
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
         }
     }
 
-    public void CreateSeriesDataEditForm()
+    public async void CreateSeriesDataEditForm()
     {
         panel = Instantiate(editPanel, gameObject.transform.parent);
         form = panel.GetComponent<SeriesDataForm>();
         id = Convert.ToInt32(seriesData.selectedRow.cells[0].value);
 
-        form.SetInfo("Изменить", "Редактировать серию");
+        form.SetInfo("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
 
-        Series series = DBSeries.GetSeriesById(id);
+        Series series = await DBSeries.GetSeriesById(id);
         form.seriesName.text = series.name;
         form.description.text = series.description;
 
         form.researchId.ClearOptions();
 
-        researches = DBResearches.GetResearches();
+        researches = await DBResearches.GetResearches();
         List<string> researchIds = researches.Select(r => r.id.ToString()).ToList();
         form.researchId.AddOptions(researchIds);
 
@@ -73,11 +73,11 @@ public class SeriesDataFormCreator : MonoBehaviour
 
         form.researchId.value = researchId;
 
-        form.applyButton.onClick.AddListener(() =>
+        form.applyButton.onClick.AddListener(async () =>
         {
             int researchId = Convert.ToInt32(form.researchId.options[form.researchId.value].text);
-            DBSeries.EditSeries(id, form.seriesName.text, form.description.text, researchId);
-            dataGridView.GetComponent<SeriesData>().FillData();
+            await DBSeries.EditSeries(id, form.seriesName.text, form.description.text, researchId);
+            await dataGridView.GetComponent<SeriesData>().FillData();
             Destroy(panel);
         });
 

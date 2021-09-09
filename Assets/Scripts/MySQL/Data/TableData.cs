@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using CatchyClick;
+using System.Threading.Tasks;
 
 public abstract class TableData<T> : MonoBehaviour
 {
@@ -9,11 +10,11 @@ public abstract class TableData<T> : MonoBehaviour
 
     public QueryBuilder filterQuery = new QueryBuilder(new Dictionary<string, string>());
 
-    void OnEnable()
+    async void OnEnable()
     {
         dataGridView = GetComponent<DataGridView>();
         dataGridView.cellClicked.AddListener(OnCellClicked);
-        FillData();
+        await FillData();
     }
 
     private void OnDisable()
@@ -26,11 +27,13 @@ public abstract class TableData<T> : MonoBehaviour
         selectedRow = dataGridView.rows[e.row];
     }
 
-    public abstract void FillData();
+    public abstract Task FillData();
 
-    public void OnFilterChanged(QueryBuilder queryBuilder)
+    public async Task OnFilterChanged(QueryBuilder queryBuilder)
     {
         this.filterQuery = queryBuilder;
-        FillData();
+        await FillData();
+
+        return;
     }
 }

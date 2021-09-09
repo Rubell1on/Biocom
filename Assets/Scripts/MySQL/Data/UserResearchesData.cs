@@ -3,22 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using CatchyClick;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class UserResearchesData : TableData<UserResearchesData>
 {
     public Authorization authorization;
 
-    public override void FillData()
+    public override async Task FillData()
     {
         if (authorization?.userData != null)
         {
-            List<Research> researches = DBResearches.GetResearches(filterQuery, $"{DBTableNames.users}.id");
+            //Dictionary<string, >
+            // = new QueryBuilder()
+            List<Research> researches = await DBResearches.GetResearches(filterQuery, $"{DBTableNames.users}.id");
             FillData(researches);
         }
         else
         {
             Debug.LogError("Необходимо авторизоваться");
         }
+
+        return;
     }
 
     public void FillData(List<Research> researches)

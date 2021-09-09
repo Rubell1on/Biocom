@@ -20,29 +20,29 @@ public class PartsDataFormCreator : MonoBehaviour
     GameObject panel;
     PartsDataForm form;
 
-    public void CreatePartDataAddForm()
+    public async void CreatePartDataAddForm()
     {
         panel = Instantiate(template, gameObject.transform.parent);
         form = panel.GetComponent<PartsDataForm>();
-        series = DBSeries.GetSeries();
+        series = await DBSeries.GetSeries();
         List<string> seriesNames = series.Select(s => s.name).ToList();
 
-        tissues = DBTissues.GetTissues();
+        tissues = await DBTissues.GetTissues();
         List<string> tissueNames = tissues.Select(s => s.rusName).ToList();
 
         form.SetInfo("�������", "�������� �������", seriesNames);
 
         form.tissue.AddOptions(tissueNames);
-        form.applyButton.onClick.AddListener(() =>
+        form.applyButton.onClick.AddListener(async () =>
         {
             int seriesId = series.Find(s => s.name == form.seriesId.options[form.seriesId.value].text).id;
             int tissueId = tissues.Find(t => t.rusName == form.tissue.options[form.tissue.value].text).id;
 
             string partPath = form.partPath.text;
 
-            if (DBParts.AddPart(seriesId, tissueId, partPath))
+            if (await DBParts.AddPart(seriesId, tissueId, partPath))
             {
-                dataGridView.GetComponent<PartsData>().FillData();
+                await dataGridView.GetComponent<PartsData>().FillData();
                 Destroy(panel);
             }
             else
@@ -52,14 +52,14 @@ public class PartsDataFormCreator : MonoBehaviour
         });
     }
 
-    public void DeletePartData()
+    public async void DeletePartData()
     {
         id = Convert.ToInt32(partsData.selectedRow.cells[0].value);
         if (partsData.selectedRow != null)
         {
-            if (DBParts.RemovePart(id))
+            if (await DBParts.RemovePart(id))
             {
-                dataGridView.GetComponent<PartsData>().FillData();
+                await dataGridView.GetComponent<PartsData>().FillData();
             }
             else
             {
@@ -72,36 +72,36 @@ public class PartsDataFormCreator : MonoBehaviour
         }
     }
 
-    public void CreatePartDataEditForm()
+    public async void CreatePartDataEditForm()
     {
         panel = Instantiate(template, gameObject.transform.parent);
         form = panel.GetComponent<PartsDataForm>();
 
-        series = DBSeries.GetSeries();
+        series = await DBSeries.GetSeries();
 
         List<string> seriesNames = series.Select(s => s.name).ToList();
 
         form.SetInfo("��������", "������������� �������", seriesNames);
-        part = DBParts.GetPart(Convert.ToInt32(partsData.selectedRow.cells[0].value));
+        part = await DBParts.GetPart(Convert.ToInt32(partsData.selectedRow.cells[0].value));
 
         form.partPath.text = part.filePath;
         form.seriesId.value = seriesNames.FindIndex(s => s == part.seriesName);
 
-        tissues = DBTissues.GetTissues();
+        tissues = await DBTissues.GetTissues();
         List<string> tissueNames = tissues.Select(s => s.rusName).ToList();
         form.tissue.AddOptions(tissueNames);
 
         int tissueId = tissueNames.FindIndex(t => t == part.tissue.rusName);
         form.tissue.value = tissueId;
 
-        form.applyButton.onClick.AddListener(() =>
+        form.applyButton.onClick.AddListener(async () =>
         {
             int seriesId = series.Find(s => s.name == form.seriesId.options[form.seriesId.value].text).id;
             int tissueId = tissues.Find(t => t.rusName == form.tissue.options[form.tissue.value].text).id;
 
-            if (DBParts.EditPart(part.id, seriesId, tissueId, form.partPath.text))
+            if (await DBParts.EditPart(part.id, seriesId, tissueId, form.partPath.text))
             {
-                dataGridView.GetComponent<PartsData>().FillData();
+                await dataGridView.GetComponent<PartsData>().FillData();
                 Destroy(panel);
             }
             else

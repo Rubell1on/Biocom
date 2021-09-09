@@ -95,7 +95,7 @@ public class ResearchLoader : MonoBehaviour
             //Images
             if (!Directory.Exists(researchImagesDirPath))
             {
-                Research research = DBResearches.GetReasearchById(index);
+                Research research = await DBResearches.GetReasearchById(index);
 
                 progressWindow.bodyText.text = $"���� ������� ��������� ������� �� �� ����� {research.sourceNiiFilePath}";
 
@@ -128,7 +128,7 @@ public class ResearchLoader : MonoBehaviour
 
             progressWindow.bodyText.text = $"���� ������� ��������� �����";
 
-            List<Part> parts = DBParts.GetPartsByResearchId(index);
+            List<Part> parts = await DBParts.GetPartsByResearchId(index);
             if (parts.Count > 0)
             {
                 Dictionary<int, List<Part>> series = Part.GetSeries(parts);
@@ -147,11 +147,11 @@ public class ResearchLoader : MonoBehaviour
 
                     if (generationFinished)
                     {
-                        bool partsUpdated = UpdatePartsData(singleSeries);
+                        bool partsUpdated = await UpdatePartsData(singleSeries);
 
                         if (partsUpdated)
                         {
-                            parts = DBParts.GetPartsByResearchId(index);
+                            parts = await DBParts.GetPartsByResearchId(index);
                             series = Part.GetSeries(parts);
                             seriesId = series.Keys.ToArray()[seriesController.current];
                         }
@@ -205,15 +205,18 @@ public class ResearchLoader : MonoBehaviour
         });
     }
 
-    private bool UpdatePartsData(List<Part> parts)
+    private async Task<bool> UpdatePartsData(List<Part> parts)
     {
-        return meshesData.Select(m =>
+        List<Task<bool>> tasks = meshesData.Select(async m =>
         {
             int id = parts.Find(p => p.filePath == m.inputFilePath).id;
             Dictionary<string, string> dictionary = new Dictionary<string, string>() { { "meshFilePath", $"{m.outputFilePath}/Segmentation.obj" } };
             QueryBuilder queryBuilder = new QueryBuilder(dictionary);
-            return DBParts.EditPart(id, queryBuilder);
-        }).All(result => result == true);
+            return await DBParts.EditPart(id, queryBuilder);
+        }).ToList();
+
+        bool[] finishedTasks = await Task.WhenAll(tasks);
+        return finishedTasks.ToList().All(result => result == true);
     }
 
     private List<MeshData> GetMeshesData(List<Part> parts)

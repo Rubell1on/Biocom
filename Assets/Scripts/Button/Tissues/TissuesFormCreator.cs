@@ -20,9 +20,9 @@ class TissuesFormCreator : MonoBehaviour
         form = instance.GetComponent<TissueForm>();
 
         form.SetInfo("Добавить", "Добавить тип ткани");
-        form.apply.onClick.AddListener(OnClick);
+        form.apply.onClick.AddListener(async () => await OnClick());
 
-        void OnClick()
+        async Task OnClick()
         {
             string name = form.tissueName.text;
             string rusName = form.tissueRusName.text;
@@ -33,25 +33,27 @@ class TissuesFormCreator : MonoBehaviour
                 Debug.LogError("Can't parse color!");
             }
 
-            if (DBTissues.AddTissue(name, rusName, color))
+            if (await DBTissues.AddTissue(name, rusName, color))
             {
                 Destroy(instance);
-                tissuesData.FillData();
+                await tissuesData.FillData();
             }
             else
             {
                 Debug.LogError("При добавлении типа ткани произошла ошибка!");
             }
         }
+
+        return;
     }
 
-    public void CreateEditForm()
+    public async void CreateEditForm()
     {
         GameObject instance = Instantiate(window, gameObject.transform.parent);
         form = instance.GetComponent<TissueForm>();
 
         int id = Convert.ToInt32(tissuesData.selectedRow.cells[0].value);
-        Tissue tissue = DBTissues.GetTissueById(id);
+        Tissue tissue = await DBTissues.GetTissueById(id);
 
         form.SetInfo("Обновить", "Обновить тип ткани");
 
@@ -59,9 +61,9 @@ class TissuesFormCreator : MonoBehaviour
         form.tissueRusName.text = tissue.rusName;
         form.color.text = ColorUtility.ToHtmlStringRGBA(tissue.color);
 
-        form.apply.onClick.AddListener(OnClick);
+        form.apply.onClick.AddListener(async () => await OnClick());
 
-        void OnClick()
+        async Task OnClick()
         {
             string name = form.tissueName.text;
             string rusName = form.tissueRusName.text;
@@ -72,10 +74,10 @@ class TissuesFormCreator : MonoBehaviour
                 Debug.LogError("Can't parse color!");
             }
 
-            if (DBTissues.EditTissue(id, name, rusName, color))
+            if (await DBTissues.EditTissue(id, name, rusName, color))
             {
                 Destroy(instance);
-                tissuesData.FillData();
+                await tissuesData.FillData();
             }
             else
             {
@@ -84,19 +86,21 @@ class TissuesFormCreator : MonoBehaviour
         }
     }
 
-    public void DeleteTissue()
+    public async void DeleteTissue()
     {
         int id = Convert.ToInt32(tissuesData.selectedRow.cells[0].value);
         if (tissuesData.selectedRow != null)
         {
-            if (DBTissues.RemoveTissue(id))
+            if (await DBTissues.RemoveTissue(id))
             {
-                dataGridView.GetComponent<TissuesData>().FillData();
+                await dataGridView.GetComponent<TissuesData>().FillData();
             }
             else
             {
                 Debug.LogError("При удалении типа ткани произошла ошибка!");
             }
         }
+
+        return;
     }
 }

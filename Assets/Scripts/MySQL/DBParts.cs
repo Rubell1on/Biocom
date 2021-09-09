@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
+using System.Data.Common;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MySql.Data;
@@ -7,18 +9,18 @@ using System;
 using System.Linq;
 public class DBParts : MonoBehaviour
 {
-    public static List<Part> GetParts()
+    public static async Task<List<Part>> GetParts()
     {
         QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
-        return GetParts(query);
+        return await GetParts(query);
     }
 
-    public static List<Part> GetParts(QueryBuilder queryBuilder)
+    public static async Task<List<Part>> GetParts(QueryBuilder queryBuilder)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { $"{DBTableNames.parts}.filePath", $"{DBTableNames.series}.name" };
             string query = queryBuilder.ToSearchQueryString(regexp);
             string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.tissueId, {DBTableNames.series}.name, {DBTableNames.tissues}.name, {DBTableNames.tissues}.rusName, {DBTableNames.tissues}.color, {DBTableNames.parts}.meshFilePath " +
@@ -28,10 +30,10 @@ public class DBParts : MonoBehaviour
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            DbDataReader reader = await command.ExecuteReaderAsync();
             List<Part> serires = new List<Part>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 int id = Convert.ToInt32(reader[0]);
                 int serId = Convert.ToInt32(reader[1]);
@@ -57,26 +59,26 @@ public class DBParts : MonoBehaviour
             }
             reader.Close();
 
-            connection.Close();
+            await connection.CloseAsync();
             return serires;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return null;
         }
     }
 
-    public static Part GetPart(int partId)
+    public static async Task<Part> GetPart(int partId)
     {
         MySqlConnection connection = null;
         Part part = null;
 
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.tissueId, {DBTableNames.series}.name, {DBTableNames.tissues}.name, {DBTableNames.tissues}.rusName, {DBTableNames.tissues}.color " +
                 $"FROM {DBTableNames.parts} " +
                 $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
@@ -84,9 +86,9 @@ public class DBParts : MonoBehaviour
                 $"WHERE {DBTableNames.parts}.id = \"{partId}\"";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            DbDataReader reader = await command.ExecuteReaderAsync();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 int id = Convert.ToInt32(reader[0]);
                 int serId = Convert.ToInt32(reader[1]);
@@ -107,24 +109,24 @@ public class DBParts : MonoBehaviour
             }
             reader.Close();
 
-            connection.Close();
+            await connection.CloseAsync();
             return part;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return null;
         }
     }
 
-    public static List<Part> GetPartsByResearchId(int researchId)
+    public static async Task<List<Part>> GetPartsByResearchId(int researchId)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"SELECT {DBTableNames.parts}.id, {DBTableNames.parts}.seriesId, {DBTableNames.parts}.remoteId, {DBTableNames.parts}.filePath, {DBTableNames.parts}.tissueId, {DBTableNames.series}.name, {DBTableNames.tissues}.name, {DBTableNames.tissues}.rusName, {DBTableNames.tissues}.color, {DBTableNames.parts}.meshFilePath " +
                 $"FROM {DBTableNames.parts} " +
                 $"JOIN {DBTableNames.series} ON {DBTableNames.parts}.seriesId = {DBTableNames.series}.id " +
@@ -133,10 +135,10 @@ public class DBParts : MonoBehaviour
                 $"WHERE {DBTableNames.researches}.id = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            DbDataReader reader = await command.ExecuteReaderAsync();
             List<Part> serires = new List<Part>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 int id = Convert.ToInt32(reader[0]);
                 int serId = Convert.ToInt32(reader[1]);
@@ -159,32 +161,32 @@ public class DBParts : MonoBehaviour
             }
             reader.Close();
 
-            connection.Close();
+            await connection.CloseAsync();
             return serires;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return null;
         }
     }
 
-    public static bool AddPart(int seriesId, int tissueId, string filePath, int remoteId = -1)
+    public static async Task<bool> AddPart(int seriesId, int tissueId, string filePath, int remoteId = -1)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.parts} " +
                 $"SET {DBTableNames.parts}.seriesId = \"{seriesId}\", {DBTableNames.parts}.tissueId = \"{tissueId}\", {DBTableNames.parts}.filePath = \"{filePath}\", {DBTableNames.parts}.remoteId = \"{remoteId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Элемент, добавлен в базу данных.");
                 return true;
             }
@@ -192,28 +194,28 @@ public class DBParts : MonoBehaviour
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return false;
         }
     }
 
-    public static bool EditPart(int id, int seriesId, int tissieId, string filePath, int remoteId = -1)
+    public static async Task<bool> EditPart(int id, int seriesId, int tissieId, string filePath, int remoteId = -1)
     {
         MySqlConnection connection = null;
 
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.parts} " +
                 $"SET seriesId = \"{seriesId}\", tissueId = \"{tissieId}\", filePath = \"{filePath}\", remoteId = \"{remoteId}\" " +
                 $"WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Элемент успешно изменен.");
                 return true;
             }
@@ -221,12 +223,12 @@ public class DBParts : MonoBehaviour
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
 
-    public static bool EditPart(int id, QueryBuilder updateQueryBuilder)
+    public static async Task<bool> EditPart(int id, QueryBuilder updateQueryBuilder)
     {
         MySqlConnection connection = null;
         string updateString = updateQueryBuilder.ToUpdateQueryString();
@@ -235,15 +237,15 @@ public class DBParts : MonoBehaviour
         {
             try
             {
-                connection = SQLConnection.GetConnection();
+                connection = await SQLConnection.GetConnection();
                 string sql = $"UPDATE {DBTableNames.parts} " +
                     $"SET {updateString} WHERE id = \"{id}\";";
 
                 MySqlCommand command = new MySqlCommand(sql, connection);
 
-                using (MySqlDataReader reader = command.ExecuteReader())
+                using (DbDataReader reader = await command.ExecuteReaderAsync())
                 {
-                    connection.Close();
+                    await connection.CloseAsync();
                     Logger.GetInstance().Log($"Элемент успешно изменен.");
                     return true;
                 }
@@ -251,7 +253,7 @@ public class DBParts : MonoBehaviour
             catch (Exception e)
             {
                 Logger.GetInstance().Error("Ошибка: " + e);
-                connection.Close();
+                await connection.CloseAsync();
                 return false;
             }
         }
@@ -259,19 +261,19 @@ public class DBParts : MonoBehaviour
         return false;
     }
 
-    public static bool RemovePart(int id)
+    public static async Task<bool> RemovePart(int id)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.parts} WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Элемент удален из базы данных.");
                 return true;
             }
@@ -279,7 +281,7 @@ public class DBParts : MonoBehaviour
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }

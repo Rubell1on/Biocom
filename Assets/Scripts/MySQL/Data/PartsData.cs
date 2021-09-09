@@ -3,13 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CatchyClick;
+using System.Threading.Tasks;
 
 public class PartsData : TableData<PartsData>
 {
-    public override void FillData()
+    public override async Task FillData()
     {
-        List<Part> parts = DBParts.GetParts(filterQuery);
+        List<Part> parts = await DBParts.GetParts(filterQuery);
         FillData(parts);
+
+        return;
     }
 
     public void FillData(List<Part> parts)

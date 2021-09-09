@@ -2,13 +2,16 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using CatchyClick;
+using System.Threading.Tasks;
 
 public class ResearchesData : TableData<ResearchesData>
 {
-    public override void FillData()
+    public override async Task FillData()
     {
-        List<Research> researches = DBResearches.GetResearches(filterQuery);
+        List<Research> researches = await DBResearches.GetResearches(filterQuery);
         FillData(researches);
+
+        return;
     }
 
     public void FillData(List<Research> researches)

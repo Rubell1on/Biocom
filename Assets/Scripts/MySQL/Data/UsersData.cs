@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CatchyClick;
+using System.Threading.Tasks;
 
 public class UsersData : TableData<UsersData>
 {
 
-    public override void FillData()
+    public override async Task FillData()
     {
-        List<User> users = DBUsers.GetUsers(filterQuery);
+        List<User> users = await DBUsers.GetUsers(filterQuery);
         FillData(users);
+
+        return;
     }
 
     public void FillData(List<User> users)

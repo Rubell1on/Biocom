@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using CatchyClick;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class TissuesData : TableData<TissuesData>
 {
-    public override void FillData()
+    public override async Task FillData()
     {
-        List<Tissue> tissues = DBTissues.GetTissues(filterQuery);
+        List<Tissue> tissues = await DBTissues.GetTissues(filterQuery);
         FillData(tissues);
     }
 

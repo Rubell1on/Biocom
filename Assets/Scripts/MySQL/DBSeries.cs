@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
+using System.Data.Common;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MySql.Data;
@@ -8,18 +10,18 @@ using System.Linq;
 
 public static class DBSeries
 {
-    public static List<Series> GetSeries()
+    public static async Task<List<Series>> GetSeries()
     {
         QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
-        return GetSeries(query);
+        return await GetSeries(query);
     }
 
-    public static List<Series> GetSeries(QueryBuilder queryBuilder)
+    public static async Task<List<Series>> GetSeries(QueryBuilder queryBuilder)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "name", $"{DBTableNames.series}.description" };
             string query = queryBuilder.ToSearchQueryString(regexp);
             string sql = $"SELECT {DBTableNames.series}.id, {DBTableNames.series}.name, {DBTableNames.series}.description, {DBTableNames.researches}.id " +
@@ -28,10 +30,10 @@ public static class DBSeries
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            DbDataReader reader = await command.ExecuteReaderAsync();
             List<Series> serires = new List<Series>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 int researchId;
                 if (!Int32.TryParse(reader[3].ToString(), out researchId))
@@ -43,26 +45,26 @@ public static class DBSeries
             }
             reader.Close();
 
-            connection.Close();
+            await connection.CloseAsync();
             return serires;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return null;
         }
     }
 
-    public static Series GetSeriesById(int id)
+    public static async Task<Series> GetSeriesById(int id)
     {
         Dictionary<string, string> dictionary = new Dictionary<string, string>()
         {
             { $"{DBTableNames.series}.id", id.ToString() }
         };
 
-        List<Series> series = GetSeries(new QueryBuilder(dictionary));
+        List<Series> series = await GetSeries(new QueryBuilder(dictionary));
         if (series.Count > 0)
         {
             return series[0];
@@ -71,18 +73,18 @@ public static class DBSeries
         return null;
     }
 
-    public static bool AddSeries(string seriesName, string description, int researchId)
+    public static async Task<bool> AddSeries(string seriesName, string description, int researchId)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\";";
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Серия {seriesName}, добавлена в базу данных.");
                 return true;
             }
@@ -90,22 +92,22 @@ public static class DBSeries
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
-    public static bool RemoveSeries(int id)
+    public static async Task<bool> RemoveSeries(int id)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.series} WHERE id = \"{id}\";";
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Серия успешно удалена.");
                 return true;
             }
@@ -113,27 +115,27 @@ public static class DBSeries
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
 
-    public static bool EditSeries(int id, string seriesName, string description, int researchId)
+    public static async Task<bool> EditSeries(int id, string seriesName, string description, int researchId)
     {
         MySqlConnection connection = null;
 
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.series} " +
                 $"SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\" " +
                 $"WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Серия изменина в базе данных.");
                 return true;
             }
@@ -141,7 +143,7 @@ public static class DBSeries
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }

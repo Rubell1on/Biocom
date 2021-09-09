@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Data.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,28 +10,28 @@ using MySql.Data.MySqlClient;
 
 class DBTissues
 {
-    public static List<Tissue> GetTissues()
+    public static async Task<List<Tissue>> GetTissues()
     {
         QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
-        return GetTissues(query);
+        return await GetTissues(query);
     }
 
-    public static List<Tissue> GetTissues(QueryBuilder queryBuilder)
+    public static async Task<List<Tissue>> GetTissues(QueryBuilder queryBuilder)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "name", "rusName" };
             string query = queryBuilder.ToSearchQueryString(regexp);
 
             string sql = $"SELECT * FROM {DBTableNames.tissues}{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            DbDataReader reader = await command.ExecuteReaderAsync();
             List<Tissue> tissues = new List<Tissue>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 int id = Convert.ToInt32(reader[0]);
                 string name = reader[1].ToString();
@@ -45,19 +47,19 @@ class DBTissues
             }
             reader.Close();
 
-            connection.Close();
+            await connection.CloseAsync();
             return tissues;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return null;
         }
     }
 
-    public static Tissue GetTissueById(int id)
+    public static async Task<Tissue> GetTissueById(int id)
     {
         Dictionary<string, string> dictionary = new Dictionary<string, string>()
         {
@@ -65,7 +67,7 @@ class DBTissues
         };
 
         QueryBuilder query = new QueryBuilder(dictionary);
-        List<Tissue> tissues = GetTissues(query);
+        List<Tissue> tissues = await GetTissues(query);
         if (tissues.Count > 0)
         {
             return tissues[0];
@@ -74,19 +76,19 @@ class DBTissues
         return null;
     }
 
-    public static bool RemoveTissue(int id)
+    public static async Task<bool> RemoveTissue(int id)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.tissues} WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Ткань успешно удалена.");
                 return true;
             }
@@ -94,24 +96,24 @@ class DBTissues
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
 
-    public static bool AddTissue(string name, string rusName, Color32 color)
+    public static async Task<bool> AddTissue(string name, string rusName, Color32 color)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.tissues} SET name = \"{name}\", rusName = \"{rusName}\", color = \"#{ColorUtility.ToHtmlStringRGBA(color)}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Ткань {name}, добавлена в базу данных.");
                 return true;
             }
@@ -119,25 +121,25 @@ class DBTissues
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
 
-    public static bool EditTissue(int id, string name, string rusName, Color32 color)
+    public static async Task<bool> EditTissue(int id, string name, string rusName, Color32 color)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.tissues} SET name = \"{name}\", rusName = \"{rusName}\", color = \"#{ColorUtility.ToHtmlStringRGBA(color)}\" " +
                 $"WHERE {DBTableNames.tissues}.id = {id};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Ткань изменена в базе данных.");
                 return true;
             }
@@ -145,7 +147,7 @@ class DBTissues
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }

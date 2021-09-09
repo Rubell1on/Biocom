@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.Threading.Tasks;
+using System.Data.Common;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MySql.Data;
@@ -8,18 +10,18 @@ using System.Linq;
 
 public class DBResearches 
 { 
-    public static List<Research> GetResearches()
+    public static async Task<List<Research>> GetResearches()
     {
         QueryBuilder query = new QueryBuilder(new Dictionary<string, string>());
-        return GetResearches(query);
+        return await GetResearches(query);
     }
 
-    public static List<Research> GetResearches(QueryBuilder queryBuilder, string groupBy = "")
+    public static async Task<List<Research>> GetResearches(QueryBuilder queryBuilder, string groupBy = "")
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "description", "note", "date" };
             string query = queryBuilder.ToSearchQueryString(regexp);
             string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.sourceNiiFilePath " +
@@ -29,28 +31,28 @@ public class DBResearches
                 $"{(!String.IsNullOrEmpty(groupBy) ? $"GROUP BY {groupBy}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            DbDataReader reader = await command.ExecuteReaderAsync();
             List<Research> researches = new List<Research>();
 
-            while (reader.Read())
+            while (await reader.ReadAsync())
             {
                 researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), reader[7].ToString()));
             }
             reader.Close();
 
-            connection.Close();
+            await connection.CloseAsync();
             return researches;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
 
             return null;
         }
     }
 
-    public static Research GetReasearchById(int id)
+    public static async Task<Research> GetReasearchById(int id)
     {
         Dictionary<string, string> dictionary = new Dictionary<string, string>()
         {
@@ -58,7 +60,7 @@ public class DBResearches
         };
 
         QueryBuilder query = new QueryBuilder(dictionary);
-        List<Research> researches = GetResearches(query);
+        List<Research> researches = await GetResearches(query);
         if (researches.Count > 0)
         {
             return researches[0];
@@ -67,19 +69,19 @@ public class DBResearches
         return null;
     }
 
-    public static bool AddResearch(int userId, string dateTime, string description, string note, string state)
+    public static async Task<bool> AddResearch(int userId, string dateTime, string description, string note, string state)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.researches} SET userId = \"{userId}\", date = \"{dateTime}\", description = \"{description}\", note = \"{note}\", state = \"{state}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Исследование добавлено в базу данных.");
                 return true;
             }
@@ -87,23 +89,23 @@ public class DBResearches
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
-    public static bool RemoveResearch(int id)
+    public static async Task<bool> RemoveResearch(int id)
     {
         MySqlConnection connection = null;
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.researches} WHERE id = \"{id}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Исследование удалено из базы данных.");
                 return true;
             }
@@ -111,27 +113,27 @@ public class DBResearches
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }
 
-    public static bool EditResearch(int researchId, int userId, string description, string note, string state)
+    public static async Task<bool> EditResearch(int researchId, int userId, string description, string note, string state)
     {
         MySqlConnection connection = null;
 
         try
         {
-            connection = SQLConnection.GetConnection();
+            connection = await SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.researches} " +
                 $"SET userId = \"{userId}\", description = \"{description}\", note = \"{note}\", state = \"{state}\" " +
                 $"WHERE id = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            using (DbDataReader reader = await command.ExecuteReaderAsync())
             {
-                connection.Close();
+                await connection.CloseAsync();
                 Logger.GetInstance().Log($"Исследование успешно изменено.");
                 return true;
             }
@@ -139,7 +141,7 @@ public class DBResearches
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            connection.Close();
+            await connection.CloseAsync();
             return false;
         }
     }

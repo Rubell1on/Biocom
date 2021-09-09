@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using System.Data.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +19,7 @@ public class Authorization : MonoBehaviour
     private static readonly string login = "login";
     private static readonly string password = "password";
 
-    private void Start()
+    private async void Start()
     {
         if (PlayerPrefs.HasKey(login) && PlayerPrefs.HasKey(password))
         {
@@ -26,20 +28,20 @@ public class Authorization : MonoBehaviour
             passwordField.text = user.password;
             savePassword.isOn = true;
 
-            Authorize();
+            await Authorize();
         }
         else
         {
             savePassword.isOn = false;
         }
 
-        enterButton.onClick.AddListener(Authorize);
+        enterButton.onClick.AddListener(async () => await Authorize());
         exitButton.onClick.AddListener(Exit);
     }
 
-    private void Authorize()
+    private async Task Authorize()
     {
-        userData = DBUsers.Authorize(loginField.text, passwordField.text);
+        userData = await DBUsers.Authorize(loginField.text, passwordField.text);
         if (userData != null)
         {
             if (savePassword.isOn)
@@ -57,6 +59,8 @@ public class Authorization : MonoBehaviour
             });
             canvasController.SelectCanvas((int)userData.role + 1);
         }
+
+        return;
     }
 
     private User GetUserData()
@@ -87,6 +91,6 @@ public class Authorization : MonoBehaviour
     private void Exit()
     {
         Application.Quit();
-        Logger.GetInstance().Log("Выход из программы.");
+        Logger.GetInstance().Log("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.");
     }
 }

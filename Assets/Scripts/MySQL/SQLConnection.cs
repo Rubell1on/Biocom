@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public static class SQLConnection
     public static ConnectionData connectionData = null;
     private static MySqlConnection connection = null;
 
-    public static MySqlConnection GetConnection()
+    public static async Task<MySqlConnection> GetConnection()
     {
         if (connectionData == null)
         {
@@ -23,13 +24,13 @@ public static class SQLConnection
         try
         {
             connection = new MySqlConnection(connectionString);
-            connection.Open();
+            await connection.OpenAsync();
             return connection;
         }
         catch (Exception e)
         {
-            Logger.GetInstance().Error("Состояние подключение: " + connection.State);
-            Logger.GetInstance().Error("Ошибка подключения базы данных: " + e);
+            Logger.GetInstance().Error("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: " + connection.State);
+            Logger.GetInstance().Error("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " + e);
             return null;
         }
     }
