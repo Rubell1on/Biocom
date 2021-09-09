@@ -31,7 +31,7 @@ public class ResearchDataFormCreator : MonoBehaviour
             string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             await DBResearches.AddResearch(id, date, form.description.text, form.note.text, form.state.options[form.state.value].text);
-            await dataGridView.GetComponent<PartsData>().FillData();
+            await dataGridView.GetComponent<ResearchesData>().FillData();
             Destroy(panel);
         });
     }
@@ -42,7 +42,7 @@ public class ResearchDataFormCreator : MonoBehaviour
         if (researchData.selectedRow != null)
         {
             await DBResearches.RemoveResearch(id);
-            await dataGridView.GetComponent<PartsData>().FillData();
+            await dataGridView.GetComponent<ResearchesData>().FillData();
         }
         else
         {

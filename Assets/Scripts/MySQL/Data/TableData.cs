@@ -29,11 +29,9 @@ public abstract class TableData<T> : MonoBehaviour
 
     public abstract Task FillData();
 
-    public async Task OnFilterChanged(QueryBuilder queryBuilder)
+    public async void OnFilterChanged(QueryBuilder queryBuilder)
     {
         this.filterQuery = queryBuilder;
         await FillData();
-
-        return;
     }
 }

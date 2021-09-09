@@ -13,8 +13,6 @@ public class UserResearchesData : TableData<UserResearchesData>
     {
         if (authorization?.userData != null)
         {
-            //Dictionary<string, >
-            // = new QueryBuilder()
             List<Research> researches = await DBResearches.GetResearches(filterQuery, $"{DBTableNames.users}.id");
             FillData(researches);
         }
