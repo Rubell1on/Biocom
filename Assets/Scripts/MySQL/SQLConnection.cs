@@ -15,11 +15,8 @@ public static class SQLConnection
 
     public static async Task<MySqlConnection> GetConnection()
     {
-        if (connectionData == null)
-        {
             connectionString = GetConnectionString();
             connectionData = ConnectionData.Parse(connectionString);
-        }
 
         try
         {
@@ -37,7 +34,6 @@ public static class SQLConnection
 
     public static string GetConnectionString()
     {
-
-        return UnityEngine.Resources.Load<TextAsset>("connectionString").text;
+        return PlayerPrefs.GetString("keyConnectionString");
     }
 }
