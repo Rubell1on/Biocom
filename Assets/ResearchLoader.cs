@@ -69,6 +69,22 @@ public class ResearchLoader : MonoBehaviour
                 Directory.CreateDirectory(researchDirPath);
             }
 
+            List<string> files = new List<string>() {
+                "scripts/python/GenerateMesh",
+                "scripts/python/Segmenter",
+                "scripts/python/slicerApp",
+                "scripts/python/test",
+                "scripts/python/SimpleITK/ExportImages",
+                "scripts/python/SimpleITK/SimpleITKImages"
+            };
+            bool extractionResult = files.Select(f => ResourcesExtractor.ExtractTextAsset(f, "py")).All(e => e == true);
+
+            if (!extractionResult)
+            {
+                researchLoadFailed.Invoke();
+                return;
+            }
+
             string researchImagesDirPath = $"{researchDirPath}/images";
 
             //if (Directory.Exists(researchImagesDirPath))
@@ -81,7 +97,7 @@ public class ResearchLoader : MonoBehaviour
             {
                 Research research = DBResearches.GetReasearchById(index);
 
-                progressWindow.bodyText.text = $"Идет процесс получения снимков КТ из файла {research.sourceNiiFilePath}";
+                progressWindow.bodyText.text = $"пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ {research.sourceNiiFilePath}";
 
                 bool imagesExported = await NiiImagesExporter.Export(research.sourceNiiFilePath, researchDirPath);
 
@@ -92,7 +108,7 @@ public class ResearchLoader : MonoBehaviour
                 }
             }
 
-            progressWindow.bodyText.text = $"Идет процесс загрузки снимков КТ";
+            progressWindow.bodyText.text = $"пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ";
 
             List<string> directories = Directory.GetDirectories($"{researchDirPath}/images").ToList();
 
@@ -110,7 +126,7 @@ public class ResearchLoader : MonoBehaviour
             List<Process> processes = GetSlicerProcesses();
             if (processes.Count > 0) CloseProcesses(processes);
 
-            progressWindow.bodyText.text = $"Идет процесс генерации мешей";
+            progressWindow.bodyText.text = $"пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ";
 
             List<Part> parts = DBParts.GetPartsByResearchId(index);
             if (parts.Count > 0)
@@ -305,7 +321,7 @@ public class ResearchLoader : MonoBehaviour
 
     void OnResearchLoaded()
     {
-        Logger.GetInstance().Log("Исследование успешно загружено");
+        Logger.GetInstance().Log("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
         canvasController.SelectCanvas(3);
         Destroy(progressWindow.gameObject);
     }
@@ -313,7 +329,7 @@ public class ResearchLoader : MonoBehaviour
     private void OnReasearchLoadFailed()
     {
         Destroy(progressWindow.gameObject);
-        Logger.GetInstance().Error("При загрузке исследования произошла ошибка");
+        Logger.GetInstance().Error("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
         canvasController.SelectCanvas(2);
     }
 }

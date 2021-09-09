@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class NiiImagesExporter
 {
@@ -16,7 +17,7 @@ public class NiiImagesExporter
             try
             {
                 string pathToScript = $"{UnityEngine.Application.dataPath}/Scripts/python/SimpleITK/ExportImages.py";
-                ProcessStartInfo startInfo = new ProcessStartInfo("powershell", $"py \"{pathToScript}\" \"{inputFilePath}\" \"{outputDirPath}\"");
+                ProcessStartInfo startInfo = new ProcessStartInfo("py", $"\"{pathToScript}\" \"{inputFilePath}\" \"{outputDirPath}\"");
                 startInfo.UseShellExecute = false;
                 startInfo.CreateNoWindow = true;
                 process.StartInfo = startInfo;
@@ -37,6 +38,7 @@ public class NiiImagesExporter
 
     private static void myProcess_Exited(object sender, System.EventArgs e)
     {
-        eventHandle.TrySetResult(true);
+        UnityEngine.Debug.Log($"Process exit code is :{process.ExitCode}");
+        eventHandle.TrySetResult(process.ExitCode == 0 ? true : false);
     }
 }
