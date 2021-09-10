@@ -13,6 +13,8 @@ public static class SQLConnection
     public static ConnectionData connectionData = null;
     private static MySqlConnection connection = null;
 
+    private static readonly string key = "keyConnectionString";
+
     public static async Task<MySqlConnection> GetConnection()
     {
             connectionString = GetConnectionString();
@@ -34,6 +36,16 @@ public static class SQLConnection
 
     public static string GetConnectionString()
     {
-        return PlayerPrefs.GetString("keyConnectionString");
+        return PlayerPrefs.GetString(key);
+    }
+
+    public static void SetConnectionString(string connectionString)
+    {
+        PlayerPrefs.SetString(key, connectionString);
+    }
+
+    public static bool ConnectionStringExists()
+    {
+        return PlayerPrefs.HasKey(key);
     }
 }

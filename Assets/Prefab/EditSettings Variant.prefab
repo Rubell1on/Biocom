@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -211,7 +211,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: "\u041D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u043E"
 --- !u!1 &404743740274953178
 GameObject:
   m_ObjectHideFlags: 0
@@ -4108,7 +4108,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1Lovelena
+  m_Text: '*********'
 --- !u!1 &4713067254263496003
 GameObject:
   m_ObjectHideFlags: 0
@@ -4324,8 +4324,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8684977256518955721}
   m_TextComponent: {fileID: 6628448912082947988}
   m_Placeholder: {fileID: 2652646702875058939}
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0

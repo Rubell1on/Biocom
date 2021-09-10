@@ -12,67 +12,44 @@ public class MySQLConnection : MonoBehaviour
     public InputField password;
     public Text textState;
 
-    private string dirPath;
-    private const string fileName = "connectionString.txt";
+    private ConnectionData connectionData;
 
     private void Start()
     {
-        dirPath = $"{Application.dataPath}/Resources";
-
-        CheckRegistryAndFiles(dirPath, fileName);
+        CheckRegistry();
+        connectionData = ConnectionData.Parse(SQLConnection.GetConnectionString());
         FillFieldUI();
     }
 
-    private void CheckRegistryAndFiles(string dirPath, string fileName)
+    private void CheckRegistry()
     {
-        if (!PlayerPrefs.HasKey("keyIp") || !PlayerPrefs.HasKey("keyDBName") || !PlayerPrefs.HasKey("keyUser") || !PlayerPrefs.HasKey("keyPassword") || 
-            !PlayerPrefs.HasKey("keyConnectionString"))
+        if (!SQLConnection.ConnectionStringExists())
         {
-            PlayerPrefs.SetString("keyIp", "192.168.0.1");
-            PlayerPrefs.SetString("keyDBName", "biocom");
-            PlayerPrefs.SetString("keyUser", "admin");
-            PlayerPrefs.SetString("keyPassword", "1234567890");
-            SetStringConnection(PlayerPrefs.GetString("keyIp"),
-                PlayerPrefs.GetString("keyDBName"),
-                PlayerPrefs.GetString("keyUser"),
-                PlayerPrefs.GetString("keyPassword"));
+            SetStringConnection(new ConnectionData().ToString());
         }
-
-        if (!Directory.Exists(dirPath))
-            Directory.CreateDirectory(dirPath);
-
-        if (!File.Exists($"{dirPath}/{fileName}"))
-            SetStringConnection(PlayerPrefs.GetString("keyIp"), 
-                PlayerPrefs.GetString("keyDBName"), 
-                PlayerPrefs.GetString("keyUser"), 
-                PlayerPrefs.GetString("keyPassword"));
     }
 
     private void FillFieldUI()
     {
-        ip.text = PlayerPrefs.GetString("keyIp");
-        dbName.text = PlayerPrefs.GetString("keyDBName");
-        user.text = PlayerPrefs.GetString("keyUser");
-        password.text = PlayerPrefs.GetString("keyPassword");
+        ip.text = connectionData.server;
+        dbName.text = connectionData.database;
+        user.text = connectionData.user;
+        password.text = connectionData.password;
     }
 
     public void SaveParametrs()
     {
-        PlayerPrefs.SetString("keyIp", ip.text);
-        PlayerPrefs.SetString("keyDBName", dbName.text);
-        PlayerPrefs.SetString("keyUser", user.text);
-        PlayerPrefs.SetString("keyPassword", password.text);
-
-        SetStringConnection(PlayerPrefs.GetString("keyIp"), 
-            PlayerPrefs.GetString("keyDBName"), 
-            PlayerPrefs.GetString("keyUser"), 
-            PlayerPrefs.GetString("keyPassword"));
+        connectionData.server = ip.text;
+        connectionData.database = dbName.text;
+        connectionData.user = user.text;
+        connectionData.password = password.text;
+        SetStringConnection(connectionData.ToString());
+        Logger.GetInstance().Log("Параметры подключения, успешно сохранены.");
     }
 
-    private void SetStringConnection(string ip, string dbName, string user, string password)
+    private void SetStringConnection(string connection)
     {
-        string connection = $"server={ip};database={dbName};user id={user};pwd={password};pooling=True;";
-        PlayerPrefs.SetString("keyConnectionString", connection);
+        SQLConnection.SetConnectionString(connection);
     }
 
     public async void CheckConnection()

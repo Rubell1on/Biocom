@@ -11,7 +11,7 @@ public class ConnectionData
 
     public ConnectionData() { }
 
-    public ConnectionData(string server, string database, string user, string password, bool pooling = true)
+    public ConnectionData(string server = "192.168.0.1", string database = "biocom", string user = "admin", string password = "1234567890", bool pooling = true)
     {
         this.server = server;
         this.database = database;
@@ -55,11 +55,11 @@ public class ConnectionData
     {
         List<string> parameters = new List<string>()
         {
-            !String.IsNullOrEmpty(this.server) ? $"server={this.server};" : "",
-            !String.IsNullOrEmpty(this.database) ? $"database={this.database};" : "",
-            !String.IsNullOrEmpty(this.user) ? $"user id={this.user};" : "",
-            !String.IsNullOrEmpty(this.password) ? $"pwd={this.password};" : "",
-            $"pooling={(this.pooling ? "True" : "False")};"
+            $"server={this.server};",
+            $"database={this.database};",
+            $"user id={this.user};",
+            $"pwd={this.password};",
+            $"pooling=True"
         };
 
         return String.Join("", parameters);
