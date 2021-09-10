@@ -64,4 +64,15 @@ public class ConnectionData
 
         return String.Join("", parameters);
     }
+
+    public override bool Equals(object obj)
+    {
+        ConnectionData newData = (ConnectionData)obj;
+        if (this.server == newData.server && this.database == newData.database && this.user == newData.user && this.password == newData.password && this.pooling && newData.pooling)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

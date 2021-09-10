@@ -10,15 +10,22 @@ using System.Linq;
 public static class SQLConnection
 {
     private static string connectionString;
-    public static ConnectionData connectionData = null;
-    private static MySqlConnection connection = null;
+    public static ConnectionData connectionData = new ConnectionData();
 
     private static readonly string key = "keyConnectionString";
 
     public static async Task<MySqlConnection> GetConnection()
     {
         connectionString = GetConnectionString();
-        connectionData = ConnectionData.Parse(connectionString);
+        ConnectionData possibleConnectionData = ConnectionData.Parse(connectionString);
+
+        bool equal = !connectionData.Equals(possibleConnectionData);
+        if (equal) 
+        {
+            connectionData = possibleConnectionData;
+        }
+
+        MySqlConnection connection = null;
 
         try
         {
