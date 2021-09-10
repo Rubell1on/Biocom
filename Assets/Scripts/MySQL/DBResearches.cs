@@ -31,22 +31,22 @@ public class DBResearches
                 $"{(!String.IsNullOrEmpty(groupBy) ? $"GROUP BY {groupBy}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             List<Research> researches = new List<Research>();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), reader[7].ToString()));
             }
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return researches;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -79,9 +79,9 @@ public class DBResearches
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Исследование добавлено в базу данных.");
                 return true;
             }
@@ -89,7 +89,7 @@ public class DBResearches
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -103,9 +103,9 @@ public class DBResearches
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Исследование удалено из базы данных.");
                 return true;
             }
@@ -113,7 +113,7 @@ public class DBResearches
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -131,9 +131,9 @@ public class DBResearches
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Исследование успешно изменено.");
                 return true;
             }
@@ -141,7 +141,7 @@ public class DBResearches
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }

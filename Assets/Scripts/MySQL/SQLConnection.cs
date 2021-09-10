@@ -22,16 +22,13 @@ public static class SQLConnection
 
         try
         {
-            return await Task.Run<MySqlConnection>(async () =>
+            return await Task.Run<MySqlConnection>(() =>
             {
                 connection = new MySqlConnection(connectionString);
-                await connection.OpenAsync();
+                connection.Open();
 
                 return connection;
             });
-            //connection = new MySqlConnection(connectionString);
-            //await connection.OpenAsync();
-            //return connection;
         }
         catch (Exception e)
         {

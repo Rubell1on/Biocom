@@ -30,10 +30,10 @@ public static class DBSeries
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             List<Series> serires = new List<Series>();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 int researchId;
                 if (!Int32.TryParse(reader[3].ToString(), out researchId))
@@ -45,13 +45,13 @@ public static class DBSeries
             }
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return serires;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -82,9 +82,9 @@ public static class DBSeries
             string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\";";
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Серия {seriesName}, добавлена в базу данных.");
                 return true;
             }
@@ -92,7 +92,7 @@ public static class DBSeries
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -105,9 +105,9 @@ public static class DBSeries
             string sql = $"DELETE FROM {DBTableNames.series} WHERE id = \"{id}\";";
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Серия успешно удалена.");
                 return true;
             }
@@ -115,7 +115,7 @@ public static class DBSeries
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -133,9 +133,9 @@ public static class DBSeries
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Серия изменина в базе данных.");
                 return true;
             }
@@ -143,7 +143,7 @@ public static class DBSeries
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }

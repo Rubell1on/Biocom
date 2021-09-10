@@ -28,10 +28,10 @@ class DBTissues
             string sql = $"SELECT * FROM {DBTableNames.tissues}{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             List<Tissue> tissues = new List<Tissue>();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 int id = Convert.ToInt32(reader[0]);
                 string name = reader[1].ToString();
@@ -47,13 +47,13 @@ class DBTissues
             }
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return tissues;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -86,9 +86,9 @@ class DBTissues
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Ткань успешно удалена.");
                 return true;
             }
@@ -96,7 +96,7 @@ class DBTissues
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -111,9 +111,9 @@ class DBTissues
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Ткань {name}, добавлена в базу данных.");
                 return true;
             }
@@ -121,7 +121,7 @@ class DBTissues
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -137,9 +137,9 @@ class DBTissues
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Ткань изменена в базе данных.");
                 return true;
             }
@@ -147,7 +147,7 @@ class DBTissues
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }

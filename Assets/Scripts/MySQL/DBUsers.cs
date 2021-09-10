@@ -19,10 +19,10 @@ public static class DBUsers
             string sql = $"SELECT id, username, role FROM {DBTableNames.users} WHERE username = \"{user}\" AND password = \"{password}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             User userInstance = null;
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 userInstance = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
             }
@@ -33,13 +33,13 @@ public static class DBUsers
             else
                 Logger.GetInstance().Warning($"Внимание. Введен не верный логин/пароль. Попробуйте, еще раз.");
 
-            await connection.CloseAsync();
+            connection.Close();
             return userInstance;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return null;
         }
     }
@@ -59,9 +59,9 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Пользователь {userName}, добавлен в базу данных.");
                 return true;
             }
@@ -69,7 +69,7 @@ public static class DBUsers
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -84,9 +84,9 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Пользователь, удален из базы данных.");
                 return true;
             }
@@ -94,7 +94,7 @@ public static class DBUsers
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -112,9 +112,9 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Пользователь изменен.");
                 return true;
             }
@@ -122,7 +122,7 @@ public static class DBUsers
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -155,23 +155,23 @@ public static class DBUsers
             string sql = $"SELECT id, username, role FROM {DBTableNames.users}{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             List<User> users = new List<User>();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 users.Add(new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString()));
             }
 
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return users;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -191,23 +191,23 @@ public static class DBUsers
                 //$"GROUP BY {SQLConnection.connectionData.database}.{DBTableNames.users}.id";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
 
             User user = null;
-            if (await reader.ReadAsync())
+            if (reader.Read())
             {
                 user = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
             }
 
             reader.Close();
-            await connection.CloseAsync();
+            connection.Close();
 
             return user;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }

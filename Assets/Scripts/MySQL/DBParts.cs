@@ -30,10 +30,10 @@ public class DBParts : MonoBehaviour
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             List<Part> serires = new List<Part>();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 int id = Convert.ToInt32(reader[0]);
                 int serId = Convert.ToInt32(reader[1]);
@@ -59,13 +59,13 @@ public class DBParts : MonoBehaviour
             }
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return serires;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -86,9 +86,9 @@ public class DBParts : MonoBehaviour
                 $"WHERE {DBTableNames.parts}.id = \"{partId}\"";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 int id = Convert.ToInt32(reader[0]);
                 int serId = Convert.ToInt32(reader[1]);
@@ -109,13 +109,13 @@ public class DBParts : MonoBehaviour
             }
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return part;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -135,10 +135,10 @@ public class DBParts : MonoBehaviour
                 $"WHERE {DBTableNames.researches}.id = \"{researchId}\";";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            DbDataReader reader = await command.ExecuteReaderAsync();
+            MySqlDataReader reader = command.ExecuteReader();
             List<Part> serires = new List<Part>();
 
-            while (await reader.ReadAsync())
+            while (reader.Read())
             {
                 int id = Convert.ToInt32(reader[0]);
                 int serId = Convert.ToInt32(reader[1]);
@@ -161,13 +161,13 @@ public class DBParts : MonoBehaviour
             }
             reader.Close();
 
-            await connection.CloseAsync();
+            connection.Close();
             return serires;
         }
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return null;
         }
@@ -184,9 +184,9 @@ public class DBParts : MonoBehaviour
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Элемент, добавлен в базу данных.");
                 return true;
             }
@@ -194,7 +194,7 @@ public class DBParts : MonoBehaviour
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
 
             return false;
         }
@@ -213,9 +213,9 @@ public class DBParts : MonoBehaviour
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Элемент успешно изменен.");
                 return true;
             }
@@ -223,7 +223,7 @@ public class DBParts : MonoBehaviour
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
@@ -243,9 +243,9 @@ public class DBParts : MonoBehaviour
 
                 MySqlCommand command = new MySqlCommand(sql, connection);
 
-                using (DbDataReader reader = await command.ExecuteReaderAsync())
+                using (MySqlDataReader reader = command.ExecuteReader())
                 {
-                    await connection.CloseAsync();
+                    connection.Close();
                     Logger.GetInstance().Log($"Элемент успешно изменен.");
                     return true;
                 }
@@ -253,7 +253,7 @@ public class DBParts : MonoBehaviour
             catch (Exception e)
             {
                 Logger.GetInstance().Error("Ошибка: " + e);
-                await connection.CloseAsync();
+                connection.Close();
                 return false;
             }
         }
@@ -271,9 +271,9 @@ public class DBParts : MonoBehaviour
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (DbDataReader reader = await command.ExecuteReaderAsync())
+            using (MySqlDataReader reader = command.ExecuteReader())
             {
-                await connection.CloseAsync();
+                connection.Close();
                 Logger.GetInstance().Log($"Элемент удален из базы данных.");
                 return true;
             }
@@ -281,7 +281,7 @@ public class DBParts : MonoBehaviour
         catch (Exception e)
         {
             Logger.GetInstance().Error("Ошибка: " + e);
-            await connection.CloseAsync();
+            connection.Close();
             return false;
         }
     }
