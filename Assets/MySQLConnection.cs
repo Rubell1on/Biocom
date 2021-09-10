@@ -21,7 +21,7 @@ public class MySQLConnection : MonoBehaviour
         FillFieldUI();
     }
 
-    private void CheckRegistry()
+    public void CheckRegistry()
     {
         if (!SQLConnection.ConnectionStringExists())
         {

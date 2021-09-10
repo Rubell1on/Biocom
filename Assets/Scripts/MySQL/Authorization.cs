@@ -19,8 +19,16 @@ public class Authorization : MonoBehaviour
     private static readonly string login = "login";
     private static readonly string password = "password";
 
+    private void Awake()
+    {
+        MySQLConnection mc = new MySQLConnection();
+        mc.CheckRegistry();
+    }
     private async void Start()
     {
+        enterButton.onClick.AddListener(async () => await Authorize());
+        exitButton.onClick.AddListener(Exit);
+
         if (PlayerPrefs.HasKey(login) && PlayerPrefs.HasKey(password))
         {
             User user = GetUserData();
@@ -34,9 +42,6 @@ public class Authorization : MonoBehaviour
         {
             savePassword.isOn = false;
         }
-
-        enterButton.onClick.AddListener(async () => await Authorize());
-        exitButton.onClick.AddListener(Exit);
     }
 
     private async Task Authorize()
