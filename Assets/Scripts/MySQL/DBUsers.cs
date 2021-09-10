@@ -228,7 +228,6 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             
-
             User user = await Task.Run(() =>
             {
                 MySqlDataReader reader = command.ExecuteReader();

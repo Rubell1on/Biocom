@@ -31,7 +31,7 @@ public class DBParts : MonoBehaviour
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
-            List<Part> serires = new List<Part>();
+            List<Part> series = new List<Part>();
 
             while (reader.Read())
             {
@@ -55,12 +55,12 @@ public class DBParts : MonoBehaviour
                 part.tissue = tissueId != -1 ? tissue : new Tissue(tissueId, "default", "default");
                 part.meshFilePath = meshFilePath;
 
-                serires.Add(part);
+                series.Add(part);
             }
             reader.Close();
-
             connection.Close();
-            return serires;
+
+            return series;
         }
         catch (Exception e)
         {
@@ -74,7 +74,6 @@ public class DBParts : MonoBehaviour
     public static async Task<Part> GetPart(int partId)
     {
         MySqlConnection connection = null;
-        Part part = null;
 
         try
         {
@@ -85,6 +84,7 @@ public class DBParts : MonoBehaviour
                 $"LEFT JOIN {DBTableNames.tissues} ON {DBTableNames.parts}.tissueId = {DBTableNames.tissues}.id " +
                 $"WHERE {DBTableNames.parts}.id = \"{partId}\"";
 
+            Part part = null;
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
 
@@ -108,8 +108,8 @@ public class DBParts : MonoBehaviour
                 part = new Part(id, serId, remoteId, filePath, seriesName, tissue);
             }
             reader.Close();
-
             connection.Close();
+
             return part;
         }
         catch (Exception e)
@@ -136,7 +136,7 @@ public class DBParts : MonoBehaviour
 
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
-            List<Part> serires = new List<Part>();
+            List<Part> parts = new List<Part>();
 
             while (reader.Read())
             {
@@ -157,12 +157,13 @@ public class DBParts : MonoBehaviour
                 Tissue tissue = new Tissue(tissueId, tissueName, tissueRusName, color);
                 Part part = new Part(id, serId, remoteId, filePath, seriesName, tissue);
                 part.meshFilePath = meshFilePath;
-                serires.Add(part);
+                parts.Add(part);
             }
             reader.Close();
 
             connection.Close();
-            return serires;
+
+            return parts;
         }
         catch (Exception e)
         {
@@ -182,14 +183,22 @@ public class DBParts : MonoBehaviour
             string sql = $"INSERT INTO {DBTableNames.parts} " +
                 $"SET {DBTableNames.parts}.seriesId = \"{seriesId}\", {DBTableNames.parts}.tissueId = \"{tissueId}\", {DBTableNames.parts}.filePath = \"{filePath}\", {DBTableNames.parts}.remoteId = \"{remoteId}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на добавление элемента");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Элемент, добавлен в базу данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Элемент, добавлен в базу данных.");
+
+            return result;
         }
         catch (Exception e)
         {
@@ -211,14 +220,22 @@ public class DBParts : MonoBehaviour
                 $"SET seriesId = \"{seriesId}\", tissueId = \"{tissieId}\", filePath = \"{filePath}\", remoteId = \"{remoteId}\" " +
                 $"WHERE id = \"{id}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на редактирование элемента");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Элемент успешно изменен.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Элемент успешно изменен.");
+            return result;
         }
         catch (Exception e)
         {
@@ -240,6 +257,8 @@ public class DBParts : MonoBehaviour
                 connection = await SQLConnection.GetConnection();
                 string sql = $"UPDATE {DBTableNames.parts} " +
                     $"SET {updateString} WHERE id = \"{id}\";";
+
+                Logger.GetInstance().Log("Отправлен запрос на редактирование элемента");
 
                 MySqlCommand command = new MySqlCommand(sql, connection);
 
@@ -269,14 +288,21 @@ public class DBParts : MonoBehaviour
             connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.parts} WHERE id = \"{id}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на удаление элемента");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Элемент удален из базы данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Элемент удален из базы данных.");
+            return result;
         }
         catch (Exception e)
         {

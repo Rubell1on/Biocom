@@ -29,24 +29,30 @@ public static class DBSeries
                 $"LEFT JOIN {DBTableNames.researches} ON {DBTableNames.researches}.id = {DBTableNames.series}.researchId" +
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
-            List<Series> serires = new List<Series>();
-
-            while (reader.Read())
+            List<Series> series = await Task.Run(() =>
             {
-                int researchId;
-                if (!Int32.TryParse(reader[3].ToString(), out researchId))
+                MySqlCommand command = new MySqlCommand(sql, connection);
+                MySqlDataReader reader = command.ExecuteReader();
+                List<Series> series = new List<Series>();
+
+                while (reader.Read())
                 {
-                    researchId = -1;
+                    int researchId;
+                    if (!Int32.TryParse(reader[3].ToString(), out researchId))
+                    {
+                        researchId = -1;
+                    }
+
+                    series.Add(new Series(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), researchId));
                 }
+                reader.Close();
 
-                serires.Add(new Series(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), researchId));
-            }
-            reader.Close();
+                connection.Close();
 
-            connection.Close();
-            return serires;
+                return series;
+            });
+
+            return series;
         }
         catch (Exception e)
         {
@@ -80,14 +86,23 @@ public static class DBSeries
         {
             connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\";";
-            MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            Logger.GetInstance().Log("Отправлен запрос на добавление серии");
+
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Серия {seriesName}, добавлена в базу данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Серия {seriesName}, добавлена в базу данных.");
+            return result;
+            
         }
         catch (Exception e)
         {
@@ -103,14 +118,23 @@ public static class DBSeries
         {
             connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.series} WHERE id = \"{id}\";";
-            MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            Logger.GetInstance().Log("Отправлен запрос на удаление серии");
+
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Серия успешно удалена.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Серия успешно удалена.");
+
+            return result;
         }
         catch (Exception e)
         {
@@ -131,14 +155,21 @@ public static class DBSeries
                 $"SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\" " +
                 $"WHERE id = \"{id}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на редактирование серии");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Серия изменина в базе данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Серия изменина в базе данных.");
+            return result;
         }
         catch (Exception e)
         {

@@ -41,6 +41,7 @@ public class DBResearches
             reader.Close();
 
             connection.Close();
+
             return researches;
         }
         catch (Exception e)
@@ -77,14 +78,22 @@ public class DBResearches
             connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.researches} SET userId = \"{userId}\", date = \"{dateTime}\", description = \"{description}\", note = \"{note}\", state = \"{state}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на добавление исследования");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Исследование добавлено в базу данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Исследование добавлено в базу данных.");
+            return result;
         }
         catch (Exception e)
         {
@@ -101,14 +110,22 @@ public class DBResearches
             connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.researches} WHERE id = \"{id}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на удаление исследования");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Исследование удалено из базы данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Исследование удалено из базы данных.");
+            return result;
         }
         catch (Exception e)
         {
@@ -129,14 +146,21 @@ public class DBResearches
                 $"SET userId = \"{userId}\", description = \"{description}\", note = \"{note}\", state = \"{state}\" " +
                 $"WHERE id = \"{researchId}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на редактирование исследования");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Исследование успешно изменено.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Исследование успешно изменено.");
+            return result;
         }
         catch (Exception e)
         {

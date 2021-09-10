@@ -4,7 +4,6 @@ using System.Data.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using MySql.Data.MySqlClient;
 
@@ -84,14 +83,21 @@ class DBTissues
             connection = await SQLConnection.GetConnection();
             string sql = $"DELETE FROM {DBTableNames.tissues} WHERE id = \"{id}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на удаление ткани");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Ткань успешно удалена.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Ткань успешно удалена.");
+            return result;
         }
         catch (Exception e)
         {
@@ -109,14 +115,21 @@ class DBTissues
             connection = await SQLConnection.GetConnection();
             string sql = $"INSERT INTO {DBTableNames.tissues} SET name = \"{name}\", rusName = \"{rusName}\", color = \"#{ColorUtility.ToHtmlStringRGBA(color)}\";";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на добавление ткани");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Ткань {name}, добавлена в базу данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Ткань {name}, добавлена в базу данных.");
+            return result;
         }
         catch (Exception e)
         {
@@ -135,14 +148,22 @@ class DBTissues
             string sql = $"UPDATE {DBTableNames.tissues} SET name = \"{name}\", rusName = \"{rusName}\", color = \"#{ColorUtility.ToHtmlStringRGBA(color)}\" " +
                 $"WHERE {DBTableNames.tissues}.id = {id};";
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
+            Logger.GetInstance().Log("Отправлен запрос на редактирование ткани");
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Success($"Ткань изменена в базе данных.");
-                return true;
-            }
+                MySqlCommand command = new MySqlCommand(sql, connection);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Ткань изменена в базе данных.");
+            return result;
         }
         catch (Exception e)
         {
