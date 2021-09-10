@@ -21,12 +21,12 @@ public class MySQLConnection : MonoBehaviour
 
         CheckRegistryAndFiles(dirPath, fileName);
         FillFieldUI();
-        CheckConnection();
     }
 
     private void CheckRegistryAndFiles(string dirPath, string fileName)
     {
-        if (!PlayerPrefs.HasKey("keyIp") || !PlayerPrefs.HasKey("keyDBName") || !PlayerPrefs.HasKey("keyUser") || !PlayerPrefs.HasKey("keyPassword") || PlayerPrefs.HasKey("keyConnectionString"))
+        if (!PlayerPrefs.HasKey("keyIp") || !PlayerPrefs.HasKey("keyDBName") || !PlayerPrefs.HasKey("keyUser") || !PlayerPrefs.HasKey("keyPassword") || 
+            !PlayerPrefs.HasKey("keyConnectionString"))
         {
             PlayerPrefs.SetString("keyIp", "192.168.0.1");
             PlayerPrefs.SetString("keyDBName", "biocom");
@@ -71,14 +71,14 @@ public class MySQLConnection : MonoBehaviour
 
     private void SetStringConnection(string ip, string dbName, string user, string password)
     {
-        string connection = $"server = {ip}; database = {dbName}; user id = {user}; pwd = {password}; pooling = True;";
+        string connection = $"server={ip};database={dbName};user id={user};pwd={password};pooling=True;";
         PlayerPrefs.SetString("keyConnectionString", connection);
     }
 
-    public void CheckConnection()
+    public async void CheckConnection()
     {
         string str = SQLConnection.GetConnectionString();
-        if (SQLConnection.GetConnection() == null)
+        if (await SQLConnection.GetConnection() == null)
         {
             textState.color = Color.red;
             textState.text = "Закрыто";

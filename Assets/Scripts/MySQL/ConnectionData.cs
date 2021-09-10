@@ -38,8 +38,8 @@ public class ConnectionData
             string[] field = parameter.Split('=');
             if (field.Length == 2)
             {
-                string key = field[0].ToLower();
-                string value = field[1];
+                string key = field[0].ToLower().Trim();
+                string value = field[1].Trim();
                 actions[key].Invoke(value);
             }
             else
