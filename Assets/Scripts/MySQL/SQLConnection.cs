@@ -17,14 +17,21 @@ public static class SQLConnection
 
     public static async Task<MySqlConnection> GetConnection()
     {
-            connectionString = GetConnectionString();
-            connectionData = ConnectionData.Parse(connectionString);
+        connectionString = GetConnectionString();
+        connectionData = ConnectionData.Parse(connectionString);
 
         try
         {
-            connection = new MySqlConnection(connectionString);
-            await connection.OpenAsync();
-            return connection;
+            return await Task.Run<MySqlConnection>(async () =>
+            {
+                connection = new MySqlConnection(connectionString);
+                await connection.OpenAsync();
+
+                return connection;
+            });
+            //connection = new MySqlConnection(connectionString);
+            //await connection.OpenAsync();
+            //return connection;
         }
         catch (Exception e)
         {
