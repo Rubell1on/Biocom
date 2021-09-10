@@ -11,7 +11,13 @@ public class Logger : Singleton<Logger>, ILogger
     public void Log(string text)
     {
         foreach (ILogger l in loggers)
-           l.Log(text);
+            l.Log(text);
+    }
+
+    public void Success(string text)
+    {
+        foreach (ILogger l in loggers)
+           l.Success(text);
     }
 
     public void Warning(string text)

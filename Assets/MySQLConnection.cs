@@ -44,7 +44,7 @@ public class MySQLConnection : MonoBehaviour
         connectionData.user = user.text;
         connectionData.password = password.text;
         SetStringConnection(connectionData.ToString());
-        Logger.GetInstance().Log("Параметры подключения, успешно сохранены.");
+        Logger.GetInstance().Success("Параметры подключения, успешно сохранены.");
     }
 
     private void SetStringConnection(string connection)

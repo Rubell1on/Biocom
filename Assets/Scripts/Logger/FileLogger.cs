@@ -7,10 +7,11 @@ using System;
 public class FileLogger : Singleton<FileLogger>, ILogger
 {
     public string dirPath;
-    public enum LogType {Log, Warning, Error};
+    public enum LogType {Log, Success, Warning, Error};
     private Dictionary<LogType, string> dictionary = new Dictionary<LogType, string>() 
     {
         {LogType.Log, "log"},
+        {LogType.Success, "success"},
         {LogType.Warning, "warning"},
         {LogType.Error, "error"}
     };
@@ -23,6 +24,11 @@ public class FileLogger : Singleton<FileLogger>, ILogger
     public void Log(string text)
     {
         _Log(text, LogType.Log);
+    }
+
+    public void Success(string text)
+    {
+        _Log(text, LogType.Success);
     }
     public void Warning(string text)
     {

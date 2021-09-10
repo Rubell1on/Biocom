@@ -17,19 +17,27 @@ public static class DBUsers
         {
             connection = await SQLConnection.GetConnection();
             string sql = $"SELECT id, username, role FROM {DBTableNames.users} WHERE username = \"{user}\" AND password = \"{password}\";";
+            
+            Logger.GetInstance().Log("Запрос на авторизацию отправлен");
 
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
-            User userInstance = null;
-
-            while (reader.Read())
+            User userInstance = await Task.Run(() =>
             {
-                userInstance = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
-            }
-            reader.Close();
+                MySqlCommand command = new MySqlCommand(sql, connection);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                User userInstance = null;
+
+                while (reader.Read())
+                {
+                    userInstance = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
+                }
+                reader.Close();
+
+                return userInstance;
+            });
 
             if (userInstance != null)
-                Logger.GetInstance().Log($"Здравствуйте, {user}.");
+                Logger.GetInstance().Success($"Здравствуйте, {user}.");
             else
                 Logger.GetInstance().Warning($"Внимание. Введен не верный логин/пароль. Попробуйте, еще раз.");
 
@@ -59,12 +67,18 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            Logger.GetInstance().Log("Запрос на добавление пользователя отправлен");
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Log($"Пользователь {userName}, добавлен в базу данных.");
-                return true;
-            }
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Пользователь {userName}, добавлен в базу данных.");
+            return result;
         }
         catch (Exception e)
         {
@@ -84,12 +98,19 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            Logger.GetInstance().Log("Запрос на удаление пользователя отправлен");
+
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Log($"Пользователь, удален из базы данных.");
-                return true;
-            }
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Пользователь, удален из базы данных.");
+            return result;
         }
         catch (Exception e)
         {
@@ -112,12 +133,20 @@ public static class DBUsers
 
             MySqlCommand command = new MySqlCommand(sql, connection);
 
-            using (MySqlDataReader reader = command.ExecuteReader())
+            Logger.GetInstance().Log("Запрос на редактирование пользователя отправлен");
+
+            bool result = await Task.Run(() =>
             {
-                connection.Close();
-                Logger.GetInstance().Log($"Пользователь изменен.");
-                return true;
-            }
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    connection.Close();
+                    
+                    return true;
+                }
+            });
+
+            Logger.GetInstance().Success($"Пользователь изменен.");
+            return result;
         }
         catch (Exception e)
         {
@@ -155,17 +184,24 @@ public static class DBUsers
             string sql = $"SELECT id, username, role FROM {DBTableNames.users}{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
-            List<User> users = new List<User>();
 
-            while (reader.Read())
+            List<User> users = await Task.Run(() =>
             {
-                users.Add(new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString()));
-            }
+                MySqlDataReader reader = command.ExecuteReader();
+                List<User> users = new List<User>();
 
-            reader.Close();
+                while (reader.Read())
+                {
+                    users.Add(new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString()));
+                }
 
-            connection.Close();
+                reader.Close();
+
+                connection.Close();
+
+                return users;
+            });
+
             return users;
         }
         catch (Exception e)
@@ -191,16 +227,23 @@ public static class DBUsers
                 //$"GROUP BY {SQLConnection.connectionData.database}.{DBTableNames.users}.id";
 
             MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader reader = command.ExecuteReader();
+            
 
-            User user = null;
-            if (reader.Read())
+            User user = await Task.Run(() =>
             {
-                user = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
-            }
+                MySqlDataReader reader = command.ExecuteReader();
+                User user = null;
 
-            reader.Close();
-            connection.Close();
+                if (reader.Read())
+                {
+                    user = new User(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString());
+                }
+
+                reader.Close();
+                connection.Close();
+
+                return user;
+            });
 
             return user;
         }

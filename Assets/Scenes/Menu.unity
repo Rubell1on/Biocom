@@ -38836,9 +38836,12 @@ MonoBehaviour:
   prefab: {fileID: 3264030896904330136, guid: e7f85d084f33c404abab09011af0e2cd, type: 3}
   icons:
   - {fileID: 21300000, guid: e3538ac86e521f84dab52ca3ea5d6cd1, type: 3}
+  - {fileID: 21300000, guid: e3538ac86e521f84dab52ca3ea5d6cd1, type: 3}
   - {fileID: 21300000, guid: 252aced3b4a541f4f85cd105f9e20f94, type: 3}
   - {fileID: 21300000, guid: 0b41542bb2933a14eb375963af431983, type: 3}
   colors:
+  - serializedVersion: 2
+    rgba: 4294967295
   - serializedVersion: 2
     rgba: 4278255360
   - serializedVersion: 2

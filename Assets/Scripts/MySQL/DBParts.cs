@@ -187,7 +187,7 @@ public class DBParts : MonoBehaviour
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Элемент, добавлен в базу данных.");
+                Logger.GetInstance().Success($"Элемент, добавлен в базу данных.");
                 return true;
             }
         }
@@ -216,7 +216,7 @@ public class DBParts : MonoBehaviour
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Элемент успешно изменен.");
+                Logger.GetInstance().Success($"Элемент успешно изменен.");
                 return true;
             }
         }
@@ -246,7 +246,7 @@ public class DBParts : MonoBehaviour
                 using (MySqlDataReader reader = command.ExecuteReader())
                 {
                     connection.Close();
-                    Logger.GetInstance().Log($"Элемент успешно изменен.");
+                    Logger.GetInstance().Success($"Элемент успешно изменен.");
                     return true;
                 }
             }
@@ -274,7 +274,7 @@ public class DBParts : MonoBehaviour
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Элемент удален из базы данных.");
+                Logger.GetInstance().Success($"Элемент удален из базы данных.");
                 return true;
             }
         }

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Notification : MonoBehaviour
 {
-    public enum NotificationType { Log, Warning, Error }
+    public enum NotificationType { Log, Success, Warning, Error }
     public Text text;
     public Image image;
     public Button button;

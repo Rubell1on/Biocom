@@ -19,6 +19,11 @@ public class NotificationManager : Singleton<NotificationManager>, ILogger
         Notificate(str, Notification.NotificationType.Log);
     }
 
+    public void Success(string str)
+    {
+        Notificate(str, Notification.NotificationType.Success);
+    }
+
     public void Warning(string str)
     {
         Notificate(str, Notification.NotificationType.Warning);

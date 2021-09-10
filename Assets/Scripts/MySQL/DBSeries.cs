@@ -85,7 +85,7 @@ public static class DBSeries
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Серия {seriesName}, добавлена в базу данных.");
+                Logger.GetInstance().Success($"Серия {seriesName}, добавлена в базу данных.");
                 return true;
             }
         }
@@ -108,7 +108,7 @@ public static class DBSeries
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Серия успешно удалена.");
+                Logger.GetInstance().Success($"Серия успешно удалена.");
                 return true;
             }
         }
@@ -136,7 +136,7 @@ public static class DBSeries
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Серия изменина в базе данных.");
+                Logger.GetInstance().Success($"Серия изменина в базе данных.");
                 return true;
             }
         }

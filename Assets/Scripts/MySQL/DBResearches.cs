@@ -82,7 +82,7 @@ public class DBResearches
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Исследование добавлено в базу данных.");
+                Logger.GetInstance().Success($"Исследование добавлено в базу данных.");
                 return true;
             }
         }
@@ -106,7 +106,7 @@ public class DBResearches
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Исследование удалено из базы данных.");
+                Logger.GetInstance().Success($"Исследование удалено из базы данных.");
                 return true;
             }
         }
@@ -134,7 +134,7 @@ public class DBResearches
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Исследование успешно изменено.");
+                Logger.GetInstance().Success($"Исследование успешно изменено.");
                 return true;
             }
         }

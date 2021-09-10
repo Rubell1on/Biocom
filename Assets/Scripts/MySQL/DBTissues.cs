@@ -89,7 +89,7 @@ class DBTissues
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Ткань успешно удалена.");
+                Logger.GetInstance().Success($"Ткань успешно удалена.");
                 return true;
             }
         }
@@ -114,7 +114,7 @@ class DBTissues
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Ткань {name}, добавлена в базу данных.");
+                Logger.GetInstance().Success($"Ткань {name}, добавлена в базу данных.");
                 return true;
             }
         }
@@ -140,7 +140,7 @@ class DBTissues
             using (MySqlDataReader reader = command.ExecuteReader())
             {
                 connection.Close();
-                Logger.GetInstance().Log($"Ткань изменена в базе данных.");
+                Logger.GetInstance().Success($"Ткань изменена в базе данных.");
                 return true;
             }
         }

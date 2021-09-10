@@ -324,7 +324,7 @@ public class ResearchLoader : MonoBehaviour
 
     void OnResearchLoaded()
     {
-        Logger.GetInstance().Log("������������ ������� ���������");
+        Logger.GetInstance().Success("������������ ������� ���������");
         canvasController.SelectCanvas(3);
         Destroy(progressWindow.gameObject);
     }
