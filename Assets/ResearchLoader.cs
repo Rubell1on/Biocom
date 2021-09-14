@@ -335,4 +335,5 @@ public class ResearchLoader : MonoBehaviour
         Logger.GetInstance().Error("��� �������� ������������ ��������� ������");
         canvasController.SelectCanvas(2);
     }
+
 }
