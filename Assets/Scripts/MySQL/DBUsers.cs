@@ -35,7 +35,6 @@ public static class DBUsers
 
                 return userInstance;
             });
-
             if (userInstance != null)
                 Logger.GetInstance().Success($"Здравствуйте, {user}.");
             else

@@ -10,6 +10,7 @@ public class PartsDataFormCreator : MonoBehaviour
     public GameObject template;
     public DataGridView dataGridView;
     public PartsData partsData;
+    public GameObject dialog;
 
     List<Series> series;
     List<Part> parts;
@@ -57,13 +58,19 @@ public class PartsDataFormCreator : MonoBehaviour
         id = Convert.ToInt32(partsData.selectedRow.cells[0].value);
         if (partsData.selectedRow != null)
         {
-            if (await DBParts.RemovePart(id))
+            GameObject showDialog = Instantiate(dialog, transform.parent);
+            YesNoWindow yesNoWindow = showDialog.GetComponent<YesNoWindow>();
+            await yesNoWindow.Init("Вы уверены что хотите удалить эту строку?");
+            if (yesNoWindow.dialogResult == YesNoWindow.DialogResult.Ok)
             {
-                await dataGridView.GetComponent<PartsData>().FillData();
-            }
-            else
-            {
-                //�������� ������ �� ������.
+                if (await DBParts.RemovePart(id))
+                {
+                    await dataGridView.GetComponent<PartsData>().FillData();
+                }
+                else
+                {
+                    Debug.LogError("При удалении части произошла ошибка!");
+                }
             }
         }
         else

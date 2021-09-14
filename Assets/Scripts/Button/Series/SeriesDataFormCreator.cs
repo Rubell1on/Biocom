@@ -10,6 +10,8 @@ public class SeriesDataFormCreator : MonoBehaviour
     public GameObject editPanel;
     public DataGridView dataGridView;
     public SeriesData seriesData;
+    public GameObject dialog;
+
 
     int id;
     GameObject panel;
@@ -42,12 +44,18 @@ public class SeriesDataFormCreator : MonoBehaviour
         id = Convert.ToInt32(seriesData.selectedRow.cells[0].value);
         if (seriesData.selectedRow != null)
         {
-            await DBSeries.RemoveSeries(id);
-            await dataGridView.GetComponent<SeriesData>().FillData();
+            GameObject showDialog = Instantiate(dialog, transform.parent);
+            YesNoWindow yesNoWindow = showDialog.GetComponent<YesNoWindow>();
+            await yesNoWindow.Init("Вы уверены что хотите удалить эту строку?");
+            if (yesNoWindow.dialogResult == YesNoWindow.DialogResult.Ok)
+            {
+                await DBSeries.RemoveSeries(id);
+                await dataGridView.GetComponent<SeriesData>().FillData();
+            }
         }
         else
         {
-            //�������� ������ �� ������.
+            Debug.LogError("При удалении серий произошла ошибка!");
         }
     }
 

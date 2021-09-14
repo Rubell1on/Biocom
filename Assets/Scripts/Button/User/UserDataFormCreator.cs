@@ -11,6 +11,7 @@ public class UserDataFormCreator : MonoBehaviour
     public GameObject editPanel;
     public DataGridView dataGridView;
     public UsersData userData;
+    public GameObject dialog;
 
     int id;
     GameObject panel;
@@ -34,12 +35,18 @@ public class UserDataFormCreator : MonoBehaviour
         id = Convert.ToInt32(userData.selectedRow.cells[0].value);
         if (userData.selectedRow != null)
         {
-            await DBUsers.RemoveUser(id);
-            await dataGridView.GetComponent<UsersData>().FillData();
+            GameObject showDialog = Instantiate(dialog, transform.parent);
+            YesNoWindow yesNoWindow = showDialog.GetComponent<YesNoWindow>();
+            await yesNoWindow.Init("Вы уверены что хотите удалить эту строку?");
+            if (yesNoWindow.dialogResult == YesNoWindow.DialogResult.Ok)
+            {
+                await DBUsers.RemoveUser(id);
+                await dataGridView.GetComponent<UsersData>().FillData();
+            }
         }
         else
         {
-            //�������� ������ �� ������.
+            Debug.LogError("При удалении пользователя произошла ошибка!");
         }
     }
 

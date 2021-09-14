@@ -11,6 +11,7 @@ class TissuesFormCreator : MonoBehaviour
     public GameObject window;
     public DataGridView dataGridView;
     public TissuesData tissuesData;
+    public GameObject dialog;
 
     private TissueForm form;
 
@@ -91,13 +92,19 @@ class TissuesFormCreator : MonoBehaviour
         int id = Convert.ToInt32(tissuesData.selectedRow.cells[0].value);
         if (tissuesData.selectedRow != null)
         {
-            if (await DBTissues.RemoveTissue(id))
+            GameObject showDialog = Instantiate(dialog, transform.parent);
+            YesNoWindow yesNoWindow = showDialog.GetComponent<YesNoWindow>();
+            await yesNoWindow.Init("Вы уверены что хотите удалить эту строку?");
+            if (yesNoWindow.dialogResult == YesNoWindow.DialogResult.Ok)
             {
-                await dataGridView.GetComponent<TissuesData>().FillData();
-            }
-            else
-            {
-                Debug.LogError("При удалении типа ткани произошла ошибка!");
+                if (await DBTissues.RemoveTissue(id))
+                {
+                    await dataGridView.GetComponent<TissuesData>().FillData();
+                }
+                else
+                {
+                    Debug.LogError("При удалении типа ткани произошла ошибка!");
+                }
             }
         }
 

@@ -10,6 +10,8 @@ public class ResearchDataFormCreator : MonoBehaviour
     public GameObject template;
     public DataGridView dataGridView;
     public ResearchesData researchData;
+    public GameObject dialog;
+
     List<User> users;
     List<Series> series;
     int id;
@@ -41,12 +43,18 @@ public class ResearchDataFormCreator : MonoBehaviour
         id = Convert.ToInt32(researchData.selectedRow.cells[0].value);
         if (researchData.selectedRow != null)
         {
-            await DBResearches.RemoveResearch(id);
-            await dataGridView.GetComponent<ResearchesData>().FillData();
+            GameObject showDialog = Instantiate(dialog, transform.parent);
+            YesNoWindow yesNoWindow = showDialog.GetComponent<YesNoWindow>();
+            await yesNoWindow.Init("Вы уверены что хотите удалить эту строку?");
+            if (yesNoWindow.dialogResult == YesNoWindow.DialogResult.Ok)
+            {
+                await DBResearches.RemoveResearch(id);
+                await dataGridView.GetComponent<ResearchesData>().FillData();
+            }
         }
         else
         {
-            //�������� ������ �� ������.
+            Debug.LogError("При удалении исследования произошла ошибка!");
         }
     }
 
