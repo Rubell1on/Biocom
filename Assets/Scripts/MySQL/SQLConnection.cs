@@ -39,8 +39,8 @@ public static class SQLConnection
         }
         catch (Exception e)
         {
-            Logger.GetInstance().Error("��������� �����������: " + connection.State);
-            Logger.GetInstance().Error("������ ����������� ���� ������: " + e);
+            Logger.GetInstance().Error("Состояние подключения: " + connection.State);
+            Logger.GetInstance().Error("Ошиибка подключения: " + e);
             return null;
         }
     }

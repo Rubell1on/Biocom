@@ -97,7 +97,7 @@ public class ResearchLoader : MonoBehaviour
             {
                 Research research = await DBResearches.GetReasearchById(index);
 
-                progressWindow.bodyText.text = $"���� ������� ��������� ������� �� �� ����� {research.sourceNiiFilePath}";
+                progressWindow.bodyText.text = $"Экспорт снимков КТ из {research.sourceNiiFilePath}";
 
                 bool imagesExported = await NiiImagesExporter.Export(research.sourceNiiFilePath, researchDirPath);
 
@@ -108,7 +108,7 @@ public class ResearchLoader : MonoBehaviour
                 }
             }
 
-            progressWindow.bodyText.text = $"���� ������� �������� ������� ��";
+            progressWindow.bodyText.text = $"Чтение снимков КТ";
 
             List<string> directories = Directory.GetDirectories($"{researchDirPath}/images").ToList();
 
@@ -126,7 +126,7 @@ public class ResearchLoader : MonoBehaviour
             List<Process> processes = GetSlicerProcesses();
             if (processes.Count > 0) CloseProcesses(processes);
 
-            progressWindow.bodyText.text = $"���� ������� ��������� �����";
+            progressWindow.bodyText.text = $"Проверка кэша";
 
             List<Part> parts = await DBParts.GetPartsByResearchId(index);
             if (parts.Count > 0)
@@ -143,6 +143,7 @@ public class ResearchLoader : MonoBehaviour
 
                 if (!meshesExists)
                 {
+                    progressWindow.bodyText.text = $"Генерация мешей";
                     bool generationFinished = await GenerateMeshes(meshesData);
 
                     if (generationFinished)
@@ -158,6 +159,7 @@ public class ResearchLoader : MonoBehaviour
                     }
                 }
 
+                progressWindow.bodyText.text = $"Загрузка мешей";
                 bool meshesLoaded = LoadMeshes(series[seriesId]);
 
                 if (meshesLoaded)
@@ -324,7 +326,7 @@ public class ResearchLoader : MonoBehaviour
 
     void OnResearchLoaded()
     {
-        Logger.GetInstance().Success("������������ ������� ���������");
+        Logger.GetInstance().Success("Исследование успешно загружено");
         canvasController.SelectCanvas(3);
         Destroy(progressWindow.gameObject);
     }
@@ -332,7 +334,7 @@ public class ResearchLoader : MonoBehaviour
     private void OnReasearchLoadFailed()
     {
         Destroy(progressWindow.gameObject);
-        Logger.GetInstance().Error("��� �������� ������������ ��������� ������");
+        Logger.GetInstance().Error("При загрузке исследования произошла ошибка");
         canvasController.SelectCanvas(2);
     }
 

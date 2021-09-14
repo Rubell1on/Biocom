@@ -22,7 +22,7 @@ public class SeriesDataFormCreator : MonoBehaviour
     {
         panel = Instantiate(editPanel, gameObject.transform.parent);
         form = panel.GetComponent<SeriesDataForm>();
-        form.SetInfo("�������", "�������� �����");
+        form.SetInfo("Добавить", "Добавить серию");
 
         form.researchId.ClearOptions();
         researches = await DBResearches.GetResearches();
@@ -65,7 +65,7 @@ public class SeriesDataFormCreator : MonoBehaviour
         form = panel.GetComponent<SeriesDataForm>();
         id = Convert.ToInt32(seriesData.selectedRow.cells[0].value);
 
-        form.SetInfo("��������", "������������� �����");
+        form.SetInfo("Изменить", "Редактировать серию");
 
         Series series = await DBSeries.GetSeriesById(id);
         form.seriesName.text = series.name;

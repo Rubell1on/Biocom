@@ -31,7 +31,7 @@ public class PartsDataFormCreator : MonoBehaviour
         tissues = await DBTissues.GetTissues();
         List<string> tissueNames = tissues.Select(s => s.rusName).ToList();
 
-        form.SetInfo("�������", "�������� �������", seriesNames);
+        form.SetInfo("Добавить", "Добавить элемент", seriesNames);
 
         form.tissue.AddOptions(tissueNames);
         form.applyButton.onClick.AddListener(async () =>
@@ -48,7 +48,7 @@ public class PartsDataFormCreator : MonoBehaviour
             }
             else
             {
-                //������ �� ������!
+                //Дописать логику
             }
         });
     }
@@ -75,7 +75,7 @@ public class PartsDataFormCreator : MonoBehaviour
         }
         else
         {
-            //�������� ������ �� ������.
+            //Дописать логику
         }
     }
 
@@ -88,7 +88,7 @@ public class PartsDataFormCreator : MonoBehaviour
 
         List<string> seriesNames = series.Select(s => s.name).ToList();
 
-        form.SetInfo("��������", "������������� �������", seriesNames);
+        form.SetInfo("Изменить", "Редактировать элемент", seriesNames);
         part = await DBParts.GetPart(Convert.ToInt32(partsData.selectedRow.cells[0].value));
 
         form.partPath.text = part.filePath;
@@ -113,7 +113,7 @@ public class PartsDataFormCreator : MonoBehaviour
             }
             else
             {
-                //�������� ������ �� ������.
+                //Дописать логику
             }
         });
     }

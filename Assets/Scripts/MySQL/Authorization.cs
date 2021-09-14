@@ -96,6 +96,5 @@ public class Authorization : MonoBehaviour
     private void Exit()
     {
         Application.Quit();
-        Logger.GetInstance().Success("����� �� ���������.");
     }
 }

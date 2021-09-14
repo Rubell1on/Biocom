@@ -24857,6 +24857,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 975911116}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
+        m_MethodName: set_isOn
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1030085302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56622,7 +56634,7 @@ MonoBehaviour:
     type: 3}
   dataGridView: {fileID: 1423521025}
   userData: {fileID: 1423521024}
-  dialog: {fileID: 0}
+  dialog: {fileID: 6371297831367016538, guid: dc4791dcb6207b4489b8a2485e515f95, type: 3}
 --- !u!114 &925565898627244045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56660,7 +56672,7 @@ MonoBehaviour:
     type: 3}
   dataGridView: {fileID: 484120363}
   researchData: {fileID: 484120362}
-  dialog: {fileID: 0}
+  dialog: {fileID: 6371297831367016538, guid: dc4791dcb6207b4489b8a2485e515f95, type: 3}
 --- !u!114 &925565898627244047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56677,7 +56689,7 @@ MonoBehaviour:
     type: 3}
   dataGridView: {fileID: 1157567684}
   seriesData: {fileID: 1157567683}
-  dialog: {fileID: 0}
+  dialog: {fileID: 6371297831367016538, guid: dc4791dcb6207b4489b8a2485e515f95, type: 3}
 --- !u!114 &925565898627244048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56694,7 +56706,7 @@ MonoBehaviour:
     type: 3}
   dataGridView: {fileID: 1486364902}
   partsData: {fileID: 1486364901}
-  dialog: {fileID: 0}
+  dialog: {fileID: 6371297831367016538, guid: dc4791dcb6207b4489b8a2485e515f95, type: 3}
 --- !u!114 &925565898627244049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56710,7 +56722,7 @@ MonoBehaviour:
   window: {fileID: 82406494120063048, guid: e4d95fde8cf1ac64b883b4c4105360b0, type: 3}
   dataGridView: {fileID: 1053571640}
   tissuesData: {fileID: 1053571639}
-  dialog: {fileID: 0}
+  dialog: {fileID: 6371297831367016538, guid: dc4791dcb6207b4489b8a2485e515f95, type: 3}
 --- !u!222 &925565898631536815
 CanvasRenderer:
   m_ObjectHideFlags: 0

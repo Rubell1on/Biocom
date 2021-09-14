@@ -26,7 +26,7 @@ public class ResearchDataFormCreator : MonoBehaviour
         series = await DBSeries.GetSeries();
         List<string> userNames = users.Where(u => u.role == User.Role.user).Select(user => user.userName).ToList();
 
-        form.SetInfo("�������", "�������� ������������", userNames);
+        form.SetInfo("Добавить", "Добавить исследование", userNames);
         form.applyButton.onClick.AddListener(async () =>
         {
             int id = users.Find(u => u.userName == form.userName.options[form.userName.value].text).id;
@@ -79,7 +79,7 @@ public class ResearchDataFormCreator : MonoBehaviour
 
         string description = research.description;
         string note = research.note;
-        form.SetInfo("��������", "������������� ������������", userNames, description, note);
+        form.SetInfo("Изменить", "Редактировать исследование", userNames, description, note);
 
         User user = await DBUsers.GetUserByResearchId(id);
         int userId = form.userName.options.FindIndex(u => u.text == user.userName);
