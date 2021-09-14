@@ -18,13 +18,14 @@ public class ViewsController : MonoBehaviour
     public List<ViewPreset> presets = new List<ViewPreset>()
     {
         new ViewPreset("1x1", new List<Vector2>() { new Vector2(0, 0)}),
-        new ViewPreset("1x2", new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1) }),
-        new ViewPreset("3x1", new List<Vector2>() { new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 2) })
+        new ViewPreset("1x2", new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1) }, 15),
+        new ViewPreset("3x1", new List<Vector2>() { new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 2) }, 20)
     };
 
     public UnityEvent viewChanged = new UnityEvent();
     public Vector2 padding = new Vector2(0, 100);
     public Vector2 offset;
+    public int currentPresetId = 0;
 
     private Vector2 boxPadding;
 
@@ -139,6 +140,7 @@ public class ViewsController : MonoBehaviour
                 rect.y = height * y + (boxPadding.y / Screen.height) / 2 - paddingY;
 
                 view.camera.rect = rect;
+                view.camera.orthographicSize = presets[currentPresetId].size;
             }
         }
         

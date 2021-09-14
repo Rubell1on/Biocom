@@ -22,6 +22,7 @@ public class ViewPresetSelector : MonoBehaviour
     void OnPresetChanged(int id)
     {
         string name = viewsController.presets[id].name;
-        viewsController.ApplyPreset(name);
+        viewsController.currentPresetId = id;
+        viewsController.ApplyPreset(name);   
     }
 }
