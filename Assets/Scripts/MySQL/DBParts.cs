@@ -44,7 +44,7 @@ public class DBParts : MonoBehaviour
                 int tissueId = Convert.ToInt32(reader[4]);
                 string tissueName = reader[6].ToString();
                 string tissueRusName = reader[7].ToString();
-                string meshFilePath = reader[8].ToString();
+                string meshFilePath = reader[9].ToString();
 
                 Color color = new Color();
 
@@ -172,6 +172,16 @@ public class DBParts : MonoBehaviour
 
             return null;
         }
+    }
+
+    public static async Task<List<Part>> GetPartsBySeriesId(int seriesId)
+    {
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { "seriesId", seriesId.ToString() }
+        };
+
+        return await GetParts(new QueryBuilder(dictionary));
     }
 
     public static async Task<bool> AddPart(int seriesId, int tissueId, string filePath, int remoteId = -1)

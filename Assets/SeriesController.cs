@@ -9,7 +9,8 @@ public class SeriesController : MonoBehaviour
     public GameObject content;
     public GameObject template;
     public List<SeriesUI> seriesUIs;
-    public Dictionary<int, List<Part>> series = new Dictionary<int, List<Part>>();
+    //public Dictionary<int, List<Part>> series = new Dictionary<int, List<Part>>();
+    public List<Series> series = new List<Series>();
     public int current = 0;
     public UnityEvent<int> seriesChanged = new UnityEvent<int>();
 
@@ -23,27 +24,54 @@ public class SeriesController : MonoBehaviour
         seriesChanged.RemoveListener(OnSeriesChanged);
     }
 
-    public void AddSeriesRange(Dictionary<int, List<Part>> series)
+    //public void AddSeriesRange(Dictionary<int, List<Part>> series)
+    //{
+    //    if (series.Keys.Count > 0)
+    //    {
+    //        this.series = series;
+    //        List<int> keys = this.series.Keys.ToList();
+
+    //        for (int i = 0; i < series.Count; i++)
+    //        {
+    //            int key = i;
+    //            GameObject instance = Instantiate(template, content.transform);
+    //            SeriesUI instanceUI = instance.GetComponent<SeriesUI>();
+    //            instanceUI.button.onClick.AddListener(OnSeriesClick);
+    //            seriesUIs.Add(instanceUI);
+
+    //            void OnSeriesClick()
+    //            {
+    //                if (key != current)
+    //                {
+    //                    seriesChanged.Invoke(key);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    public void AddSeriesRange(List<Series> series)
     {
-        if (series.Keys.Count > 0)
+        this.series = series;
+
+        for (int i = 0; i < series.Count; i++)
         {
-            this.series = series;
-            List<int> keys = this.series.Keys.ToList();
+            Series s = series[i];
+            int key = i;
+            GameObject instance = Instantiate(template, content.transform);
+            SeriesUI instanceUI = instance.GetComponent<SeriesUI>();
+            instanceUI.id.text = s.id.ToString();
+            instanceUI.SetImage(s.thumbnail);
+            instanceUI.photosCount.text = s.photosCount.ToString();
 
-            for (int i = 0; i < series.Count; i++)
+            instanceUI.button.onClick.AddListener(OnSeriesClick);
+            seriesUIs.Add(instanceUI);
+
+            void OnSeriesClick()
             {
-                int key = i;
-                GameObject instance = Instantiate(template, content.transform);
-                SeriesUI instanceUI = instance.GetComponent<SeriesUI>();
-                instanceUI.button.onClick.AddListener(OnSeriesClick);
-                seriesUIs.Add(instanceUI);
-
-                void OnSeriesClick()
+                if (key != current)
                 {
-                    if (key != current)
-                    {
-                        seriesChanged.Invoke(key);
-                    }
+                    seriesChanged.Invoke(key);
                 }
             }
         }

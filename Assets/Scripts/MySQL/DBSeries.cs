@@ -24,7 +24,7 @@ public static class DBSeries
             connection = await SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "name", $"{DBTableNames.series}.description" };
             string query = queryBuilder.ToSearchQueryString(regexp);
-            string sql = $"SELECT {DBTableNames.series}.id, {DBTableNames.series}.name, {DBTableNames.series}.description, {DBTableNames.researches}.id " +
+            string sql = $"SELECT {DBTableNames.series}.id, {DBTableNames.series}.name, {DBTableNames.series}.description, {DBTableNames.researches}.id,  {DBTableNames.series}.sourceNiiFilePath " +
                 $"FROM {DBTableNames.series} " +
                 $"LEFT JOIN {DBTableNames.researches} ON {DBTableNames.researches}.id = {DBTableNames.series}.researchId" +
                 $"{(!String.IsNullOrEmpty(query) ? $" WHERE {query}" : "")};";
@@ -43,7 +43,7 @@ public static class DBSeries
                         researchId = -1;
                     }
 
-                    series.Add(new Series(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), researchId));
+                    series.Add(new Series(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), researchId, reader[4].ToString()));
                 }
                 reader.Close();
 
@@ -74,6 +74,22 @@ public static class DBSeries
         if (series.Count > 0)
         {
             return series[0];
+        }
+
+        return null;
+    }
+
+    public static async Task<List<Series>> GetSeriesByResearchId(int researchId)
+    {
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { $"{DBTableNames.series}.researchId", researchId.ToString() }
+        };
+
+        List<Series> series = await GetSeries(new QueryBuilder(dictionary));
+        if (series.Count > 0)
+        {
+            return series;
         }
 
         return null;
@@ -185,12 +201,17 @@ public class Series
     public string name;
     public string description;
     public int researchId;
+    public string sourceNiiFilePath;
+    public List<Part> parts = new List<Part>();
+    public Texture2D thumbnail = null;
+    public int photosCount = 0;
 
-    public Series(int id, string name, string description, int researchId)
+    public Series(int id, string name, string description, int researchId, string sourceNiiFilePath = "")
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.researchId = researchId;
+        this.sourceNiiFilePath = sourceNiiFilePath;
     }
 }

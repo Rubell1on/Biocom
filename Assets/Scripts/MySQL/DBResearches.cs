@@ -24,7 +24,7 @@ public class DBResearches
             connection = await SQLConnection.GetConnection();
             List<string> regexp = new List<string>() { "description", "note", "date" };
             string query = queryBuilder.ToSearchQueryString(regexp);
-            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username, {DBTableNames.researches}.sourceNiiFilePath " +
+            string sql = $"SELECT {DBTableNames.researches}.id, {DBTableNames.researches}.date, {DBTableNames.researches}.description, {DBTableNames.researches}.note, {DBTableNames.researches}.state, {DBTableNames.users}.id, {DBTableNames.users}.username " +
                 $"FROM {SQLConnection.connectionData.database}.{DBTableNames.researches} " +
                 $"JOIN {SQLConnection.connectionData.database}.{DBTableNames.users} ON {DBTableNames.researches}.userId = {DBTableNames.users}.id " +
                 $"{(!String.IsNullOrEmpty(query) ? $"WHERE {query} " : "")}" +
@@ -36,7 +36,7 @@ public class DBResearches
 
             while (reader.Read())
             {
-                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString(), reader[7].ToString()));
+                researches.Add(new Research(Convert.ToInt32(reader[0]), reader[1].ToString(), reader[2].ToString(), reader[3].ToString(), reader[4].ToString(), Convert.ToInt32(reader[5]), reader[6].ToString()));
             }
             reader.Close();
 
@@ -169,6 +169,33 @@ public class DBResearches
             return false;
         }
     }
+
+    public static async Task<Research> GetFullResearchInfo(int researchId)
+    {
+        Research research = await GetReasearchById(researchId);
+        if (research == null) return null;
+
+        List<Series> series = await DBSeries.GetSeriesByResearchId(researchId);
+        if (series == null) return null;
+
+        List<Task<List<Part>>> partTasks = series.Select(async s =>
+        {
+            return await DBParts.GetPartsBySeriesId(s.id);
+        }).ToList();
+
+        List<Part>[] parts = await Task.WhenAll(partTasks);
+
+        foreach(List<Part> p in parts)
+        {
+            if (p.Count == 0) return null;
+            Series s = series.Find(s => s.id == p[0].seriesId);
+            s.parts = p;
+        }
+
+        research.series = series;
+
+        return research;
+    }
 }
 public class Research
 {
@@ -182,9 +209,9 @@ public class Research
     public string seriesName;
     public enum State { newResearch, inProgress, finished };
     public State state;
-    public string sourceNiiFilePath;
+    public List<Series> series = new List<Series>();
 
-    public Research(int id, string date, string description, string note, string state, int userId, string userName, string sourceNiiFilePath = "")
+    public Research(int id, string date, string description, string note, string state, int userId, string userName)
     {
         this.id = id;
         this.date = DateTime.Parse(date);
@@ -193,7 +220,6 @@ public class Research
         this.state = GetState(state);
         this.userId = userId;
         this.userName = userName;
-        this.sourceNiiFilePath = sourceNiiFilePath;
     }
 
     private static State GetState(string state)

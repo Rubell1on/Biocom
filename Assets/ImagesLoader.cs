@@ -51,22 +51,22 @@ public class ImagesLoader : MonoBehaviour
         viewers.ForEach(v => v.RemoveImages());
     }
 
-    private async Task<Texture2D[]> LoadImages(List<string> paths)
+    public async Task<Texture2D[]> LoadImages(List<string> paths)
     {
-        Task<Texture2D>[] operations = paths.Select(GetTexture).ToArray();
+        Task<Texture2D>[] operations = paths.Select(LoadImage).ToArray();
 
         Texture2D[] textures = await Task.WhenAll(operations);
 
-        async Task<Texture2D> GetTexture(string path)
-        {
-            UnityWebRequest request = UnityWebRequestTexture.GetTexture(path);
-            await request.SendWebRequest();
-            Texture2D texture = DownloadHandlerTexture.GetContent(request);
-
-            return texture;
-        }
-
         return textures;
+    }
+
+    public async Task<Texture2D> LoadImage(string path)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(path);
+        await request.SendWebRequest();
+        Texture2D texture = DownloadHandlerTexture.GetContent(request);
+
+        return texture;
     }
 
     private int PathsComparer(string a, string b)
