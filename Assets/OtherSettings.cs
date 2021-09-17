@@ -10,46 +10,36 @@ public class OtherSettings : MonoBehaviour
     public Button save;
     public Dropdown screenSettings;
 
-    private const string keyCashe = "CachePath";
+    public static string keyCache = "CachePath";
 
     public void Start()
     {
         save.onClick.AddListener(SetPath);
-        save.onClick.AddListener(CheckDirectory);
         screenSettings.onValueChanged.AddListener(ChangeWindowProgramm);
 
         FullScreenMode s = Screen.fullScreenMode;
         screenSettings.value = (int)s == 1 ? 0 : 1;
 
         CheckRegistry();
-        inputField.text = PlayerPrefs.GetString(keyCashe);
+        inputField.text = PlayerPrefs.GetString(keyCache);
     }
 
     private void SetPath()
     {
-        PlayerPrefs.SetString(keyCashe, inputField.text);
+        PlayerPrefs.SetString(keyCache, inputField.text);
     }
 
     private void CheckRegistry()
     {
-        if (!PlayerPrefs.HasKey(keyCashe) || PlayerPrefs.GetString(keyCashe) == "")
+        if (!PlayerPrefs.HasKey(keyCache) || PlayerPrefs.GetString(keyCache) == "")
         {
-            PlayerPrefs.SetString(keyCashe, $"{Application.dataPath}/tmp");
-            CheckDirectory();
+            PlayerPrefs.SetString(keyCache, $"{Application.dataPath}/tmp");
         }
     }
 
-    private void CheckDirectory()
-    {
-        string path = PlayerPrefs.GetString(keyCashe);
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
-        Logger.GetInstance().Success("Папка для кеш файлов сохранена.");
-    }
     private void OnDestroy()
     {
         save.onClick.RemoveListener(SetPath);
-        save.onClick.RemoveListener(CheckDirectory);
         screenSettings.onValueChanged.RemoveListener(ChangeWindowProgramm);
     }
 
@@ -61,7 +51,17 @@ public class OtherSettings : MonoBehaviour
             Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.Windowed);
     }
 
-
+    public static string GetCachePath()
+    {
+        if (PlayerPrefs.HasKey(keyCache))
+            return PlayerPrefs.GetString(keyCache);
+        else
+        {
+            string cachePath = $"{ Application.dataPath}/tmp";
+            PlayerPrefs.SetString(keyCache, cachePath);
+            return cachePath;
+        }
+    }
 
 
 }

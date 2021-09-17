@@ -49,6 +49,9 @@ public class ResearchLoader : MonoBehaviour
 
     async Task<bool> _LoadResearch(int researchId)
     {
+        outputPath = OtherSettings.GetCachePath();
+        CheckCacheDirectory(outputPath);
+
         Research research = await DBResearches.GetFullResearchInfo(researchId);
 
         if (research == null || research.series.Count == 0)
@@ -62,11 +65,6 @@ public class ResearchLoader : MonoBehaviour
         if (modalWindowInstance)
         {
             progressWindow = modalWindowInstance.GetComponent<LoadingModalWindow>();
-        }
-
-        if (!Directory.Exists(outputPath))
-        {
-            Directory.CreateDirectory(outputPath);
         }
 
         researchDirPath = $"{outputPath}/research_{researchId}_series_{series.id}";
@@ -389,6 +387,12 @@ public class ResearchLoader : MonoBehaviour
         Logger.GetInstance().Error("При загрузке исследования произошла ошибка");
         canvasController.SelectCanvas(2);
         progressWindow = null;
+    }
+
+    private void CheckCacheDirectory(string path)
+    {
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
     }
 
 }
