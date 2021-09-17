@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using CatchyClick;
 using Dummiesman;
+using UnityEngine.UI;
 
 public class ResearchLoader : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class ResearchLoader : MonoBehaviour
     public SeriesController seriesController;
     public List<MeshData> meshesData;
     public MeshFilterController mFController;
+
+    public Text dateLabel;
+    public Text stateLabel;
 
     public ImagesLoader imagesLoader;
 
@@ -163,6 +167,7 @@ public class ResearchLoader : MonoBehaviour
         {
             seriesController.AddSeriesRange(research.series);
             seriesController.seriesChanged.AddListener(OnSeriesChanged);
+            stateLabel.text = Research.GetStringFromState(research.state);
             return true;
         }
         else

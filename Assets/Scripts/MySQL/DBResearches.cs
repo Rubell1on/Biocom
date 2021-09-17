@@ -209,6 +209,13 @@ public class Research
     public string seriesName;
     public enum State { newResearch, inProgress, finished };
     public State state;
+
+    private static Dictionary<State, string> dictionary = new Dictionary<State, string>() 
+    { 
+        { State.newResearch, "Новое исследование" },
+        { State.inProgress, "В процессе" },
+        { State.finished, "Завершено" }
+    };
     public List<Series> series = new List<Series>();
 
     public Research(int id, string date, string description, string note, string state, int userId, string userName)
@@ -225,5 +232,9 @@ public class Research
     private static State GetState(string state)
     {
         return (State)Enum.GetNames(typeof(State)).ToList().FindIndex(s => s == state);
+    }
+    public static string GetStringFromState(State state)
+    {
+        return dictionary[state];
     }
 }

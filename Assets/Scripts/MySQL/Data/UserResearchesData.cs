@@ -34,7 +34,7 @@ public class UserResearchesData : TableData<UserResearchesData>
                 new DataGridViewCell(r.date.ToString()),
                 new DataGridViewCell(r.description.ToString()),
                 new DataGridViewCell(r.note.ToString()),
-                new DataGridViewCell(r.state.ToString())
+                new DataGridViewCell(Research.GetStringFromState(r.state))
             };
 
             return new DataGridViewRow(cells);
