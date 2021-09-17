@@ -31,11 +31,13 @@ namespace CatchyClick {
 
         [Header("Events")]
         public DataGridViewCellClickEvent cellClicked = new DataGridViewCellClickEvent();
+        public DataGridViewCellDoubleClickEvent cellDoubleClicked = new DataGridViewCellDoubleClickEvent();
 
         private List<bool> sortings = new List<bool>();
 
         private void Awake()
         {
+            cellDoubleClicked.AddListener(args => Debug.Log($"Два нажатия по строке: {args.row} и ячейке: {args.cell}"));
             columns = _GetHeaderElements();
 
             if (sortings.Count > 0)
@@ -161,6 +163,7 @@ namespace CatchyClick {
                             void OnClick()
                             {
                                 cellClicked.Invoke(args);
+                                cellDoubleClicked.Invoke(args);
                             }
                         }
 
@@ -206,6 +209,8 @@ namespace CatchyClick {
 
     [Serializable]
     public class DataGridViewCellClickEvent : UnityEvent<DataGridViewEventArgs> { };
+    [Serializable]
+    public class DataGridViewCellDoubleClickEvent : DoubleClick<DataGridViewEventArgs> { };
 
     public static class StringExtention
     {
