@@ -12,7 +12,6 @@ public class SeriesDataFormCreator : MonoBehaviour
     public SeriesData seriesData;
     public GameObject dialog;
 
-
     int id;
     GameObject panel;
     SeriesDataForm form;
@@ -33,7 +32,7 @@ public class SeriesDataFormCreator : MonoBehaviour
         form.applyButton.onClick.AddListener(async () =>
         {
             int researchId = Convert.ToInt32(form.researchId.options[form.researchId.value].text);
-            await DBSeries.AddSeries(form.seriesName.text,form.description.text, researchId);
+            await DBSeries.AddSeries(form.seriesName.text,form.description.text, form.filePath.text, researchId);
             await dataGridView.GetComponent<SeriesData>().FillData();
             Destroy(panel);
         });
@@ -70,6 +69,7 @@ public class SeriesDataFormCreator : MonoBehaviour
         Series series = await DBSeries.GetSeriesById(id);
         form.seriesName.text = series.name;
         form.description.text = series.description;
+        form.filePath.text = series.sourceNiiFilePath;
 
         form.researchId.ClearOptions();
 
@@ -84,7 +84,7 @@ public class SeriesDataFormCreator : MonoBehaviour
         form.applyButton.onClick.AddListener(async () =>
         {
             int researchId = Convert.ToInt32(form.researchId.options[form.researchId.value].text);
-            await DBSeries.EditSeries(id, form.seriesName.text, form.description.text, researchId);
+            await DBSeries.EditSeries(id, form.seriesName.text, form.description.text, form.filePath.text, researchId);
             await dataGridView.GetComponent<SeriesData>().FillData();
             Destroy(panel);
         });

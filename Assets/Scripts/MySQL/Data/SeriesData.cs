@@ -24,7 +24,8 @@ public class SeriesData : TableData<SeriesData>
                 new DataGridViewCell(u.id.ToString()),
                 new DataGridViewCell(u.name.ToString()),
                 new DataGridViewCell(u.description.ToString()),
-                new DataGridViewCell(u.researchId.ToString())
+                new DataGridViewCell(u.researchId.ToString()),
+                new DataGridViewCell(u.sourceNiiFilePath.ToString())
             };
 
             return new DataGridViewRow(cells);

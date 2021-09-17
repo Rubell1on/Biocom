@@ -95,13 +95,13 @@ public static class DBSeries
         return null;
     }
 
-    public static async Task<bool> AddSeries(string seriesName, string description, int researchId)
+    public static async Task<bool> AddSeries(string seriesName, string description, string filePath, int researchId)
     {
         MySqlConnection connection = null;
         try
         {
             connection = await SQLConnection.GetConnection();
-            string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\";";
+            string sql = $"INSERT INTO {DBTableNames.series} SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\", sourceNiiFilePath = \"{filePath}\";";
 
             Logger.GetInstance().Log("Отправлен запрос на добавление серии");
 
@@ -160,7 +160,7 @@ public static class DBSeries
         }
     }
 
-    public static async Task<bool> EditSeries(int id, string seriesName, string description, int researchId)
+    public static async Task<bool> EditSeries(int id, string seriesName, string description, string filePath, int researchId)
     {
         MySqlConnection connection = null;
 
@@ -168,7 +168,7 @@ public static class DBSeries
         {
             connection = await SQLConnection.GetConnection();
             string sql = $"UPDATE {DBTableNames.series} " +
-                $"SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\" " +
+                $"SET name = \"{seriesName}\", description = \"{description}\", researchId = \"{researchId}\", sourceNiiFilePath = \"{filePath}\" " +
                 $"WHERE id = \"{id}\";";
 
             Logger.GetInstance().Log("Отправлен запрос на редактирование серии");

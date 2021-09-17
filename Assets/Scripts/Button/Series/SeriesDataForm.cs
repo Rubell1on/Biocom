@@ -11,6 +11,7 @@ public class SeriesDataForm : MonoBehaviour
 
     public InputField seriesName;
     public InputField description;
+    public InputField filePath;
     public Dropdown researchId;
 
     public void SetInfo(string buttonText, string labelText)
