@@ -11,12 +11,14 @@ public class ImageViewer : MonoBehaviour
     public RawImage image;
     public Slider slider;
     public InputField field;
+    public Button button;
     [HideInInspector]
     public int id = -1;
 
     public ValueChanged valueChanged = new ValueChanged();
 
     private List<Texture2D> textures;
+    private DoubleClick<string> doubleClick = new DoubleClick<string>();
 
     private void Start()
     {   
@@ -24,6 +26,8 @@ public class ImageViewer : MonoBehaviour
         field.text = slider.value.ToString();
         slider.onValueChanged.AddListener(OnScrollChanged);
         valueChanged.AddListener(OnValueChanged);
+        doubleClick.AddListener(d => OnHandleClick());
+        button.onClick.AddListener(() => doubleClick.Invoke(""));
     }
 
     public void SetImages(List<Texture2D> textures)
@@ -73,6 +77,15 @@ public class ImageViewer : MonoBehaviour
     private void OnValueChanged(int id)
     {
         SelectImage(id);
+    }
+
+    private void OnHandleClick()
+    {
+        if (!field.gameObject.activeSelf)
+        {
+            field.gameObject.SetActive(true);
+            field.ActivateInputField();
+        }
     }
 }
 
