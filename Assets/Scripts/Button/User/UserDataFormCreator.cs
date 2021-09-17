@@ -16,6 +16,11 @@ public class UserDataFormCreator : MonoBehaviour
     int id;
     GameObject panel;
     UserDataForm form;
+
+    private void Start()
+    {
+        dataGridView.cellDoubleClicked.AddListener(args => CreateUserDataEditForm());
+    }
     public void CreateUserDataAddForm()
     {
         panel = Instantiate(editPanel, gameObject.transform.parent);

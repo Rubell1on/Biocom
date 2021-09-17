@@ -15,6 +15,10 @@ class TissuesFormCreator : MonoBehaviour
 
     private TissueForm form;
 
+    private void Start()
+    {
+        dataGridView.cellDoubleClicked.AddListener(args => CreateEditForm());
+    }
     public void CreateAddForm()
     {
         GameObject instance = Instantiate(window, gameObject.transform.parent);

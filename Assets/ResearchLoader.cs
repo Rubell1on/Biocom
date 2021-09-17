@@ -45,6 +45,7 @@ public class ResearchLoader : MonoBehaviour
         dataGrid.cellClicked.AddListener(OnCellClicked);
         researchLoaded.AddListener(OnResearchLoaded);
         researchLoadFailed.AddListener(OnReasearchLoadFailed);
+        dataGrid.cellDoubleClicked.AddListener(args => LoadResearch());
     }
 
     async Task<bool> _LoadResearch(int researchId)

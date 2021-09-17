@@ -37,7 +37,6 @@ namespace CatchyClick {
 
         private void Awake()
         {
-            cellDoubleClicked.AddListener(args => Debug.Log($"Два нажатия по строке: {args.row} и ячейке: {args.cell}"));
             columns = _GetHeaderElements();
 
             if (sortings.Count > 0)

@@ -17,6 +17,10 @@ public class SeriesDataFormCreator : MonoBehaviour
     SeriesDataForm form;
     List<Research> researches;
 
+    private void Start()
+    {
+        dataGridView.cellDoubleClicked.AddListener(args => CreateSeriesDataEditForm());
+    }
     public async void CreateSeriesDataAddForm()
     {
         panel = Instantiate(editPanel, gameObject.transform.parent);

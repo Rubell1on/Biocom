@@ -18,6 +18,10 @@ public class ResearchDataFormCreator : MonoBehaviour
     GameObject panel;
     ResearchDataForm form;
 
+    private void Start()
+    {
+        dataGridView.cellDoubleClicked.AddListener(args => CreateResearchDataEditForm());
+    }
     public async void CreateResearchDataAddForm()
     {
         panel = Instantiate(template, gameObject.transform.parent);

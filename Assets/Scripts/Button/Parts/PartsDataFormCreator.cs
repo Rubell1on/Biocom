@@ -21,6 +21,11 @@ public class PartsDataFormCreator : MonoBehaviour
     GameObject panel;
     PartsDataForm form;
 
+    private void Start()
+    {
+        dataGridView.cellDoubleClicked.AddListener(args => CreatePartDataEditForm());
+    }
+
     public async void CreatePartDataAddForm()
     {
         panel = Instantiate(template, gameObject.transform.parent);
