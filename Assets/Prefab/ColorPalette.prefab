@@ -1001,7 +1001,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8789847469677629141}
+        m_TargetAssemblyTypeName: ColorPallete, Assembly-CSharp
+        m_MethodName: OnHexFieldEndEdit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1307,6 +1319,26 @@ PrefabInstance:
     - target: {fileID: 4776994732644774878, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270774244978492575, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270774244978492575, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270774244978492575, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270774244978492575, guid: 39a1ec73b5e1a1343b37234f0c82c99d,
+        type: 3}
+      propertyPath: m_Offset.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

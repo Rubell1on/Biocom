@@ -20,8 +20,9 @@ public class ColorPallete : MonoBehaviour
         set 
         {
             targetColorImage.color = value;
-            hexInputField.text = ColorUtility.ToHtmlStringRGBA(value);
+            hexInputField.text = "#" + ColorUtility.ToHtmlStringRGBA(value);
             targetColor = value;
+            colorChanged.Invoke(value);
         }
     }
     public string Hex { get { return hexInputField.text; } }
@@ -38,13 +39,21 @@ public class ColorPallete : MonoBehaviour
 
         Color color = GetColorPallete((int)(targetPosX), (int)(targetPosY));
         TargetColor = color;
-        colorChanged.Invoke(color);
     }
 
     private Color GetColorPallete(int x, int y)
     {
         Texture2D texture = image.sprite.texture;
         return texture.GetPixel(x, y);
+    }
+
+    public void OnHexFieldEndEdit(string field)
+    {
+        Color color;
+        if (ColorUtility.TryParseHtmlString(field, out color))
+            TargetColor = color;
+        else
+            Logger.GetInstance().Error("¬веден не правильный формат HEX кода.");
     }
 
 }

@@ -13,7 +13,8 @@ public class ViewColorController : MonoBehaviour
         if (colorPallete == null)
         {
             colorPallete = Instantiate(panel, new Vector2(20, 20), Quaternion.identity, transform.parent).GetComponent<ColorPallete>();
-            colorPallete.colorChanged.AddListener(OnColorChanged); 
+            colorPallete.colorChanged.AddListener(OnColorChanged);
+            colorPallete.TargetColor = viewsController.backgroundColor;
         }
     }
 
