@@ -26,6 +26,7 @@ public class ViewsController : MonoBehaviour
     public Vector2 padding = new Vector2(0, 100);
     public Vector2 offset;
     public int currentPresetId = 0;
+    public Color32 backgroundColor = Color.blue;
 
     private Vector2 boxPadding;
 
@@ -141,6 +142,8 @@ public class ViewsController : MonoBehaviour
 
                 view.camera.rect = rect;
                 view.camera.orthographicSize = presets[currentPresetId].size;
+
+                view.camera.backgroundColor = backgroundColor;
             }
         }
         

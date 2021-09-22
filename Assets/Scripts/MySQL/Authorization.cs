@@ -28,7 +28,7 @@ public class Authorization : MonoBehaviour
     {
         enterButton.onClick.AddListener(async () => await Authorize());
         exitButton.onClick.AddListener(Exit);
-
+        
         if (PlayerPrefs.HasKey(login) && PlayerPrefs.HasKey(password))
         {
             User user = GetUserData();
