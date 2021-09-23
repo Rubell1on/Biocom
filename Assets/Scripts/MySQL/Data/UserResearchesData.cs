@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using CatchyClick;
 using UnityEngine;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class UserResearchesData : TableData<UserResearchesData>
 {
     public Authorization authorization;
+    public Button update;
 
+    private void Start()
+    {
+        update.onClick.AddListener(async() => await FillData());
+    }
     public override async Task FillData()
     {
         if (authorization?.userData != null)
