@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class Authorization : MonoBehaviour
 {
-    public Button enterButton;
     public Button exitButton;
     public List<Text> userNames;
     public InputField loginField;
@@ -15,6 +14,7 @@ public class Authorization : MonoBehaviour
     public Toggle savePassword;
     public CanvasController canvasController;
     public User userData;
+    public CustomForm authorizationForm;
 
     private static readonly string login = "login";
     private static readonly string password = "password";
@@ -24,9 +24,10 @@ public class Authorization : MonoBehaviour
         MySQLConnection mc = new MySQLConnection();
         mc.CheckRegistry();
     }
-    private async void Start()
+    private void Start()
     {
-        enterButton.onClick.AddListener(async () => await Authorize());
+        authorizationForm.ValidationFailed.AddListener(OnValidationFailed);
+        authorizationForm.Submit.AddListener(Authorize);
         exitButton.onClick.AddListener(Exit);
         
         if (PlayerPrefs.HasKey(login) && PlayerPrefs.HasKey(password))
@@ -36,7 +37,7 @@ public class Authorization : MonoBehaviour
             passwordField.text = user.password;
             savePassword.isOn = true;
 
-            await Authorize();
+            Authorize();
         }
         else
         {
@@ -44,7 +45,7 @@ public class Authorization : MonoBehaviour
         }
     }
 
-    private async Task Authorize()
+    public async void Authorize()
     {
         userData = await DBUsers.Authorize(loginField.text, passwordField.text);
         if (userData != null)
@@ -96,5 +97,10 @@ public class Authorization : MonoBehaviour
     private void Exit()
     {
         Application.Quit();
+    }
+
+    private void OnValidationFailed(string message)
+    {
+        Logger.GetInstance().Error(message);
     }
 }

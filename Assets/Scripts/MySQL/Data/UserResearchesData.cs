@@ -13,7 +13,7 @@ public class UserResearchesData : TableData<UserResearchesData>
 
     private void Start()
     {
-        update.onClick.AddListener(async() => await FillData());
+        update.onClick.AddListener(async () => await FillData());
     }
     public override async Task FillData()
     {
