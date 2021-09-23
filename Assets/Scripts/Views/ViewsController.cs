@@ -15,11 +15,30 @@ public class ViewsController : MonoBehaviour
         new List<CameraView>()
     };
 
+    //public List<ViewPreset> presets = new List<ViewPreset>()
+    //{
+    //    new ViewPreset("1x1", new List<Vector2>() { new Vector2(0, 0) }, Vector3.zero),
+    //    new ViewPreset("1x2", new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1) }, new Vector3(4.95f, 90, 0), 15),
+    //    new ViewPreset("3x1", new List<Vector2>() { new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 2) }, new Vector3(80, 0, 0), 20)
+    //};
     public List<ViewPreset> presets = new List<ViewPreset>()
     {
-        new ViewPreset("1x1", new List<Vector2>() { new Vector2(0, 0)}),
-        new ViewPreset("1x2", new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1) }, 15),
-        new ViewPreset("3x1", new List<Vector2>() { new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 2) }, 20)
+        new ViewPreset("1x1", new List<ViewPreset.View>() 
+        { 
+            new ViewPreset.View(new Vector2(0, 0), Vector3.zero, Vector3.zero) 
+        }),
+        new ViewPreset("1x2", new List<ViewPreset.View>()
+        {
+            new ViewPreset.View(new Vector2(0, 0), Vector3.zero, Vector3.zero),
+            new ViewPreset.View(new Vector2(1, 0), new Vector3 (-15, 1, -46), new Vector3(4.1f, 90, 0)),
+            new ViewPreset.View(new Vector2(1, 1), new Vector3 (0, 15, -50), new Vector3(60, 0, 0)),
+        }, 15),
+        new ViewPreset("3x1", new List<ViewPreset.View>()
+        {
+            new ViewPreset.View(new Vector2(0, 0), Vector3.zero, Vector3.zero),
+            new ViewPreset.View(new Vector2(0, 1), new Vector3 (-15, 1, -46), new Vector3(4.1f, 90, 0)),
+            new ViewPreset.View(new Vector2(0, 2), new Vector3 (0, 15, -50), new Vector3(60, 0, 0)),
+        }, 20),
     };
 
     public UnityEvent viewChanged = new UnityEvent();
@@ -42,7 +61,7 @@ public class ViewsController : MonoBehaviour
         if (viewPreset != null)
         {
             RemoveAllViews();
-            viewPreset.views.ForEach(v => AddView(v));
+            viewPreset.views.ForEach(v => AddView(v.gridPosition,v.cameraPosition, v.cameraRotaion));
         }
         else
         {
@@ -50,16 +69,21 @@ public class ViewsController : MonoBehaviour
         }
     }
 
-    public void AddView(Vector2 position)
+    public void AddView(Vector2 position, Vector3 cameraPosition, Vector3 cameraRotation)
     {
         if (views.Count <= position.x)
         {
             views.Add(new List<CameraView>());
         }
-
         GameObject instance = Instantiate(template, transform);
         CameraView view = instance.GetComponent<CameraView>();
+
+        CameraRotateAround cameraRotateAround = instance.GetComponentInChildren<CameraRotateAround>();
+
         view.cameraRotate.target = target.transform;
+        view.camera.transform.localRotation = Quaternion.Euler(cameraRotation);
+        view.camera.transform.position = view.camera.transform.localRotation * cameraRotateAround.offset + cameraRotateAround.target.position;
+        
 
         views[(int)position.x].Insert((int)position.y, view);
 

@@ -95,8 +95,8 @@ MonoBehaviour:
   sensitivity: 3
   limit: 80
   zoom: 0.25
-  zoomMax: 100
-  zoomMin: 3
+  zoomMax: 20
+  zoomMin: 5
 --- !u!65 &3613609303835513929
 BoxCollider:
   m_ObjectHideFlags: 0

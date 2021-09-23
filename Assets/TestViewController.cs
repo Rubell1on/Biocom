@@ -39,7 +39,7 @@ public class TestViewController : MonoBehaviour
         int i = Convert.ToInt32(row.text);
         int j = Convert.ToInt32(col.text);
 
-        viewsController.AddView(new Vector2(i, j));
+        viewsController.AddView(new Vector2(i, j), Vector3.zero, Vector3.zero);
     }
 
     void Remove()
