@@ -29,26 +29,32 @@ public class ResearchLoader : MonoBehaviour
 
     public ImagesLoader imagesLoader;
 
-    public CanvasController canvasController;
-
     public UnityEvent researchLoaded = new UnityEvent();
     public UnityEvent researchLoadFailed = new UnityEvent();
 
+    [HideInInspector]
+    public DataGridViewEventArgs args;
+
     private LoadingModalWindow progressWindow;
-    private DataGridViewEventArgs args;
+    
 
     private string researchDirPath;
 
     void Start()
     {
         dataGrid = GetComponent<DataGridView>();
-        dataGrid.cellClicked.AddListener(OnCellClicked);
+
+        if (dataGrid != null)
+        {
+            dataGrid.cellClicked.AddListener(OnCellClicked);
+            dataGrid.cellDoubleClicked.AddListener(args => LoadResearch());
+        }
+        
         researchLoaded.AddListener(OnResearchLoaded);
         researchLoadFailed.AddListener(OnReasearchLoadFailed);
-        dataGrid.cellDoubleClicked.AddListener(args => LoadResearch());
     }
 
-    async Task<bool> _LoadResearch(int researchId)
+    public async Task<bool> LoadResearch(int researchId)
     {
         outputPath = OtherSettings.GetCachePath();
         CheckCacheDirectory(outputPath);
@@ -166,7 +172,15 @@ public class ResearchLoader : MonoBehaviour
         {
             seriesController.AddSeriesRange(research.series);
             seriesController.seriesChanged.AddListener(OnSeriesChanged);
-            stateLabel.text = Research.GetStringFromState(research.state);
+
+            if (stateLabel != null)
+                stateLabel.text = Research.GetStringFromState(research.state);
+
+            if (dateLabel != null)
+            {
+                //Дописать логику
+            }
+
             return true;
         }
         else
@@ -184,7 +198,7 @@ public class ResearchLoader : MonoBehaviour
 
         if (Int32.TryParse(row.cells[0].value, out index))
         {
-            bool loadResult = await _LoadResearch(index);
+            bool loadResult = await LoadResearch(index);
             if (loadResult)
             {
                 UnityEngine.Debug.Log("Finished");
@@ -377,7 +391,6 @@ public class ResearchLoader : MonoBehaviour
     void OnResearchLoaded()
     {
         Logger.GetInstance().Success("Исследование успешно загружено");
-        canvasController.SelectCanvas(3);
         Destroy(progressWindow.gameObject);
         progressWindow = null;
     }
@@ -386,7 +399,6 @@ public class ResearchLoader : MonoBehaviour
     {
         Destroy(progressWindow.gameObject);
         Logger.GetInstance().Error("При загрузке исследования произошла ошибка");
-        canvasController.SelectCanvas(2);
         progressWindow = null;
     }
 

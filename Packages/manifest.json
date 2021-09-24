@@ -8,6 +8,7 @@
     "com.unity.test-framework": "1.1.24",
     "com.unity.timeline": "1.4.7",
     "com.unity.ugui": "1.0.0",
+    "com.valvesoftware.unity.openvr": "file:../Assets/SteamVR/OpenVRUnityXRPackage/Editor/com.valvesoftware.unity.openvr-1.1.4.tgz",
     "jillejr.newtonsoft.json-for-unity": "13.0.102",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
