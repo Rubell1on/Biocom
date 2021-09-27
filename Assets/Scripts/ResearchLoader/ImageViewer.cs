@@ -17,7 +17,7 @@ public class ImageViewer : MonoBehaviour
 
     public ValueChanged valueChanged = new ValueChanged();
 
-    private List<Texture2D> textures;
+    private List<Texture2D> textures = new List<Texture2D>();
     private DoubleClick<string> doubleClick = new DoubleClick<string>();
 
     private void Start()
