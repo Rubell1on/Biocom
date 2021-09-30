@@ -33,17 +33,17 @@ public class VRMeshesController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha1))
+        if (Input.GetKeyUp(KeyCode.R))
         {
             SelectHandle(handles[0]);
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha2))
+        if (Input.GetKeyUp(KeyCode.T))
         {
             SelectHandle(handles[1]);
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha3))
+        if (Input.GetKeyUp(KeyCode.Y))
         {
             SelectHandle(handles[2]);
         }
