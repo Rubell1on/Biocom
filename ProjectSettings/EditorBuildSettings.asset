@@ -5,12 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: b04c1f4f0ff5bf840ba192ed494dd8f7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/VR.unity
     guid: 8382c63638c9f434896bd3875047ed29
+  - enabled: 1
+    path: Assets/Scenes/StereoscopicTest/StereoscopicTest.unity
+    guid: 8fa191b01cc764445a8e83cadc53a33b
   m_configObjects:
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 1450f584bb02a0d44b2cbe2f658f1b54,
       type: 2}
