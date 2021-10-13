@@ -22,11 +22,11 @@ class KnowledgeBaseDataForm : MonoBehaviour
         applyButton.GetComponentInChildren<Text>().text = "Добавить";
 
         if (frostedGlassLesionVolume.options.Count > 0) frostedGlassLesionVolume.options.Clear();
-        frostedGlassLesionVolume.AddOptions(KnowledgeBaseData.frostedGlassLesionVolume);
+        frostedGlassLesionVolume.AddOptions(KnowledgeBaseData.frostedGlassLesionVolumes);
         frostedGlassLesionVolume.value = 0;
 
         if (lungsVolume.options.Count > 0) lungsVolume.options.Clear();
-        lungsVolume.AddOptions(KnowledgeBaseData.lungsVolume);
+        lungsVolume.AddOptions(KnowledgeBaseData.lungsVolumes);
         lungsVolume.value = 0;
 
         if (changeStates.options.Count > 0) changeStates.options.Clear();
@@ -34,7 +34,7 @@ class KnowledgeBaseDataForm : MonoBehaviour
         changeStates.value = 0;
 
         if (result.options.Count > 0) result.options.Clear();
-        result.AddOptions(KnowledgeBaseData.result1);
+        result.AddOptions(KnowledgeBaseData.results);
         result.value = 0;
     }
 }

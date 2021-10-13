@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,29 +8,98 @@ using CatchyClick;
 using System.Threading.Tasks;
 public class KnowledgeBaseData : TableData<KnowledgeBaseData>
 {
-    public static List<string> frostedGlassLesionVolume = new List<string>() { "Отсутствует", "Низкий", "Средний", "Высокий" };
-    public static List<string> lungsVolume = new List<string>() { "Малый", "Средний", "Большой" };
+    public static List<string> frostedGlassLesionVolumes = new List<string>() { "Отсутствует", "Низкий", "Средний", "Высокий" };
+    public static List<string> lungsVolumes = new List<string>() { "Малый", "Средний", "Большой" };
     public static List<string> changeStates = new List<string>() { "Отсутствует", "Низкая", "Средняя", "Высокая" };
-    public static List<string> result1 = new List<string>() { "Отсутствует", "Низкий", "Средний", "Высокий" };
+    public static List<string> temperatures = new List<string>() { "Нормальная", "Повышенная", "Высокая" };
+    public static List<string> bloodOxygenSaturations = new List<string>() { "Низкая", "Пониженная", "Нормальная" };
+    public static List<string> frostedGlassCounts = new List<string>() { "Одиночный", "Среднее", "Большое" };
+    public static List<string> comorbidities = new List<string>() { "Нет", "Слабая", "Сильная" };
+    public static List<string> ages = new List<string>() { "Молодой", "Средний", "Пожилой", "Старческий" };
+    public static List<string> results = new List<string>() { "Отсутствует", "Низкий", "Средний", "Высокий" };
 
     public override async Task FillData()
     {
         List<Knowledge> knowledgeBase = new List<Knowledge>();
 
-        for (int i = 0, id = 0; i < frostedGlassLesionVolume.Count; i++)
+        //for (int i = 0, id = 0; i < frostedGlassLesionVolumes.Count; i++)
+        //{
+        //    for (int j = 0; j < lungsVolumes.Count; j++)
+        //    {
+        //        for (int x = 0; x < changeStates.Count; x++)
+        //        {
+        //            for (int y = 0; y < results.Count; y++)
+        //            {
+        //                string rule = $"IF (Объем_поражения_матовым_стеклом IS {frostedGlassLesionVolumes[i]}) AND (Объем_легких IS {lungsVolumes[j]}) AND (Степень_изменений IS {changeStates[x]}) THEN (Результат IS {results[y]})";
+        //                knowledgeBase.Add(new Knowledge(id, rule));
+        //                id += 1;
+        //            }
+        //        }
+        //    }
+        //}
+        string rulesFilePath = $"{Application.dataPath}/rules.txt";
+        if (!File.Exists(rulesFilePath))
         {
-            for (int j = 0; j < lungsVolume.Count; j++)
+            int id = 0;
+
+            frostedGlassLesionVolumes.ForEach(frostedGlassVolume =>
             {
-                for (int x = 0; x < changeStates.Count; x++)
+                lungsVolumes.ForEach(lungsVolume =>
                 {
-                    for (int y = 0; y < changeStates.Count; y++)
+                    changeStates.ForEach(change =>
                     {
-                        string rule = $"IF (Объем_поражения_матовым_стеклом IS {frostedGlassLesionVolume[i]}) AND (Объем_легких IS {lungsVolume[j]}) AND (Степень_изменений IS {changeStates[x]}) THEN (Результат IS {result1[y]})";
-                        knowledgeBase.Add(new Knowledge(id, rule));
-                        id += 1;
-                    }
-                }
-            }
+                        temperatures.ForEach(temperature =>
+                        {
+                            bloodOxygenSaturations.ForEach(saturation =>
+                            {
+                                frostedGlassCounts.ForEach(frostedGlassCount =>
+                                {
+                                    comorbidities.ForEach(comorbidity =>
+                                    {
+                                        ages.ForEach(age =>
+                                        {
+                                            results.ForEach(result =>
+                                            {
+                                                string rule = $"IF (Объем_поражения_матовым_стеклом IS {frostedGlassVolume}) " +
+                                                    $"AND (Объем_легких IS {lungsVolume}) " +
+                                                    $"AND (Степень_изменений IS {change}) " +
+                                                    $"AND (Температура IS {temperature}) " +
+                                                    $"AND (Сатурация_кислорода_крови IS {saturation}) " +
+                                                    $"AND (Количество_участков_матового_стекла) IS {frostedGlassCount} " +
+                                                    $"AND (Сопутствующая_паталогия IS {comorbidity}) " +
+                                                    $"AND (Возраст IS {age} " +
+                                                    $"THEN (Результат IS {result})";
+                                                knowledgeBase.Add(new Knowledge(id, rule));
+                                                id++;
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
+            int ruleId = 1;
+            string data = knowledgeBase.Aggregate("", (acc, curr) =>
+            {
+                acc += $"{ruleId}. {curr.rule}\n";
+                ruleId++;
+                return acc;
+            });
+            File.WriteAllText(rulesFilePath, data);
+        }
+        else
+        {
+            List<string> rules = File.ReadAllLines(rulesFilePath).Take(100).ToList();
+            rules.ForEach(r =>
+            {
+                string[] splittedString = r.Split(new string[] { ". " }, System.StringSplitOptions.None);
+                int id = Int32.Parse(splittedString[0]);
+                knowledgeBase.Add(new Knowledge(id, splittedString[1]));
+            });
+            Debug.Log("");
         }
 
         List<DataGridViewRow> rows = knowledgeBase.Select(k =>
