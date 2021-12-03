@@ -19,7 +19,7 @@ public class UserResearchesData : TableData<UserResearchesData>
     {
         if (authorization?.userData != null)
         {
-            List<Research> researches = await DBResearches.GetResearches(filterQuery, $"{DBTableNames.users}.id");
+            List<Research> researches = await DBResearches.GetResearches(filterQuery);
             FillData(researches);
         }
         else

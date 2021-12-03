@@ -46394,6 +46394,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1379882292}
     m_Modifications:
+    - target: {fileID: 5188485959416118564, guid: 32ad12cb91ee0f64da962fb64599427d,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5188485959416118564, guid: 32ad12cb91ee0f64da962fb64599427d,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5188485959416118564, guid: 32ad12cb91ee0f64da962fb64599427d,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5188485960489968928, guid: 32ad12cb91ee0f64da962fb64599427d,
         type: 3}
       propertyPath: m_Name
@@ -46458,6 +46473,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5188485960712498006, guid: 32ad12cb91ee0f64da962fb64599427d,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5188485960712498006, guid: 32ad12cb91ee0f64da962fb64599427d,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5188485960712498006, guid: 32ad12cb91ee0f64da962fb64599427d,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ad12cb91ee0f64da962fb64599427d, type: 3}
